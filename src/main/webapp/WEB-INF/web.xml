@@ -1,5 +1,4 @@
-<web-app xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee  http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
          version="3.0">
 
     <context-param>
@@ -29,7 +28,7 @@
     </servlet-mapping>
 
     <listener>
-        <listener-class>fr.usb.USBContextListener</listener-class>
+        <listener-class>fr.bbougon.ousontmesaffaires.web.ContextListener</listener-class>
     </listener>
 
 </web-app>
