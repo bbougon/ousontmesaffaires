@@ -4,8 +4,7 @@ import org.junit.Test;
 import org.mongolink.Settings;
 import org.mongolink.UpdateStrategies;
 
-import static org.fest.assertions.Assertions.assertThat;
-
+import static org.fest.assertions.api.Assertions.assertThat;
 
 public class ProprietesTest {
 

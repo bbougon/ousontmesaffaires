@@ -14,7 +14,7 @@ public class MongoConfiguration {
     }
 
     public static MongoSession startSession() {
-        ContextBuilder builder = new ContextBuilder("fr.usb.domaine.entrepot.mongo.mapping");
+        ContextBuilder builder = new ContextBuilder("fr.bbougon.ousontmesaffaires.entrepot.mongo.mapping");
         sessionManager = MongoSessionManager.create(builder, new Proprietes().ajouteLesProprietes(Settings.defaultInstance()));
         session = sessionManager.createSession();
         session.start();
