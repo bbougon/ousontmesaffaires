@@ -1,10 +1,8 @@
-package fr.bbougon.ousontmesaffaires.web;
+package fr.bbougon.ousontmesaffaires.rules;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.junit.rules.ExternalResource;
-
-import java.util.logging.Logger;
 
 public class AvecServeurEmbarque extends ExternalResource {
 
@@ -41,7 +39,6 @@ public class AvecServeurEmbarque extends ExternalResource {
     }
 
     public String getUrl() {
-        Logger.getLogger(getClass().getName()).info("#############################" + server.getURI().toString());
         return server.getURI().toString();
     }
 

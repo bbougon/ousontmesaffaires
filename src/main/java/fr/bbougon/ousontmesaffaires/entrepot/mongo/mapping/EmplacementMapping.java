@@ -1,6 +1,6 @@
 package fr.bbougon.ousontmesaffaires.entrepot.mongo.mapping;
 
-import fr.bbougon.ousontmesaffaires.domaine.Emplacement;
+import fr.bbougon.ousontmesaffaires.domaine.emplacement.Emplacement;
 import org.mongolink.domain.mapper.AggregateMap;
 
 public class EmplacementMapping extends AggregateMap<Emplacement> {

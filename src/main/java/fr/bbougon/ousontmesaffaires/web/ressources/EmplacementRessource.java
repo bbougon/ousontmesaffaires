@@ -1,7 +1,9 @@
 package fr.bbougon.ousontmesaffaires.web.ressources;
 
-import fr.bbougon.ousontmesaffaires.domaine.Emplacement;
+import fr.bbougon.ousontmesaffaires.domaine.emplacement.Emplacement;
 import fr.bbougon.ousontmesaffaires.entrepot.Entrepots;
+import fr.bbougon.ousontmesaffaires.web.utilitaires.Encoder;
+import fr.bbougon.ousontmesaffaires.web.utilitaires.URIBuilder;
 
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;

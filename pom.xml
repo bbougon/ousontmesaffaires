@@ -39,7 +39,7 @@
         </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
-            <artifactId>jersey-common</artifactId>
+            <artifactId>jersey-client</artifactId>
             <version>2.17</version>
         </dependency>
         <dependency>
@@ -85,19 +85,13 @@
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
-            <version>9.3.0.M2</version>
+            <version>9.2.10.v20150310</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-webapp</artifactId>
-            <version>9.3.0.M2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jersey.core</groupId>
-            <artifactId>jersey-client</artifactId>
-            <version>2.17</version>
+            <version>9.2.10.v20150310</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -107,11 +101,11 @@
             <plugin>
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-maven-plugin</artifactId>
-                <version>9.3.0.M2</version>
+                <version>9.2.10.v20150310</version>
                 <configuration>
+                    <jettyXml>${project.basedir}/src/main/package/dev/jetty-env.xml</jettyXml>
                     <webApp>
-                        <contextPath>/</contextPath>
-                        <jettyEnvXml>${project.basedir}/src/main/package/dev/jetty-env.xml</jettyEnvXml>
+                        <jettyEnvXml>${project.basedir}/src/main/package/dev/jetty-web.xml</jettyEnvXml>
                     </webApp>
                 </configuration>
             </plugin>
@@ -136,6 +130,16 @@
                 </executions>
             </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>${project.basedir}/src/main/package/dev/resources</directory>
+                <includes>
+                    <include>
+                        configuration_fr_FR.properties
+                    </include>
+                </includes>
+            </resource>
+        </resources>
     </build>
 
 

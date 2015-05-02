@@ -1,7 +1,5 @@
-package fr.bbougon.ousontmesaffaires.web;
+package fr.bbougon.ousontmesaffaires.entrepot;
 
-import fr.bbougon.ousontmesaffaires.entrepot.Entrepots;
-import fr.bbougon.ousontmesaffaires.entrepot.MongoConfiguration;
 import fr.bbougon.ousontmesaffaires.entrepot.mongo.EntrepotsMongos;
 import org.mongolink.MongoSession;
 

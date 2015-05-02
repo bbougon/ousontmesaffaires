@@ -1,4 +1,4 @@
-package fr.bbougon.ousontmesaffaires.domaine;
+package fr.bbougon.ousontmesaffaires.domaine.emplacement;
 
 import java.util.UUID;
 

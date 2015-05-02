@@ -1,7 +1,7 @@
 package fr.bbougon.ousontmesaffaires.entrepot.memoire;
 
 
-import fr.bbougon.ousontmesaffaires.domaine.Emplacement;
+import fr.bbougon.ousontmesaffaires.domaine.emplacement.Emplacement;
 import fr.bbougon.ousontmesaffaires.entrepot.Entrepot;
 import fr.bbougon.ousontmesaffaires.entrepot.Entrepots;
 

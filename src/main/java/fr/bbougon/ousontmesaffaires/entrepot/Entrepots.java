@@ -1,6 +1,6 @@
 package fr.bbougon.ousontmesaffaires.entrepot;
 
-import fr.bbougon.ousontmesaffaires.domaine.Emplacement;
+import fr.bbougon.ousontmesaffaires.domaine.emplacement.Emplacement;
 
 public abstract class Entrepots {
 

@@ -1,6 +1,6 @@
 package fr.bbougon.ousontmesaffaires.entrepot.mongo;
 
-import fr.bbougon.ousontmesaffaires.domaine.Emplacement;
+import fr.bbougon.ousontmesaffaires.domaine.emplacement.Emplacement;
 import fr.bbougon.ousontmesaffaires.entrepot.Entrepot;
 import fr.bbougon.ousontmesaffaires.entrepot.Entrepots;
 import org.mongolink.MongoSession;

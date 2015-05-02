@@ -1,6 +1,6 @@
 package fr.bbougon.ousontmesaffaires.web.ressources;
 
-import fr.bbougon.ousontmesaffaires.web.AvecServeurEmbarque;
+import fr.bbougon.ousontmesaffaires.rules.AvecServeurEmbarque;
 import org.junit.Rule;
 import org.junit.Test;
 
