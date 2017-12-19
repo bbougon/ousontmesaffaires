@@ -1,46 +1,54 @@
 package fr.bbougon.ousontmesaffaires.rules;
 
+import fr.bbougon.ousontmesaffaires.*;
+import fr.bbougon.ousontmesaffaires.entrepot.*;
+import fr.bbougon.ousontmesaffaires.entrepot.memoire.AvecEntrepotsMemoire;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
+import org.junit.Rule;
 import org.junit.rules.ExternalResource;
+import org.mongolink.MongoSession;
+import org.mongolink.Settings;
 
 public class AvecServeurEmbarque extends ExternalResource {
 
     @Override
-    public void before() {
-        server = new Server(8080);
-        WebAppContext context = new WebAppContext();
-        context.setDescriptor("src/main/webapp/WEB-INF/web.xml");
-        context.setResourceBase("src/main/webapp");
-        context.setContextPath("/");
-        server.setHandler(context);
-        start();
+    public void before() throws Exception {
+        loadConfiguration();
+        Main.main(new String[]{""});
     }
 
-    private void start() {
-        try {
-            server.start();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    private void loadConfiguration() {
+        EntrepotsFichier.initialise(new EntrepotsFichier() {
+            @Override
+            public EntrepotFichier<Configuration.ConfigurationServeur> getConfigurationServeur() {
+                return() -> new Configuration.ConfigurationServeur() {
+                    @Override
+                    public String getDescriptor() {
+                        return "src/main/package/dev/resources/web.xml";
+                    }
+
+                    @Override
+                    public int getPort() {
+                        return 8080;
+                    }
+                };
+            }
+
+            @Override
+            protected EntrepotFichier<Configuration.ConfigurationBaseDeDonnees> getConfigurationBaseDeDonnees() {
+                return () -> (Configuration.ConfigurationBaseDeDonnees) Settings::defaultInstance;
+            }
+        });
     }
 
     @Override
     public void after() {
-        try {
-            server.stop();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public AvecServeurEmbarque demarre() {
-        return this;
+        Serveur.stop();
     }
 
     public String getUrl() {
-        return server.getURI().toString();
+        return Serveur.getUrl();
     }
 
-    private Server server;
 }

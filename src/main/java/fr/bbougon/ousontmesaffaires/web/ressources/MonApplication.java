@@ -1,17 +1,16 @@
 package fr.bbougon.ousontmesaffaires.web.ressources;
 
+import org.glassfish.jersey.server.ResourceConfig;
+
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 import java.util.HashSet;
 import java.util.Set;
 
 @ApplicationPath("/")
-public class MonApplication extends Application {
+public class MonApplication extends ResourceConfig {
 
-    @Override
-    public Set<Class<?>> getClasses() {
-        final Set<Class<?>> classes = new HashSet<Class<?>>();
-        classes.add(EmplacementRessource.class);
-        return classes;
+    public MonApplication() {
+        packages("fr.bbougon.ousontmesaffaires.boundaries");
     }
 }

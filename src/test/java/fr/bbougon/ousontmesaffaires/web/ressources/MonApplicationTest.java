@@ -1,5 +1,6 @@
 package fr.bbougon.ousontmesaffaires.web.ressources;
 
+import fr.bbougon.ousontmesaffaires.boundaries.EmplacementRessource;
 import org.junit.Test;
 
 import java.util.Set;

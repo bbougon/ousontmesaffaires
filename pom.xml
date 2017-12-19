@@ -14,6 +14,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.testTarget>1.8</maven.compiler.testTarget>
         <maven.compiler.testSource>1.8</maven.compiler.testSource>
+        <jersey.version>2.25</jersey.version>
     </properties>
 
     <dependencies>
@@ -35,23 +36,23 @@
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-client</artifactId>
-            <version>2.17</version>
+            <version>${jersey.version}</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-client</artifactId>
-            <version>2.17</version>
+            <version>${jersey.version}</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-servlet</artifactId>
-            <version>2.17</version>
+            <version>${jersey.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-json-jackson</artifactId>
-            <version>2.17</version>
+            <version>${jersey.version}</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -85,57 +86,103 @@
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
-            <version>9.2.10.v20150310</version>
-            <scope>test</scope>
+            <version>9.3.8.RC0</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-webapp</artifactId>
-            <version>9.2.10.v20150310</version>
-            <scope>test</scope>
+            <version>9.3.8.RC0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlets</artifactId>
+            <version>9.3.8.RC0</version>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
             <plugin>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-maven-plugin</artifactId>
-                <version>9.2.10.v20150310</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <jettyXml>${project.basedir}/src/main/package/dev/jetty-env.xml</jettyXml>
-                    <webApp>
-                        <jettyEnvXml>${project.basedir}/src/main/package/dev/jetty-web.xml</jettyEnvXml>
-                    </webApp>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
+
             <plugin>
-                <groupId>org.lesscss</groupId>
-                <artifactId>lesscss-maven-plugin</artifactId>
-                <version>1.7.0.1.1</version>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.6</version>
                 <configuration>
-                    <sourceDirectory>${project.basedir}/src/main/less</sourceDirectory>
-                    <outputDirectory>src/main/webapp/public/css</outputDirectory>
-                    <compress>true</compress>
-                    <includes>
-                        <include>main.less</include>
-                    </includes>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <archive>
+                        <manifest>
+                            <mainClass>fr.ajairu.perdutrouve.Main</mainClass>
+                        </manifest>
+                    </archive>
                 </configuration>
                 <executions>
                     <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
                         <goals>
-                            <goal>compile</goal>
+                            <goal>attached</goal>
                         </goals>
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.5.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>fr.bbougon.ousontmesaffaires.Main</mainClass>
+                </configuration>
+            </plugin>
+
+
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <classpathDependencyExcludes>
+                        <classpathDependencyExclude>ch.qos.logback:logback-classic</classpathDependencyExclude>
+                        <classpathDependencyExclude>org.apache.logging.log4j:log4j-slf4j-impl</classpathDependencyExclude>
+                    </classpathDependencyExcludes>
+                </configuration>
+            </plugin>
         </plugins>
+
         <resources>
+            <resource>
+                <directory>${project.basedir}/src/main/resources</directory>
+                <includes>
+                    <include>
+                        **/*.properties
+                    </include>
+                </includes>
+            </resource>
             <resource>
                 <directory>${project.basedir}/src/main/package/dev/resources</directory>
                 <includes>
                     <include>
                         configuration_fr_FR.properties
+                    </include>
+                    <include>
+                        jetty-logging.properties
+                    </include>
+                    <include>
+                        log4j2.properties
                     </include>
                 </includes>
             </resource>

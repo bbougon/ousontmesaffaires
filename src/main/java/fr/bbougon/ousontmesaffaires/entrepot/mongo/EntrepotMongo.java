@@ -16,10 +16,6 @@ public class EntrepotMongo<T> implements Entrepot<T> {
         session.save(entity);
     }
 
-    public List<T> tous() {
-        return session.getAll(persistentType());
-    }
-
     protected final Class<T> persistentType() {
         final ParameterizedType superclass = (ParameterizedType) getClass().getGenericSuperclass();
         return (Class<T>) superclass.getActualTypeArguments()[0];

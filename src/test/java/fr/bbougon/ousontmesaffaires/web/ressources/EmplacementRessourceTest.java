@@ -1,5 +1,6 @@
 package fr.bbougon.ousontmesaffaires.web.ressources;
 
+import fr.bbougon.ousontmesaffaires.boundaries.EmplacementRessource;
 import fr.bbougon.ousontmesaffaires.entrepot.memoire.AvecEntrepotsMemoire;
 import org.junit.Rule;
 import org.junit.Test;

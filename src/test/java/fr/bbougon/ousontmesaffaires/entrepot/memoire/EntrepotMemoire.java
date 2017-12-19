@@ -14,8 +14,4 @@ public abstract class EntrepotMemoire<T> implements Entrepot<T> {
         liste.add(entity);
     }
 
-    @Override
-    public List<T> tous() {
-        return liste;
-    }
 }
