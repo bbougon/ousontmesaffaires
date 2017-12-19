@@ -119,7 +119,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>fr.ajairu.perdutrouve.Main</mainClass>
+                            <mainClass>fr.bbougon.ousontmesaffaires.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

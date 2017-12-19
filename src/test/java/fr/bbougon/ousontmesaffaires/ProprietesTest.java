@@ -15,7 +15,7 @@ public class ProprietesTest {
 
         proprietes.ajouteLesProprietes(settings);
 
-        assertThat(proprietes.getNomBaseDeDonnees()).isEqualTo("basededonnees");
+        assertThat(proprietes.getNomBaseDeDonnees()).isEqualTo("ousontmesaffaires");
         assertThat(proprietes.getServerAddress().getHost()).isEqualTo("127.0.0.1");
         assertThat(proprietes.getServerAddress().getPort()).isEqualTo(27017);
         assertThat(proprietes.getDefaultStrategy()).isEqualTo(UpdateStrategies.DIFF);

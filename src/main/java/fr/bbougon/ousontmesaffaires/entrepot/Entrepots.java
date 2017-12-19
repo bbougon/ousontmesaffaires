@@ -2,7 +2,6 @@ package fr.bbougon.ousontmesaffaires.entrepot;
 
 import fr.bbougon.ousontmesaffaires.domaine.emplacement.Emplacement;
 import fr.bbougon.ousontmesaffaires.entrepot.mongo.EntrepotsMongos;
-import org.mongolink.Settings;
 
 public abstract class Entrepots {
 
