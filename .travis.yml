@@ -4,4 +4,4 @@ jdk:
 services:
   - mongodb
 before_script:
-  - mongo ousontmesaffaires --eval 'db.addUser("user", "password");'
+  - mongo ousontmesaffaires --eval 'db.createUser({user:"user",pwd:"password",roles:["readWrite"]});'
