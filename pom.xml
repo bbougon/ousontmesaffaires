@@ -6,7 +6,6 @@
 
     <groupId>fr.bbougon.ousontmesaffaires</groupId>
     <artifactId>fr.bbougon.ousontmesaffaires</artifactId>
-    <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
