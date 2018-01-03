@@ -15,15 +15,14 @@ public class MongoConfiguration {
         sessionManager.close();
     }
 
-    static MongoSession startSession(final Settings settings) {
+    public static MongoSession createSession(final Settings settings) {
         ContextBuilder builder = new ContextBuilder("fr.bbougon.ousontmesaffaires.entrepot.mongo.mapping");
-        return SingletonHolder.INSTANCE.startSession(builder, settings);
+        return SingletonHolder.INSTANCE.createSession(builder, settings);
     }
 
-    private MongoSession startSession(final ContextBuilder builder, final Settings settings) {
+    private MongoSession createSession(final ContextBuilder builder, final Settings settings) {
         sessionManager = MongoSessionManager.create(builder, new Proprietes().ajouteLesProprietes(settings));
         session = sessionManager.createSession();
-        session.start();
         return session;
     }
 

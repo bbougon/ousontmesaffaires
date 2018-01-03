@@ -2,10 +2,6 @@ package fr.bbougon.ousontmesaffaires.rules;
 
 import fr.bbougon.ousontmesaffaires.*;
 import fr.bbougon.ousontmesaffaires.entrepot.*;
-import fr.bbougon.ousontmesaffaires.entrepot.memoire.AvecEntrepotsMemoire;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.webapp.WebAppContext;
-import org.junit.Rule;
 import org.junit.rules.ExternalResource;
 import org.mongolink.MongoSession;
 import org.mongolink.Settings;
@@ -44,7 +40,10 @@ public class AvecServeurEmbarque extends ExternalResource {
 
     @Override
     public void after() {
-        Serveur.stop();
+        MongoSession session = MongoConfiguration.createSession(EntrepotsFichier.configurationBaseDeDonnees().get().getSettings());
+        session.start();
+        session.getDb().dropDatabase();
+        session.stop();
     }
 
     public String getUrl() {

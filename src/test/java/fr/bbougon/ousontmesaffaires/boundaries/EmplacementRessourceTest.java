@@ -1,8 +1,6 @@
-package fr.bbougon.ousontmesaffaires.web.ressources;
+package fr.bbougon.ousontmesaffaires.boundaries;
 
-import fr.bbougon.ousontmesaffaires.boundaries.EmplacementRessource;
-import fr.bbougon.ousontmesaffaires.entrepot.memoire.AvecEntrepotsMemoire;
-import org.junit.Rule;
+import fr.bbougon.ousontmesaffaires.entrepot.memoire.EntrepotEmplacementMemoire;
 import org.junit.Test;
 
 import javax.ws.rs.core.Response;
@@ -12,12 +10,12 @@ import static org.fest.assertions.api.Assertions.assertThat;
 
 public class EmplacementRessourceTest {
 
-    @Rule
-    public AvecEntrepotsMemoire entrepotsMemoire = new AvecEntrepotsMemoire();
-
     @Test
     public void peutCreerUnEmplacement() {
-        Response ressource = new EmplacementRessource().creer();
+        EmplacementRessource emplacementRessource = new EmplacementRessource();
+        emplacementRessource.entrepotEmplacement = new EntrepotEmplacementMemoire();
+
+        Response ressource = emplacementRessource.creer();
 
         assertThat(ressource.getStatus()).isEqualTo(CREATED.getStatusCode());
         assertThat(ressource.getLocation().getPath()).matches("^/emplacement/[a-zA-Z0-9]{48}");

@@ -1,13 +1,12 @@
 package fr.bbougon.ousontmesaffaires.entrepot.mongo;
 
 import fr.bbougon.ousontmesaffaires.domaine.emplacement.Emplacement;
-import fr.bbougon.ousontmesaffaires.entrepot.Entrepot;
-import org.mongolink.MongoSession;
+import fr.bbougon.ousontmesaffaires.entrepot.*;
 
-public class EntrepotEmplacementMongo extends EntrepotMongo<Emplacement> implements Entrepot<Emplacement> {
+public class EntrepotEmplacementMongo extends EntrepotMongo<Emplacement> implements EntrepotEmplacement {
 
-    public EntrepotEmplacementMongo(MongoSession session) {
-        super(session);
+    public EntrepotEmplacementMongo() {
+        super(MongoConfiguration.createSession(EntrepotsFichier.configurationBaseDeDonnees().get().getSettings()));
     }
 
 }

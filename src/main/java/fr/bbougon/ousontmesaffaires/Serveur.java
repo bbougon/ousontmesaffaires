@@ -2,6 +2,7 @@ package fr.bbougon.ousontmesaffaires;
 
 import fr.bbougon.ousontmesaffaires.Configuration.ConfigurationServeur;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.webapp.Configuration.ClassList;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 import java.net.InetSocketAddress;
@@ -31,6 +32,8 @@ public class Serveur {
     private void démarre() {
         try {
             serveur = new Server(new InetSocketAddress(configuration.getPort()));
+            ClassList classlist = ClassList.setServerDefault(serveur);
+            classlist.addBefore("org.eclipse.jetty.webapp.JettyWebXmlConfiguration", "org.eclipse.jetty.annotations.AnnotationConfiguration");
             WebAppContext context = new WebAppContext();
             context.setDescriptor(configuration.getDescriptor());
             context.setResourceBase(".");
