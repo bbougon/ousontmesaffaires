@@ -7,31 +7,31 @@ import org.eclipse.jetty.webapp.WebAppContext;
 
 import java.net.InetSocketAddress;
 
-public class Serveur {
+public class EmbeddedServer {
 
-    private Serveur() {
+    private EmbeddedServer() {
     }
 
     public static String getUrl() {
-        return ServeurHolder.INSTANCE.serveur.getURI().toString();
+        return ServerHolder.INSTANCE.server.getURI().toString();
     }
 
-    static void démarre(final ServerConfiguration serverConfiguration) {
-        ServeurHolder.INSTANCE.setConfiguration(serverConfiguration);
-        ServeurHolder.INSTANCE.démarre();
+    static void start(final ServerConfiguration serverConfiguration) {
+        ServerHolder.INSTANCE.setConfiguration(serverConfiguration);
+        ServerHolder.INSTANCE.start();
     }
 
-    private void démarre() {
+    private void start() {
         try {
-            serveur = new Server(new InetSocketAddress(configuration.getPort()));
-            ClassList classlist = ClassList.setServerDefault(serveur);
+            server = new Server(new InetSocketAddress(configuration.getPort()));
+            ClassList classlist = ClassList.setServerDefault(server);
             classlist.addBefore("org.eclipse.jetty.webapp.JettyWebXmlConfiguration", "org.eclipse.jetty.annotations.AnnotationConfiguration");
             WebAppContext context = new WebAppContext();
             context.setDescriptor(configuration.getDescriptor());
             context.setResourceBase(".");
             context.setContextPath("/");
-            serveur.setHandler(context);
-            serveur.start();
+            server.setHandler(context);
+            server.start();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -41,10 +41,10 @@ public class Serveur {
         this.configuration = configuration;
     }
 
-    private static class ServeurHolder {
-        static final Serveur INSTANCE = new Serveur();
+    private static class ServerHolder {
+        static final EmbeddedServer INSTANCE = new EmbeddedServer();
     }
 
-    private Server serveur;
+    private Server server;
     private ServerConfiguration configuration;
 }

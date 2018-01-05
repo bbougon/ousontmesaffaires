@@ -1,7 +1,7 @@
 package fr.bbougon.ousontmesaffaires.web.ressources;
 
 import fr.bbougon.ousontmesaffaires.entrepot.MongoConfiguration;
-import fr.bbougon.ousontmesaffaires.rules.AvecServeurEmbarque;
+import fr.bbougon.ousontmesaffaires.rules.WithEmbeddedServer;
 import fr.bbougon.ousontmesaffaires.test.utils.JsonFileUtils;
 import org.junit.Rule;
 import org.junit.Test;
@@ -16,7 +16,7 @@ import static org.fest.assertions.api.Assertions.assertThat;
 public class LocationResourceIntegrationTest {
 
     @Rule
-    public AvecServeurEmbarque serveurEmbarque = new AvecServeurEmbarque();
+    public WithEmbeddedServer serveurEmbarque = new WithEmbeddedServer();
 
     @Test
     public void canAddLocation() {

@@ -6,7 +6,7 @@ import org.junit.rules.ExternalResource;
 import org.mongolink.MongoSession;
 import org.mongolink.Settings;
 
-public class AvecServeurEmbarque extends ExternalResource {
+public class WithEmbeddedServer extends ExternalResource {
 
     @Override
     public void before() throws Exception {
@@ -47,7 +47,7 @@ public class AvecServeurEmbarque extends ExternalResource {
     }
 
     public String getUrl() {
-        return Serveur.getUrl();
+        return EmbeddedServer.getUrl();
     }
 
 }

@@ -8,9 +8,9 @@ import org.glassfish.jersey.server.ResourceConfig;
 import javax.ws.rs.ApplicationPath;
 
 @ApplicationPath("/")
-public class MonApplication extends ResourceConfig {
+public class MyApplication extends ResourceConfig {
 
-    public MonApplication() {
+    public MyApplication() {
         packages("fr.bbougon.ousontmesaffaires.boundaries");
         register(new AbstractBinder() {
             @Override
