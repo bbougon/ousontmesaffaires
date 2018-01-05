@@ -4,14 +4,14 @@ import fr.bbougon.ousontmesaffaires.domaine.emplacement.Location;
 import fr.bbougon.ousontmesaffaires.entrepot.*;
 import org.mongolink.MongoSession;
 
-public class LocationRepositoryMongo extends EntrepotMongo<Location> implements LocationRepository {
+public class LocationMongoRepository extends MongoRepository<Location> implements LocationRepository {
 
     @SuppressWarnings("UnusedDeclaration")
-    public LocationRepositoryMongo() {
+    public LocationMongoRepository() {
         super(MongoConfiguration.createSession(EntrepotsFichier.configurationBaseDeDonnees().get().getSettings()));
     }
 
-    LocationRepositoryMongo(final MongoSession currentSession) {
+    LocationMongoRepository(final MongoSession currentSession) {
         super(currentSession);
     }
 }

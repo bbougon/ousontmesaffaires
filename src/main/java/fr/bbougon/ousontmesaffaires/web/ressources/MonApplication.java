@@ -1,7 +1,7 @@
 package fr.bbougon.ousontmesaffaires.web.ressources;
 
 import fr.bbougon.ousontmesaffaires.entrepot.LocationRepository;
-import fr.bbougon.ousontmesaffaires.entrepot.mongo.LocationRepositoryMongo;
+import fr.bbougon.ousontmesaffaires.entrepot.mongo.LocationMongoRepository;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.server.ResourceConfig;
 
@@ -15,7 +15,7 @@ public class MonApplication extends ResourceConfig {
         register(new AbstractBinder() {
             @Override
             protected void configure() {
-                bind(LocationRepositoryMongo.class).to(LocationRepository.class);
+                bind(LocationMongoRepository.class).to(LocationRepository.class);
             }
         });
     }

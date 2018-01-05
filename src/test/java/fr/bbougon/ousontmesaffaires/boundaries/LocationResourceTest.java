@@ -1,7 +1,7 @@
 package fr.bbougon.ousontmesaffaires.boundaries;
 
 import fr.bbougon.ousontmesaffaires.domaine.emplacement.Location;
-import fr.bbougon.ousontmesaffaires.entrepot.memoire.LocationRepositoryMemoire;
+import fr.bbougon.ousontmesaffaires.entrepot.memoire.LocationMemoryRepository;
 import fr.bbougon.ousontmesaffaires.test.utils.JsonFileUtils;
 import org.junit.Test;
 
@@ -17,7 +17,7 @@ public class LocationResourceTest {
     @Test
     public void canAddLocation() throws IOException {
         LocationResource locationResource = new LocationResource();
-        locationResource.locationRepository = new LocationRepositoryMemoire();
+        locationResource.locationRepository = new LocationMemoryRepository();
 
         Response resource = locationResource.add(new JsonFileUtils("json/article.json").getPayload());
 

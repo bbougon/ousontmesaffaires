@@ -12,7 +12,7 @@ import java.util.List;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 
-public class EntrepotLocationMongoTest {
+public class RepositoryLocationMongoTest {
 
     @Rule
     public MongolinkRule mongolinkRule = MongolinkRule.withPackage("fr.bbougon.ousontmesaffaires.entrepot.mongo.mapping");
@@ -24,9 +24,9 @@ public class EntrepotLocationMongoTest {
     public void canPersistLocation() {
         Location location = new Location();
         location.add(Article.create(ArticleJSON.from(new JsonFileUtils("json/article.json").getPayload())));
-        LocationRepositoryMongo locationMongoRepository = new LocationRepositoryMongo(mongoRule.session);
+        LocationMongoRepository locationMongoRepository = new LocationMongoRepository(mongoRule.session);
 
-        locationMongoRepository.persiste(location);
+        locationMongoRepository.persist(location);
         mongoRule.cleanSession();
 
         List<Location> locations = locationMongoRepository.getAll();

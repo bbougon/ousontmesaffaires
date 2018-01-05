@@ -1,15 +1,15 @@
 package fr.bbougon.ousontmesaffaires.entrepot.mongo;
 
-import fr.bbougon.ousontmesaffaires.entrepot.Entrepot;
+import fr.bbougon.ousontmesaffaires.entrepot.Repository;
 import org.mongolink.MongoSession;
 
 import javax.annotation.PostConstruct;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
-public class EntrepotMongo<T> implements Entrepot<T> {
+public class MongoRepository<T> implements Repository<T> {
 
-    EntrepotMongo(MongoSession session) {
+    MongoRepository(MongoSession session) {
         this.session = session;
     }
 
@@ -19,7 +19,7 @@ public class EntrepotMongo<T> implements Entrepot<T> {
     }
 
 
-    public void persiste(T entity) {
+    public void persist(T entity) {
         session.save(entity);
         session.flush();
     }
@@ -29,7 +29,7 @@ public class EntrepotMongo<T> implements Entrepot<T> {
         return session.getAll(persistentType());
     }
 
-    private final Class<T> persistentType() {
+    private Class<T> persistentType() {
         final ParameterizedType superclass = (ParameterizedType) getClass().getGenericSuperclass();
         return (Class<T>) superclass.getActualTypeArguments()[0];
     }

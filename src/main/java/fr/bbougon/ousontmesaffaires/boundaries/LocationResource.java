@@ -25,7 +25,7 @@ public class LocationResource {
     public Response add(final String payload) {
         Location location = new Location();
         location.add(Article.create(ArticleJSON.from(payload)));
-        locationRepository.persiste(location);
+        locationRepository.persist(location);
         return Response.created(new URIBuilder().build(PATH + "/" + Encoder.toBase64(location.getId().toString()))).build();
     }
 
