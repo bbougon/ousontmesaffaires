@@ -1,6 +1,5 @@
 package fr.bbougon.ousontmesaffaires.entrepot;
 
-import fr.bbougon.ousontmesaffaires.Proprietes;
 import org.mongolink.*;
 import org.mongolink.domain.mapper.ContextBuilder;
 
@@ -21,7 +20,7 @@ public class MongoConfiguration {
     }
 
     private MongoSession createSession(final ContextBuilder builder, final Settings settings) {
-        sessionManager = MongoSessionManager.create(builder, new Proprietes().ajouteLesProprietes(settings));
+        sessionManager = MongoSessionManager.create(builder, settings);
         session = sessionManager.createSession();
         return session;
     }

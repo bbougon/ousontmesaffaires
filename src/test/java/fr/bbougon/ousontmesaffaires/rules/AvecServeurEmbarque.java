@@ -42,7 +42,7 @@ public class AvecServeurEmbarque extends ExternalResource {
     public void after() {
         MongoSession session = MongoConfiguration.createSession(EntrepotsFichier.configurationBaseDeDonnees().get().getSettings());
         session.start();
-        session.getDb().dropDatabase();
+        session.getDb().drop();
         session.stop();
     }
 

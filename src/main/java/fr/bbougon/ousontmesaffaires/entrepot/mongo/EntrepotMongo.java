@@ -1,11 +1,11 @@
 package fr.bbougon.ousontmesaffaires.entrepot.mongo;
 
 import fr.bbougon.ousontmesaffaires.entrepot.Entrepot;
-import org.glassfish.jersey.process.internal.RequestScoped;
 import org.mongolink.MongoSession;
 
 import javax.annotation.PostConstruct;
 import java.lang.reflect.ParameterizedType;
+import java.util.List;
 
 public class EntrepotMongo<T> implements Entrepot<T> {
 
@@ -24,7 +24,12 @@ public class EntrepotMongo<T> implements Entrepot<T> {
         session.flush();
     }
 
-    protected final Class<T> persistentType() {
+    @Override
+    public List<T> getAll() {
+        return session.getAll(persistentType());
+    }
+
+    private final Class<T> persistentType() {
         final ParameterizedType superclass = (ParameterizedType) getClass().getGenericSuperclass();
         return (Class<T>) superclass.getActualTypeArguments()[0];
     }

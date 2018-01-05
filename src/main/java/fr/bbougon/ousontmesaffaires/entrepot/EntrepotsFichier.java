@@ -1,14 +1,17 @@
 package fr.bbougon.ousontmesaffaires.entrepot;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import fr.bbougon.ousontmesaffaires.Configuration;
+import com.mongodb.MongoClient;
+import com.mongodb.ServerAddress;
 import fr.bbougon.ousontmesaffaires.Configuration.ConfigurationServeur;
 import org.mongolink.Settings;
+import org.mongolink.UpdateStrategies;
 
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import static fr.bbougon.ousontmesaffaires.Configuration.*;
+import static fr.bbougon.ousontmesaffaires.Configuration.ConfigurationBaseDeDonnees;
 
 public abstract class EntrepotsFichier {
 
@@ -49,11 +52,15 @@ public abstract class EntrepotsFichier {
             protected EntrepotFichier<ConfigurationBaseDeDonnees> getConfigurationBaseDeDonnees() {
                 return () -> (ConfigurationBaseDeDonnees) () -> {
                     Map<String, String> configuration = bundleMapped();
+                    String host = configuration.get("database.host");
+                    int port = Integer.parseInt(configuration.get("database.port"));
+                    //String user = configuration.get("database.user");
+                    String dataBase = configuration.get("database.name");
+                    //String password = configuration.get("database.password");
+                    //MongoCredential credential = MongoCredential.createCredential(user, dataBase, password.toCharArray());
                     return Settings.defaultInstance()
-                            .withDbName(configuration.get("database.name"))
-                            .withAuthentication(configuration.get("database.user"), configuration.get("database.password"))
-                            .withHost(configuration.get("database.host"))
-                            .withPort(Integer.parseInt(configuration.get("database.port")));
+                            .withDatabase(new MongoClient(new ServerAddress(host, port), Lists.newArrayList()).getDatabase(dataBase))
+                            .withDefaultUpdateStrategy(UpdateStrategies.DIFF);
                 };
             }
 

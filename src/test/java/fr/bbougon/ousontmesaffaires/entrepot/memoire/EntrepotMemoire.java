@@ -7,11 +7,15 @@ import java.util.List;
 
 public abstract class EntrepotMemoire<T> implements Entrepot<T> {
 
-    List<T> liste = Lists.newArrayList();
+    private List<T> liste = Lists.newArrayList();
 
     @Override
     public void persiste(T entity) {
         liste.add(entity);
     }
 
+    @Override
+    public List<T> getAll() {
+        return liste;
+    }
 }
