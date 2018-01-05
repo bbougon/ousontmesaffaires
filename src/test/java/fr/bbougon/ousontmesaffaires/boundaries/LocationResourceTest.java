@@ -19,14 +19,14 @@ public class LocationResourceTest {
         LocationResource locationResource = new LocationResource();
         locationResource.locationRepository = new LocationMemoryRepository();
 
-        Response resource = locationResource.add(new JsonFileUtils("json/article.json").getPayload());
+        Response resource = locationResource.add(new JsonFileUtils("json/item.json").getPayload());
 
         assertThat(resource.getStatus()).isEqualTo(CREATED.getStatusCode());
         assertThat(resource.getLocation().getPath()).matches("^/location/[a-zA-Z0-9]{48}");
         List<Location> locations = locationResource.locationRepository.getAll();
         assertThat(locations).isNotNull();
-        assertThat(locations.get(0).getArticles()).isNotEmpty();
-        assertThat(locations.get(0).getArticles().get(0).getContent()).isEqualTo("\"{\\\"type\\\":\\\"tshirt\\\",\\\"couleur\\\":\\\"blanc\\\",\\\"taille\\\":\\\"3ans\\\"}\"");
+        assertThat(locations.get(0).getItems()).isNotEmpty();
+        assertThat(locations.get(0).getItems().get(0).getContent()).isEqualTo("\"{\\\"type\\\":\\\"tshirt\\\",\\\"couleur\\\":\\\"blanc\\\",\\\"taille\\\":\\\"3ans\\\"}\"");
     }
 
 }

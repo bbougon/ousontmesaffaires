@@ -12,14 +12,6 @@ public class Serveur {
     private Serveur() {
     }
 
-    public static void stop() {
-        try {
-            ServeurHolder.INSTANCE.serveur.stop();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public static String getUrl() {
         return ServeurHolder.INSTANCE.serveur.getURI().toString();
     }

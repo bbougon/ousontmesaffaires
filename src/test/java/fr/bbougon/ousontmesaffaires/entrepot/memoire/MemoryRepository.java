@@ -7,15 +7,15 @@ import java.util.List;
 
 public abstract class MemoryRepository<T> implements Repository<T> {
 
-    private List<T> liste = Lists.newArrayList();
+    private List<T> entities = Lists.newArrayList();
 
     @Override
     public void persist(T entity) {
-        liste.add(entity);
+        entities.add(entity);
     }
 
     @Override
     public List<T> getAll() {
-        return liste;
+        return entities;
     }
 }

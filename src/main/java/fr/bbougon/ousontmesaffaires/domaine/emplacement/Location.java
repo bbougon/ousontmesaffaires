@@ -15,14 +15,14 @@ public class Location {
         return id;
     }
 
-    public ImmutableList<Article> getArticles() {
-        return ImmutableList.<Article>builder().addAll(articles).build();
+    public ImmutableList<Item> getItems() {
+        return ImmutableList.<Item>builder().addAll(items).build();
     }
 
-    public void add(final Article article) {
-        articles.add(article);
+    public void add(final Item item) {
+        items.add(item);
     }
 
     private final UUID id;
-    private List<Article> articles = Lists.newArrayList();
+    private List<Item> items = Lists.newArrayList();
 }

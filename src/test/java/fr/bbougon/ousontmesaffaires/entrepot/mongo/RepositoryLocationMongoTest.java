@@ -1,10 +1,10 @@
 package fr.bbougon.ousontmesaffaires.entrepot.mongo;
 
-import fr.bbougon.ousontmesaffaires.domaine.emplacement.Article;
+import fr.bbougon.ousontmesaffaires.domaine.emplacement.Item;
 import fr.bbougon.ousontmesaffaires.domaine.emplacement.Location;
 import fr.bbougon.ousontmesaffaires.rules.MongoRule;
 import fr.bbougon.ousontmesaffaires.test.utils.JsonFileUtils;
-import fr.bbougon.ousontmesaffaires.web.ressources.json.ArticleJSON;
+import fr.bbougon.ousontmesaffaires.web.ressources.json.ItemJSON;
 import org.junit.*;
 import org.mongolink.test.MongolinkRule;
 
@@ -23,7 +23,7 @@ public class RepositoryLocationMongoTest {
     @Test
     public void canPersistLocation() {
         Location location = new Location();
-        location.add(Article.create(ArticleJSON.from(new JsonFileUtils("json/article.json").getPayload())));
+        location.add(Item.create(ItemJSON.from(new JsonFileUtils("json/item.json").getPayload())));
         LocationMongoRepository locationMongoRepository = new LocationMongoRepository(mongoRule.session);
 
         locationMongoRepository.persist(location);
@@ -31,8 +31,8 @@ public class RepositoryLocationMongoTest {
 
         List<Location> locations = locationMongoRepository.getAll();
         assertThat(locations).isNotEmpty();
-        assertThat(locations.get(0).getArticles()).isNotEmpty();
-        assertThat(locations.get(0).getArticles().get(0).getContent()).isEqualTo("\"{\\\"type\\\":\\\"tshirt\\\",\\\"couleur\\\":\\\"blanc\\\",\\\"taille\\\":\\\"3ans\\\"}\"");
+        assertThat(locations.get(0).getItems()).isNotEmpty();
+        assertThat(locations.get(0).getItems().get(0).getContent()).isEqualTo("\"{\\\"type\\\":\\\"tshirt\\\",\\\"couleur\\\":\\\"blanc\\\",\\\"taille\\\":\\\"3ans\\\"}\"");
     }
 
 }

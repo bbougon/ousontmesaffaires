@@ -9,6 +9,6 @@ public class LocationMapping extends AggregateMap<Location> {
     @Override
     public void map() {
         id().onProperty(Location::getId).natural();
-        collection().onProperty(Location::getArticles);
+        collection().onProperty(Location::getItems);
     }
 }

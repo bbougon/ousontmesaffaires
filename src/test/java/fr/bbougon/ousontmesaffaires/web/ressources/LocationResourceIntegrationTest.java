@@ -20,7 +20,7 @@ public class LocationResourceIntegrationTest {
 
     @Test
     public void canAddLocation() {
-        String payload = new JsonFileUtils("json/article.json").getPayload();
+        String payload = new JsonFileUtils("json/item.json").getPayload();
 
         Response response = ClientBuilder.newClient().target(serveurEmbarque.getUrl())
                 .path("/location")
