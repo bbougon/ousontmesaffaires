@@ -15,10 +15,10 @@ public class AvecServeurEmbarque extends ExternalResource {
     }
 
     private void loadConfiguration() {
-        EntrepotsFichier.initialise(new EntrepotsFichier() {
+        FileRepositories.initialise(new FileRepositories() {
             @Override
-            public EntrepotFichier<Configuration.ConfigurationServeur> getConfigurationServeur() {
-                return() -> new Configuration.ConfigurationServeur() {
+            public FileRepository<Configuration.ServerConfiguration> getServerConfiguration() {
+                return() -> new Configuration.ServerConfiguration() {
                     @Override
                     public String getDescriptor() {
                         return "src/main/package/dev/resources/web.xml";
@@ -32,15 +32,15 @@ public class AvecServeurEmbarque extends ExternalResource {
             }
 
             @Override
-            protected EntrepotFichier<Configuration.ConfigurationBaseDeDonnees> getConfigurationBaseDeDonnees() {
-                return () -> (Configuration.ConfigurationBaseDeDonnees) Settings::defaultInstance;
+            protected FileRepository<Configuration.DataBaseConfiguration> getDataBaseConfiguration() {
+                return () -> (Configuration.DataBaseConfiguration) Settings::defaultInstance;
             }
         });
     }
 
     @Override
     public void after() {
-        MongoSession session = MongoConfiguration.createSession(EntrepotsFichier.configurationBaseDeDonnees().get().getSettings());
+        MongoSession session = MongoConfiguration.createSession(FileRepositories.dataBaseConfiguration().get().getSettings());
         session.start();
         session.getDb().drop();
         session.stop();

@@ -1,6 +1,6 @@
 package fr.bbougon.ousontmesaffaires.entrepot;
 
-public interface EntrepotFichier<T> {
+public interface FileRepository<T> {
 
     T get();
 

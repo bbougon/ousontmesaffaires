@@ -8,7 +8,7 @@ public class LocationMongoRepository extends MongoRepository<Location> implement
 
     @SuppressWarnings("UnusedDeclaration")
     public LocationMongoRepository() {
-        super(MongoConfiguration.createSession(EntrepotsFichier.configurationBaseDeDonnees().get().getSettings()));
+        super(MongoConfiguration.createSession(FileRepositories.dataBaseConfiguration().get().getSettings()));
     }
 
     LocationMongoRepository(final MongoSession currentSession) {

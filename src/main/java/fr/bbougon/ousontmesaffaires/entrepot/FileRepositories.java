@@ -4,60 +4,57 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mongodb.MongoClient;
 import com.mongodb.ServerAddress;
-import fr.bbougon.ousontmesaffaires.Configuration.ConfigurationServeur;
+import fr.bbougon.ousontmesaffaires.Configuration.ServerConfiguration;
 import org.mongolink.Settings;
 import org.mongolink.UpdateStrategies;
 
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import static fr.bbougon.ousontmesaffaires.Configuration.ConfigurationBaseDeDonnees;
+import static fr.bbougon.ousontmesaffaires.Configuration.DataBaseConfiguration;
 
-public abstract class EntrepotsFichier {
+public abstract class FileRepositories {
 
-    public static void initialise(EntrepotsFichier entrepots) {
-        SingletonHolder.INSTANCE = entrepots;
+    public static void initialise(FileRepositories repositories) {
+        SingletonHolder.INSTANCE = repositories;
     }
 
-    public static EntrepotFichier<ConfigurationServeur> configurationServeur() {
-        return SingletonHolder.INSTANCE.getConfigurationServeur();
+    public static FileRepository<ServerConfiguration> serverConfiguration() {
+        return SingletonHolder.INSTANCE.getServerConfiguration();
     }
 
-    public abstract EntrepotFichier<ConfigurationServeur> getConfigurationServeur();
+    public abstract FileRepository<ServerConfiguration> getServerConfiguration();
 
-    public static EntrepotFichier<ConfigurationBaseDeDonnees> configurationBaseDeDonnees() {
-        return SingletonHolder.INSTANCE.getConfigurationBaseDeDonnees();
+    public static FileRepository<DataBaseConfiguration> dataBaseConfiguration() {
+        return SingletonHolder.INSTANCE.getDataBaseConfiguration();
     }
 
-    protected abstract EntrepotFichier<ConfigurationBaseDeDonnees> getConfigurationBaseDeDonnees();
+    protected abstract FileRepository<DataBaseConfiguration> getDataBaseConfiguration();
 
     private static class SingletonHolder {
-        static EntrepotsFichier INSTANCE = new EntrepotsFichier() {
+        static FileRepositories INSTANCE = new FileRepositories() {
             @Override
-            public EntrepotFichier<ConfigurationServeur> getConfigurationServeur() {
-                return() -> new ConfigurationServeur() {
+            public FileRepository<ServerConfiguration> getServerConfiguration() {
+                return() -> new ServerConfiguration() {
                     @Override
                     public String getDescriptor() {
-                        return bundleMapped().get("serveur.descriptor");
+                        return bundleMapped().get("server.descriptor");
                     }
 
                     @Override
                     public int getPort() {
-                        return Integer.parseInt(bundleMapped().get("serveur.port"));
+                        return Integer.parseInt(bundleMapped().get("server.port"));
                     }
                 };
             }
 
             @Override
-            protected EntrepotFichier<ConfigurationBaseDeDonnees> getConfigurationBaseDeDonnees() {
-                return () -> (ConfigurationBaseDeDonnees) () -> {
+            protected FileRepository<DataBaseConfiguration> getDataBaseConfiguration() {
+                return () -> (DataBaseConfiguration) () -> {
                     Map<String, String> configuration = bundleMapped();
                     String host = configuration.get("database.host");
                     int port = Integer.parseInt(configuration.get("database.port"));
-                    //String user = configuration.get("database.user");
                     String dataBase = configuration.get("database.name");
-                    //String password = configuration.get("database.password");
-                    //MongoCredential credential = MongoCredential.createCredential(user, dataBase, password.toCharArray());
                     return Settings.defaultInstance()
                             .withDatabase(new MongoClient(new ServerAddress(host, port), Lists.newArrayList()).getDatabase(dataBase))
                             .withDefaultUpdateStrategy(UpdateStrategies.DIFF);

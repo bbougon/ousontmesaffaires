@@ -1,6 +1,6 @@
 package fr.bbougon.ousontmesaffaires;
 
-import fr.bbougon.ousontmesaffaires.Configuration.ConfigurationServeur;
+import fr.bbougon.ousontmesaffaires.Configuration.ServerConfiguration;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.Configuration.ClassList;
 import org.eclipse.jetty.webapp.WebAppContext;
@@ -24,8 +24,8 @@ public class Serveur {
         return ServeurHolder.INSTANCE.serveur.getURI().toString();
     }
 
-    static void démarre(final ConfigurationServeur configurationServeur) {
-        ServeurHolder.INSTANCE.setConfiguration(configurationServeur);
+    static void démarre(final ServerConfiguration serverConfiguration) {
+        ServeurHolder.INSTANCE.setConfiguration(serverConfiguration);
         ServeurHolder.INSTANCE.démarre();
     }
 
@@ -45,7 +45,7 @@ public class Serveur {
         }
     }
 
-    private void setConfiguration(final ConfigurationServeur configuration) {
+    private void setConfiguration(final ServerConfiguration configuration) {
         this.configuration = configuration;
     }
 
@@ -54,5 +54,5 @@ public class Serveur {
     }
 
     private Server serveur;
-    private ConfigurationServeur configuration;
+    private ServerConfiguration configuration;
 }
