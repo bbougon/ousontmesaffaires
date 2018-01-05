@@ -1,6 +1,6 @@
 package fr.bbougon.ousontmesaffaires.web.ressources;
 
-import fr.bbougon.ousontmesaffaires.boundaries.EmplacementRessource;
+import fr.bbougon.ousontmesaffaires.boundaries.LocationResource;
 import org.junit.Test;
 
 import java.util.Set;
@@ -13,6 +13,6 @@ public class MonApplicationTest {
     public void toutesLesRessourcesSontChargees() throws Exception {
         Set<Class<?>> classes = new MonApplication().getClasses();
 
-        assertThat(classes).contains(EmplacementRessource.class);
+        assertThat(classes).contains(LocationResource.class);
     }
 }

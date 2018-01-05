@@ -5,9 +5,9 @@ import com.google.common.collect.*;
 import java.util.List;
 import java.util.UUID;
 
-public class Emplacement {
+public class Location {
 
-    public Emplacement() {
+    public Location() {
         id = UUID.randomUUID();
     }
 

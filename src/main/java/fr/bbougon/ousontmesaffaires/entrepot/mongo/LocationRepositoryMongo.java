@@ -1,17 +1,17 @@
 package fr.bbougon.ousontmesaffaires.entrepot.mongo;
 
-import fr.bbougon.ousontmesaffaires.domaine.emplacement.Emplacement;
+import fr.bbougon.ousontmesaffaires.domaine.emplacement.Location;
 import fr.bbougon.ousontmesaffaires.entrepot.*;
 import org.mongolink.MongoSession;
 
-public class EntrepotEmplacementMongo extends EntrepotMongo<Emplacement> implements EntrepotEmplacement {
+public class LocationRepositoryMongo extends EntrepotMongo<Location> implements LocationRepository {
 
     @SuppressWarnings("UnusedDeclaration")
-    public EntrepotEmplacementMongo() {
+    public LocationRepositoryMongo() {
         super(MongoConfiguration.createSession(EntrepotsFichier.configurationBaseDeDonnees().get().getSettings()));
     }
 
-    EntrepotEmplacementMongo(final MongoSession currentSession) {
+    LocationRepositoryMongo(final MongoSession currentSession) {
         super(currentSession);
     }
 }
