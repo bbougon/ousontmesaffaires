@@ -5,10 +5,10 @@ import com.google.common.base.Objects;
 public class Type {
 
     @SuppressWarnings("UnusedDeclaration")
-    public Type() {
+    Type() {
     }
 
-    public Type(final String type) {
+    private Type(final String type) {
         this.type = type;
     }
 
@@ -27,6 +27,10 @@ public class Type {
 
     public String getType() {
         return type;
+    }
+
+    public static Type create(final String type) {
+        return new Type(type);
     }
 
     private String type;

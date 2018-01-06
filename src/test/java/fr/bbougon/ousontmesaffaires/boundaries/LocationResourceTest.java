@@ -5,7 +5,7 @@ import fr.bbougon.ousontmesaffaires.domain.location.*;
 import fr.bbougon.ousontmesaffaires.repositories.memoire.LocationMemoryRepository;
 import fr.bbougon.ousontmesaffaires.test.utils.JsonFileUtils;
 import fr.bbougon.ousontmesaffaires.web.helpers.Encoder;
-import fr.bbougon.ousontmesaffaires.web.ressources.json.ItemJSON;
+import fr.bbougon.ousontmesaffaires.web.ressources.json.Features;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,9 +14,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
-import static javax.ws.rs.core.Response.Status.CREATED;
-import static javax.ws.rs.core.Response.Status.NOT_FOUND;
-import static javax.ws.rs.core.Response.Status.NO_CONTENT;
+import static javax.ws.rs.core.Response.Status.*;
 import static org.fest.assertions.api.Assertions.assertThat;
 
 public class LocationResourceTest {
@@ -36,15 +34,15 @@ public class LocationResourceTest {
         assertThat(locations).isNotNull();
         assertThat(locations.get(0).getItems()).isNotEmpty();
         assertThat(locations.get(0).getItems().get(0).getFeatures()).containsAll(Sets.newHashSet(
-                new Feature(new Type("type"), "tshirt"),
-                new Feature(new Type("couleur"), "blanc"),
-                new Feature(new Type("taille"), "3ans")));
+                Feature.create(Type.create("type"), "tshirt"),
+                Feature.create(Type.create("couleur"), "blanc"),
+                Feature.create(Type.create("taille"), "3ans")));
     }
 
     @Test
     public void canAddAnItemToALocation() {
         Location location = new Location();
-        location.add(Item.create(ItemJSON.from("{\"item\":{\"type\":\"pantalon\"}}")));
+        location.add(Item.create(Features.getFeaturesFromPayload("{\"item\":{\"type\":\"pantalon\"}}")));
         locationResource.locationRepository.persist(location);
 
         Response response = locationResource.addItem(Encoder.toBase64(location.getId().toString()), new JsonFileUtils("json/pantalon.json").getPayload());
@@ -53,9 +51,9 @@ public class LocationResourceTest {
         List<Location> locations = locationResource.locationRepository.getAll();
         assertThat(locations.get(0).getItems()).hasSize(2);
         assertThat(locations.get(0).getItems().get(1).getFeatures()).containsAll(Sets.newHashSet(
-                new Feature(new Type("type"), "pantalon"),
-                new Feature(new Type("couleur"), "noir"),
-                new Feature(new Type("taille"), "3ans")));
+                Feature.create(Type.create("type"), "pantalon"),
+                Feature.create(Type.create("couleur"), "noir"),
+                Feature.create(Type.create("taille"), "3ans")));
     }
 
     @Test

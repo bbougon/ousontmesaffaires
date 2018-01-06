@@ -5,10 +5,10 @@ import com.google.common.base.Objects;
 public class Feature {
 
     @SuppressWarnings("UnusedDeclaration")
-    public Feature() {
+    Feature() {
     }
 
-    public Feature(final Type type, final String feature) {
+    private Feature(final Type type, final String feature) {
         this.type = type;
         this.feature = feature;
     }
@@ -33,6 +33,10 @@ public class Feature {
     @Override
     public int hashCode() {
         return Objects.hashCode(type, feature);
+    }
+
+    public static Feature create(final Type type, final String value) {
+        return new Feature(type, value);
     }
 
     private Type type;

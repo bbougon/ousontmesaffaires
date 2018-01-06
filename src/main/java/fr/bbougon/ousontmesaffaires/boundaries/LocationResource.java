@@ -1,10 +1,9 @@
 package fr.bbougon.ousontmesaffaires.boundaries;
 
-import fr.bbougon.ousontmesaffaires.domain.location.Item;
-import fr.bbougon.ousontmesaffaires.domain.location.Location;
+import fr.bbougon.ousontmesaffaires.domain.location.*;
 import fr.bbougon.ousontmesaffaires.repositories.LocationRepository;
 import fr.bbougon.ousontmesaffaires.web.helpers.*;
-import fr.bbougon.ousontmesaffaires.web.ressources.json.ItemJSON;
+import fr.bbougon.ousontmesaffaires.web.ressources.json.Features;
 import org.glassfish.jersey.process.internal.RequestScoped;
 
 import javax.inject.Inject;
@@ -26,7 +25,7 @@ public class LocationResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response add(final String payload) {
         Location location = new Location();
-        location.add(Item.create(ItemJSON.from(payload)));
+        location.add(Item.create(Features.getFeaturesFromPayload(payload)));
         locationRepository.persist(location);
         return Response.created(new URIBuilder().build(PATH + "/" + Encoder.toBase64(location.getId().toString()))).build();
     }
@@ -39,7 +38,7 @@ public class LocationResource {
         if(location == null){
             return Response.status(NOT_FOUND).build();
         }
-        location.add(Item.create(ItemJSON.from(payload)));
+        location.add(Item.create(Features.getFeaturesFromPayload(payload)));
         return Response.noContent().build();
     }
 

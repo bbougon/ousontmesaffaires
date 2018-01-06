@@ -1,26 +1,22 @@
 package fr.bbougon.ousontmesaffaires.domain.location;
 
 import com.google.common.collect.Sets;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-import fr.bbougon.ousontmesaffaires.web.ressources.json.ItemJSON;
 
+import java.util.List;
 import java.util.Set;
 
 public class Item {
 
     @SuppressWarnings("UnusedDeclaration")
-    public Item() {
+    Item() {
     }
 
-    private Item(final String payload) {
-        JsonElement jsonElement = new JsonParser().parse(payload);
-        Set<String> keys = jsonElement.getAsJsonObject().keySet();
-        keys.forEach(key -> this.features.add(new Feature(new Type(key), jsonElement.getAsJsonObject().get(key).getAsString())));
+    private Item(final List<Feature> features) {
+        this.features.addAll(features);
     }
 
-    public static Item create(final ItemJSON article) {
-        return new Item(article.getPayload());
+    public static Item create(final List<Feature> features) {
+        return new Item(features);
     }
 
     public Set<Feature> getFeatures() {

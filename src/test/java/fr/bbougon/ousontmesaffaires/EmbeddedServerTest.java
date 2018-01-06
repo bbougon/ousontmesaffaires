@@ -10,7 +10,7 @@ import static org.fest.assertions.api.Assertions.fail;
 public class EmbeddedServerTest {
 
     @Test
-    public void exceptionsAreLogged() {
+    public void exceptionsAreLoggedOnStart() {
         try {
             EmbeddedServer.start(new Configuration.ServerConfiguration() {
                 @Override
@@ -26,7 +26,7 @@ public class EmbeddedServerTest {
             assertThat(TestAppender.events).isNotEmpty();
             assertThat(TestAppender.getFormattedMessage(Level.ERROR, 0)).isEqualTo("Impossible to start server with descriptor file 'non-existing-file-descriptor.xml' on port '66000'");
         } catch (Exception e) {
-            fail("Exception should not be thrown");
+            fail("Exception should not be thrown", e);
         }
     }
 

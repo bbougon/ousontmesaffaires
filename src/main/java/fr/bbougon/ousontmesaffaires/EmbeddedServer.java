@@ -46,7 +46,7 @@ class EmbeddedServer {
         try {
             ServerHolder.INSTANCE.server.stop();
         } catch (Exception e) {
-            e.printStackTrace();
+            LoggerFactory.getLogger(EmbeddedServer.class).error("An error occurred when stopping server ({})", e.getMessage());
         }
     }
 
