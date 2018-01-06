@@ -6,6 +6,7 @@ import org.mongolink.MongoSession;
 import javax.annotation.PostConstruct;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
+import java.util.UUID;
 
 public class MongoRepository<T> implements Repository<T> {
 
@@ -27,6 +28,11 @@ public class MongoRepository<T> implements Repository<T> {
     @Override
     public List<T> getAll() {
         return session.getAll(persistentType());
+    }
+
+    @Override
+    public T findById(final UUID id) {
+        return session.get(id, persistentType());
     }
 
     private Class<T> persistentType() {

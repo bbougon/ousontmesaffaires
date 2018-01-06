@@ -18,4 +18,5 @@ public abstract class MemoryRepository<T> implements Repository<T> {
     public List<T> getAll() {
         return entities;
     }
+
 }

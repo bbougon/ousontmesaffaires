@@ -8,12 +8,12 @@ import org.slf4j.LoggerFactory;
 
 import java.net.InetSocketAddress;
 
-public class EmbeddedServer {
+class EmbeddedServer {
 
     private EmbeddedServer() {
     }
 
-    public static String getUrl() {
+    static String getUrl() {
         return ServerHolder.INSTANCE.server.getURI().toString();
     }
 
@@ -40,6 +40,14 @@ public class EmbeddedServer {
 
     private void setConfiguration(final ServerConfiguration configuration) {
         this.configuration = configuration;
+    }
+
+    static void stop() {
+        try {
+            ServerHolder.INSTANCE.server.stop();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private static class ServerHolder {

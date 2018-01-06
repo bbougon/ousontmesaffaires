@@ -1,6 +1,5 @@
-package fr.bbougon.ousontmesaffaires.rules;
+package fr.bbougon.ousontmesaffaires;
 
-import fr.bbougon.ousontmesaffaires.*;
 import fr.bbougon.ousontmesaffaires.repositories.*;
 import org.junit.rules.ExternalResource;
 import org.mongolink.MongoSession;
@@ -11,7 +10,10 @@ public class WithEmbeddedServer extends ExternalResource {
     @Override
     public void before() throws Exception {
         loadConfiguration();
-        Main.main(new String[]{""});
+    }
+
+    public void start() {
+        EmbeddedServer.start(Configuration.getServerConfiguration());
     }
 
     private void loadConfiguration() {
@@ -51,4 +53,7 @@ public class WithEmbeddedServer extends ExternalResource {
         return EmbeddedServer.getUrl();
     }
 
+    public void stop() {
+        EmbeddedServer.stop();
+    }
 }
