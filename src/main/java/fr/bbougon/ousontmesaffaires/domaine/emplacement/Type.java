@@ -4,6 +4,7 @@ import com.google.common.base.Objects;
 
 public class Type {
 
+    @SuppressWarnings("UnusedDeclaration")
     public Type() {
     }
 

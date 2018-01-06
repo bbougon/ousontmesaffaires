@@ -3,6 +3,7 @@ package fr.bbougon.ousontmesaffaires.entrepot.mongo.mapping;
 import fr.bbougon.ousontmesaffaires.domaine.emplacement.Type;
 import org.mongolink.domain.mapper.ComponentMap;
 
+@SuppressWarnings("UnusedDeclaration")
 public class TypeMapping extends ComponentMap<Type> {
 
     @Override
