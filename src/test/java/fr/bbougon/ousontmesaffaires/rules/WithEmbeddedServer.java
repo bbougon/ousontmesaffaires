@@ -26,7 +26,7 @@ public class WithEmbeddedServer extends ExternalResource {
 
                     @Override
                     public int getPort() {
-                        return 8080;
+                        return 17000;
                     }
                 };
             }
@@ -44,6 +44,7 @@ public class WithEmbeddedServer extends ExternalResource {
         session.start();
         session.getDb().drop();
         session.stop();
+        FileRepositories.initialise(new DefaultFileRepositories());
     }
 
     public String getUrl() {
