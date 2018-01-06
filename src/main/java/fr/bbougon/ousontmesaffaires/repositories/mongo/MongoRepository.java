@@ -1,6 +1,6 @@
-package fr.bbougon.ousontmesaffaires.entrepot.mongo;
+package fr.bbougon.ousontmesaffaires.repositories.mongo;
 
-import fr.bbougon.ousontmesaffaires.entrepot.Repository;
+import fr.bbougon.ousontmesaffaires.repositories.Repository;
 import org.mongolink.MongoSession;
 
 import javax.annotation.PostConstruct;

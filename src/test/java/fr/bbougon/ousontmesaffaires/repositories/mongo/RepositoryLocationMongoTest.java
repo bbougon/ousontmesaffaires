@@ -1,7 +1,7 @@
-package fr.bbougon.ousontmesaffaires.entrepot.mongo;
+package fr.bbougon.ousontmesaffaires.repositories.mongo;
 
 import com.google.common.collect.Sets;
-import fr.bbougon.ousontmesaffaires.domaine.emplacement.*;
+import fr.bbougon.ousontmesaffaires.domain.location.*;
 import fr.bbougon.ousontmesaffaires.rules.MongoRule;
 import fr.bbougon.ousontmesaffaires.test.utils.JsonFileUtils;
 import fr.bbougon.ousontmesaffaires.web.ressources.json.ItemJSON;
@@ -16,7 +16,7 @@ import static org.fest.assertions.api.Assertions.assertThat;
 public class RepositoryLocationMongoTest {
 
     @Rule
-    public MongolinkRule mongolinkRule = MongolinkRule.withPackage("fr.bbougon.ousontmesaffaires.entrepot.mongo.mapping");
+    public MongolinkRule mongolinkRule = MongolinkRule.withPackage("fr.bbougon.ousontmesaffaires.repositories.mongo.mapping");
 
     @Rule
     public MongoRule mongoRule = new MongoRule();

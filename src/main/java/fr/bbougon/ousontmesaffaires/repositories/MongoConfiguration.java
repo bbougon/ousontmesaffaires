@@ -1,4 +1,4 @@
-package fr.bbougon.ousontmesaffaires.entrepot;
+package fr.bbougon.ousontmesaffaires.repositories;
 
 import org.mongolink.*;
 import org.mongolink.domain.mapper.ContextBuilder;
@@ -15,7 +15,7 @@ public class MongoConfiguration {
     }
 
     public static MongoSession createSession(final Settings settings) {
-        ContextBuilder builder = new ContextBuilder("fr.bbougon.ousontmesaffaires.entrepot.mongo.mapping");
+        ContextBuilder builder = new ContextBuilder("fr.bbougon.ousontmesaffaires.repositories.mongo.mapping");
         return SingletonHolder.INSTANCE.createSession(builder, settings);
     }
 

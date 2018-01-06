@@ -1,4 +1,4 @@
-package fr.bbougon.ousontmesaffaires.domaine.emplacement;
+package fr.bbougon.ousontmesaffaires.domain.location;
 
 import com.google.common.base.Objects;
 

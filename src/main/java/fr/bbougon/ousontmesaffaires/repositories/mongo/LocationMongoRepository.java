@@ -1,7 +1,7 @@
-package fr.bbougon.ousontmesaffaires.entrepot.mongo;
+package fr.bbougon.ousontmesaffaires.repositories.mongo;
 
-import fr.bbougon.ousontmesaffaires.domaine.emplacement.Location;
-import fr.bbougon.ousontmesaffaires.entrepot.*;
+import fr.bbougon.ousontmesaffaires.domain.location.Location;
+import fr.bbougon.ousontmesaffaires.repositories.*;
 import org.mongolink.MongoSession;
 
 public class LocationMongoRepository extends MongoRepository<Location> implements LocationRepository {

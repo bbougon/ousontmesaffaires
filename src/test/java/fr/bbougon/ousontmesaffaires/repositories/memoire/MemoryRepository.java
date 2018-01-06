@@ -1,7 +1,7 @@
-package fr.bbougon.ousontmesaffaires.entrepot.memoire;
+package fr.bbougon.ousontmesaffaires.repositories.memoire;
 
 import com.google.common.collect.Lists;
-import fr.bbougon.ousontmesaffaires.entrepot.Repository;
+import fr.bbougon.ousontmesaffaires.repositories.Repository;
 
 import java.util.List;
 

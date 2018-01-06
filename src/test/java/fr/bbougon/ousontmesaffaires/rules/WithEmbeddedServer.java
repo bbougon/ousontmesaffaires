@@ -1,7 +1,7 @@
 package fr.bbougon.ousontmesaffaires.rules;
 
 import fr.bbougon.ousontmesaffaires.*;
-import fr.bbougon.ousontmesaffaires.entrepot.*;
+import fr.bbougon.ousontmesaffaires.repositories.*;
 import org.junit.rules.ExternalResource;
 import org.mongolink.MongoSession;
 import org.mongolink.Settings;

@@ -1,4 +1,4 @@
-package fr.bbougon.ousontmesaffaires.entrepot;
+package fr.bbougon.ousontmesaffaires.repositories;
 
 import java.util.List;
 

@@ -1,11 +1,11 @@
 package fr.bbougon.ousontmesaffaires.boundaries;
 
-import fr.bbougon.ousontmesaffaires.domaine.emplacement.Item;
-import fr.bbougon.ousontmesaffaires.domaine.emplacement.Location;
-import fr.bbougon.ousontmesaffaires.entrepot.LocationRepository;
+import fr.bbougon.ousontmesaffaires.domain.location.Item;
+import fr.bbougon.ousontmesaffaires.domain.location.Location;
+import fr.bbougon.ousontmesaffaires.repositories.LocationRepository;
 import fr.bbougon.ousontmesaffaires.web.ressources.json.ItemJSON;
-import fr.bbougon.ousontmesaffaires.web.utilitaires.Encoder;
-import fr.bbougon.ousontmesaffaires.web.utilitaires.URIBuilder;
+import fr.bbougon.ousontmesaffaires.web.helpers.Encoder;
+import fr.bbougon.ousontmesaffaires.web.helpers.URIBuilder;
 import org.glassfish.jersey.process.internal.RequestScoped;
 
 import javax.inject.Inject;

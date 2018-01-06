@@ -1,6 +1,6 @@
-package fr.bbougon.ousontmesaffaires.entrepot.mongo.mapping;
+package fr.bbougon.ousontmesaffaires.repositories.mongo.mapping;
 
-import fr.bbougon.ousontmesaffaires.domaine.emplacement.Feature;
+import fr.bbougon.ousontmesaffaires.domain.location.Feature;
 import org.mongolink.domain.mapper.ComponentMap;
 
 @SuppressWarnings("UnusedDeclaration")

@@ -1,7 +1,7 @@
 package fr.bbougon.ousontmesaffaires.web.ressources;
 
-import fr.bbougon.ousontmesaffaires.entrepot.LocationRepository;
-import fr.bbougon.ousontmesaffaires.entrepot.mongo.LocationMongoRepository;
+import fr.bbougon.ousontmesaffaires.repositories.LocationRepository;
+import fr.bbougon.ousontmesaffaires.repositories.mongo.LocationMongoRepository;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.server.ResourceConfig;
 

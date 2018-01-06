@@ -1,6 +1,6 @@
 package fr.bbougon.ousontmesaffaires;
 
-import fr.bbougon.ousontmesaffaires.entrepot.FileRepositories;
+import fr.bbougon.ousontmesaffaires.repositories.FileRepositories;
 import org.mongolink.Settings;
 
 public class Configuration {

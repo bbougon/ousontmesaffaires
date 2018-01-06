@@ -1,4 +1,4 @@
-package fr.bbougon.ousontmesaffaires.web.utilitaires;
+package fr.bbougon.ousontmesaffaires.web.helpers;
 
 import java.net.URI;
 import java.net.URISyntaxException;

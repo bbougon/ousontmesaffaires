@@ -1,6 +1,6 @@
 package fr.bbougon.ousontmesaffaires.web.ressources;
 
-import fr.bbougon.ousontmesaffaires.entrepot.MongoConfiguration;
+import fr.bbougon.ousontmesaffaires.repositories.MongoConfiguration;
 import fr.bbougon.ousontmesaffaires.rules.WithEmbeddedServer;
 import fr.bbougon.ousontmesaffaires.test.utils.JsonFileUtils;
 import org.junit.Rule;

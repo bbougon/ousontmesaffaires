@@ -1,4 +1,4 @@
-package fr.bbougon.ousontmesaffaires.web.utilitaires;
+package fr.bbougon.ousontmesaffaires.web.helpers;
 
 import org.apache.commons.codec.binary.Base64;
 

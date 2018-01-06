@@ -3,7 +3,7 @@ package fr.bbougon.ousontmesaffaires.rules;
 import com.google.common.collect.Lists;
 import com.mongodb.MongoClient;
 import com.mongodb.ServerAddress;
-import fr.bbougon.ousontmesaffaires.entrepot.MongoConfiguration;
+import fr.bbougon.ousontmesaffaires.repositories.MongoConfiguration;
 import org.junit.rules.ExternalResource;
 import org.mongolink.*;
 

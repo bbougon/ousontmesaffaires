@@ -1,8 +1,8 @@
 package fr.bbougon.ousontmesaffaires.boundaries;
 
 import com.google.common.collect.Sets;
-import fr.bbougon.ousontmesaffaires.domaine.emplacement.*;
-import fr.bbougon.ousontmesaffaires.entrepot.memoire.LocationMemoryRepository;
+import fr.bbougon.ousontmesaffaires.domain.location.*;
+import fr.bbougon.ousontmesaffaires.repositories.memoire.LocationMemoryRepository;
 import fr.bbougon.ousontmesaffaires.test.utils.JsonFileUtils;
 import org.junit.Test;
 
