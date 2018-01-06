@@ -1,11 +1,12 @@
 package fr.bbougon.ousontmesaffaires.entrepot.mongo;
 
-import fr.bbougon.ousontmesaffaires.domaine.emplacement.Item;
-import fr.bbougon.ousontmesaffaires.domaine.emplacement.Location;
+import com.google.common.collect.Sets;
+import fr.bbougon.ousontmesaffaires.domaine.emplacement.*;
 import fr.bbougon.ousontmesaffaires.rules.MongoRule;
 import fr.bbougon.ousontmesaffaires.test.utils.JsonFileUtils;
 import fr.bbougon.ousontmesaffaires.web.ressources.json.ItemJSON;
-import org.junit.*;
+import org.junit.Rule;
+import org.junit.Test;
 import org.mongolink.test.MongolinkRule;
 
 import java.util.List;
@@ -32,7 +33,10 @@ public class RepositoryLocationMongoTest {
         List<Location> locations = locationMongoRepository.getAll();
         assertThat(locations).isNotEmpty();
         assertThat(locations.get(0).getItems()).isNotEmpty();
-        assertThat(locations.get(0).getItems().get(0).getContent()).isEqualTo("\"{\\\"type\\\":\\\"tshirt\\\",\\\"couleur\\\":\\\"blanc\\\",\\\"taille\\\":\\\"3ans\\\"}\"");
+        assertThat(locations.get(0).getItems().get(0).getFeatures()).containsAll(Sets.newHashSet(
+                new Feature(new Type("type"), "tshirt"),
+                new Feature(new Type("couleur"), "blanc"),
+                new Feature(new Type("taille"), "3ans")));
     }
 
 }

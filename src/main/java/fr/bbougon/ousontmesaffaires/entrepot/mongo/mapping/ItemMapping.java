@@ -8,6 +8,6 @@ public class ItemMapping extends ComponentMap<Item> {
 
     @Override
     public void map() {
-        property().onProperty(Item::getContent);
+        collection().onProperty(Item::getFeatures);
     }
 }

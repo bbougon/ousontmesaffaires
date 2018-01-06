@@ -4,16 +4,16 @@ import com.google.gson.*;
 
 public class ItemJSON {
 
-    private ItemJSON(final String item) {
+    private ItemJSON(final JsonObject item) {
         this.item = item;
     }
 
-    private String item;
+    private JsonObject item;
 
     public static ItemJSON from(final String payload) {
         JsonElement parse = new JsonParser().parse(payload);
         JsonObject item = ((JsonObject) parse).getAsJsonObject("item");
-        return new ItemJSON(item.toString());
+        return new ItemJSON(item);
     }
 
     public String getPayload() {

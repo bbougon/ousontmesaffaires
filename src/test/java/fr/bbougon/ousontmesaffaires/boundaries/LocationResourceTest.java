@@ -1,6 +1,7 @@
 package fr.bbougon.ousontmesaffaires.boundaries;
 
-import fr.bbougon.ousontmesaffaires.domaine.emplacement.Location;
+import com.google.common.collect.Sets;
+import fr.bbougon.ousontmesaffaires.domaine.emplacement.*;
 import fr.bbougon.ousontmesaffaires.entrepot.memoire.LocationMemoryRepository;
 import fr.bbougon.ousontmesaffaires.test.utils.JsonFileUtils;
 import org.junit.Test;
@@ -26,7 +27,10 @@ public class LocationResourceTest {
         List<Location> locations = locationResource.locationRepository.getAll();
         assertThat(locations).isNotNull();
         assertThat(locations.get(0).getItems()).isNotEmpty();
-        assertThat(locations.get(0).getItems().get(0).getContent()).isEqualTo("\"{\\\"type\\\":\\\"tshirt\\\",\\\"couleur\\\":\\\"blanc\\\",\\\"taille\\\":\\\"3ans\\\"}\"");
+        assertThat(locations.get(0).getItems().get(0).getFeatures()).containsAll(Sets.newHashSet(
+                new Feature(new Type("type"), "tshirt"),
+                new Feature(new Type("couleur"), "blanc"),
+                new Feature(new Type("taille"), "3ans")));
     }
 
 }
