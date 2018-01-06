@@ -2,12 +2,12 @@ package fr.bbougon.ousontmesaffaires.boundaries;
 
 import com.google.common.collect.Sets;
 import fr.bbougon.ousontmesaffaires.domain.location.*;
+import fr.bbougon.ousontmesaffaires.repositories.WithMongoConfiguration;
 import fr.bbougon.ousontmesaffaires.repositories.memoire.LocationMemoryRepository;
 import fr.bbougon.ousontmesaffaires.test.utils.JsonFileUtils;
 import fr.bbougon.ousontmesaffaires.web.helpers.Encoder;
 import fr.bbougon.ousontmesaffaires.web.ressources.json.Features;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import javax.ws.rs.core.Response;
 import java.io.IOException;
@@ -18,6 +18,9 @@ import static javax.ws.rs.core.Response.Status.*;
 import static org.fest.assertions.api.Assertions.assertThat;
 
 public class LocationResourceTest {
+
+    @Rule
+    public WithMongoConfiguration withMongoConfiguration = new WithMongoConfiguration();
 
     @Before
     public void before() {
@@ -34,9 +37,9 @@ public class LocationResourceTest {
         assertThat(locations).isNotNull();
         assertThat(locations.get(0).getItems()).isNotEmpty();
         assertThat(locations.get(0).getItems().get(0).getFeatures()).containsAll(Sets.newHashSet(
-                Feature.create(Type.create("type"), "tshirt"),
-                Feature.create(Type.create("couleur"), "blanc"),
-                Feature.create(Type.create("taille"), "3ans")));
+                Feature.create("type", "tshirt"),
+                Feature.create("couleur", "blanc"),
+                Feature.create("taille", "3ans")));
     }
 
     @Test
@@ -51,9 +54,9 @@ public class LocationResourceTest {
         List<Location> locations = locationResource.locationRepository.getAll();
         assertThat(locations.get(0).getItems()).hasSize(2);
         assertThat(locations.get(0).getItems().get(1).getFeatures()).containsAll(Sets.newHashSet(
-                Feature.create(Type.create("type"), "pantalon"),
-                Feature.create(Type.create("couleur"), "noir"),
-                Feature.create(Type.create("taille"), "3ans")));
+                Feature.create("type", "pantalon"),
+                Feature.create("couleur", "noir"),
+                Feature.create("taille", "3ans")));
     }
 
     @Test

@@ -11,7 +11,7 @@ public class Features {
 
     public static List<Feature> getFeaturesFromPayload(final String payload) {
         return ItemJSON.from(payload).getFeatures().stream()
-                .map(feature -> Feature.create(Type.create(feature.getType()), feature.getValue()))
+                .map(feature -> Feature.create(feature.getType(), feature.getValue()))
                 .collect(Collectors.toList());
     }
 

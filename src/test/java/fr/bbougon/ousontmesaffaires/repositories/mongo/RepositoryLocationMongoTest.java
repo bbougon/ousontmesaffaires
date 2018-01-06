@@ -34,9 +34,9 @@ public class RepositoryLocationMongoTest {
         assertThat(locations).isNotEmpty();
         assertThat(locations.get(0).getItems()).isNotEmpty();
         assertThat(locations.get(0).getItems().get(0).getFeatures()).containsAll(Sets.newHashSet(
-                Feature.create(Type.create("type"), "tshirt"),
-                Feature.create(Type.create("couleur"), "blanc"),
-                Feature.create(Type.create("taille"), "3ans")));
+                Feature.create("type", "tshirt"),
+                Feature.create("couleur", "blanc"),
+                Feature.create("taille", "3ans")));
     }
 
 }

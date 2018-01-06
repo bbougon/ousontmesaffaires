@@ -8,12 +8,12 @@ public class Feature {
     Feature() {
     }
 
-    private Feature(final Type type, final String feature) {
+    private Feature(final String type, final String feature) {
         this.type = type;
         this.feature = feature;
     }
 
-    public Type getType() {
+    public String getType() {
         return type;
     }
 
@@ -35,10 +35,10 @@ public class Feature {
         return Objects.hashCode(type, feature);
     }
 
-    public static Feature create(final Type type, final String value) {
+    public static Feature create(final String type, final String value) {
         return new Feature(type, value);
     }
 
-    private Type type;
+    private String type;
     private String feature;
 }

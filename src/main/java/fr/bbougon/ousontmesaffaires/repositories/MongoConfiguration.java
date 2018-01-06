@@ -25,10 +25,10 @@ public class MongoConfiguration {
         return session;
     }
 
-    private static class SingletonHolder {
-        static final MongoConfiguration INSTANCE = new MongoConfiguration();
+    static class SingletonHolder {
+        static MongoConfiguration INSTANCE = new MongoConfiguration();
     }
 
-    private MongoSessionManager sessionManager;
-    private MongoSession session;
+    MongoSessionManager sessionManager;
+    MongoSession session;
 }

@@ -2,6 +2,7 @@ package fr.bbougon.ousontmesaffaires.boundaries;
 
 import fr.bbougon.ousontmesaffaires.domain.location.*;
 import fr.bbougon.ousontmesaffaires.repositories.LocationRepository;
+import fr.bbougon.ousontmesaffaires.repositories.MongoConfiguration;
 import fr.bbougon.ousontmesaffaires.web.helpers.*;
 import fr.bbougon.ousontmesaffaires.web.ressources.json.Features;
 import org.glassfish.jersey.process.internal.RequestScoped;
@@ -27,6 +28,7 @@ public class LocationResource {
         Location location = new Location();
         location.add(Item.create(Features.getFeaturesFromPayload(payload)));
         locationRepository.persist(location);
+        MongoConfiguration.stopSession();
         return Response.created(new URIBuilder().build(PATH + "/" + Encoder.toBase64(location.getId().toString()))).build();
     }
 
@@ -39,6 +41,7 @@ public class LocationResource {
             return Response.status(NOT_FOUND).build();
         }
         location.add(Item.create(Features.getFeaturesFromPayload(payload)));
+        MongoConfiguration.stopSession();
         return Response.noContent().build();
     }
 

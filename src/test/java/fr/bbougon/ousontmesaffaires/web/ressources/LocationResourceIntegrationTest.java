@@ -1,11 +1,11 @@
 package fr.bbougon.ousontmesaffaires.web.ressources;
 
-import fr.bbougon.ousontmesaffaires.repositories.MongoConfiguration;
 import fr.bbougon.ousontmesaffaires.WithEmbeddedServer;
 import fr.bbougon.ousontmesaffaires.test.utils.JsonFileUtils;
 import org.junit.*;
 
-import javax.ws.rs.client.*;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -31,7 +31,6 @@ public class LocationResourceIntegrationTest {
     @Test
     public void canAddLocation() {
         Response response = createLocation("json/t-shirt.json");
-        MongoConfiguration.stopSession();
 
         assertThat(response.getStatus()).isEqualTo(CREATED.getStatusCode());
     }
@@ -45,7 +44,6 @@ public class LocationResourceIntegrationTest {
                 .request()
                 .accept(MediaType.APPLICATION_JSON_TYPE)
                 .post(Entity.json(new JsonFileUtils("json/t-shirt.json").getPayload()), Response.class);
-        MongoConfiguration.stopSession();
 
         assertThat(response.getStatus()).isEqualTo(NO_CONTENT.getStatusCode());
     }
