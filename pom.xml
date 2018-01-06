@@ -174,12 +174,6 @@
 
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <classpathDependencyExcludes>
-                        <classpathDependencyExclude>ch.qos.logback:logback-classic</classpathDependencyExclude>
-                        <classpathDependencyExclude>org.apache.logging.log4j:log4j-slf4j-impl</classpathDependencyExclude>
-                    </classpathDependencyExcludes>
-                </configuration>
             </plugin>
         </plugins>
 
@@ -202,7 +196,7 @@
                         jetty-logging.properties
                     </include>
                     <include>
-                        log4j2.properties
+                        logback.xml
                     </include>
                 </includes>
             </resource>

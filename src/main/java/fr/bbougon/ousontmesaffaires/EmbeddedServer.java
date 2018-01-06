@@ -4,6 +4,7 @@ import fr.bbougon.ousontmesaffaires.Configuration.ServerConfiguration;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.Configuration.ClassList;
 import org.eclipse.jetty.webapp.WebAppContext;
+import org.slf4j.LoggerFactory;
 
 import java.net.InetSocketAddress;
 
@@ -33,7 +34,7 @@ public class EmbeddedServer {
             server.setHandler(context);
             server.start();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            LoggerFactory.getLogger(EmbeddedServer.class).error("Impossible to start server with descriptor file '{}' on port '{}'", configuration.getDescriptor(), configuration.getPort());
         }
     }
 
