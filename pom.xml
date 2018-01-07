@@ -94,6 +94,11 @@
             <artifactId>jetty-plus</artifactId>
             <version>${jetty.version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.github.lukehutch</groupId>
+            <artifactId>fast-classpath-scanner</artifactId>
+            <version>LATEST</version>
+        </dependency>
 
         <dependency>
             <groupId>junit</groupId>

@@ -1,10 +1,11 @@
 package fr.bbougon.ousontmesaffaires.boundaries;
 
-import fr.bbougon.ousontmesaffaires.domain.location.*;
-import fr.bbougon.ousontmesaffaires.repositories.LocationRepository;
-import fr.bbougon.ousontmesaffaires.repositories.MongoConfiguration;
+import fr.bbougon.ousontmesaffaires.command.CommandHandlers;
+import fr.bbougon.ousontmesaffaires.command.Nothing;
+import fr.bbougon.ousontmesaffaires.command.location.ItemAddToLocationCommand;
+import fr.bbougon.ousontmesaffaires.command.location.LocationAddCommand;
 import fr.bbougon.ousontmesaffaires.web.helpers.*;
-import fr.bbougon.ousontmesaffaires.web.ressources.json.Features;
+import org.apache.commons.lang3.tuple.Pair;
 import org.glassfish.jersey.process.internal.RequestScoped;
 
 import javax.inject.Inject;
@@ -20,28 +21,23 @@ import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 public class LocationResource {
 
     @Inject
-    LocationRepository locationRepository;
+    CommandHandlers commandHandlers;
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response add(final String payload) {
-        Location location = new Location();
-        location.add(Item.create(Features.getFeaturesFromPayload(payload)));
-        locationRepository.persist(location);
-        MongoConfiguration.stopSession();
-        return Response.created(new URIBuilder().build(PATH + "/" + Encoder.toBase64(location.getId().toString()))).build();
+        Pair<UUID, Object> pair = commandHandlers.locationAdd().execute(new LocationAddCommand(payload));
+        return Response.created(new URIBuilder().build(PATH + "/" + Encoder.toBase64(pair.getKey().toString()))).build();
     }
 
     @POST
     @Path("/{UUID}/item")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addItem(@PathParam("UUID") final String locationId, final String payload) {
-        Location location = locationRepository.findById(UUID.fromString(Decoder.fromBase64(locationId)));
-        if(location == null){
+        Pair<Nothing, Object> pair = commandHandlers.itemAddToLocation().execute(new ItemAddToLocationCommand(UUID.fromString(Decoder.fromBase64(locationId)), payload));
+        if(pair == null){
             return Response.status(NOT_FOUND).build();
         }
-        location.add(Item.create(Features.getFeaturesFromPayload(payload)));
-        MongoConfiguration.stopSession();
         return Response.noContent().build();
     }
 

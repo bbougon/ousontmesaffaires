@@ -25,6 +25,10 @@ public class MongoConfiguration {
         return session;
     }
 
+    public static void startSession() {
+        SingletonHolder.INSTANCE.session.start();
+    }
+
     static class SingletonHolder {
         static MongoConfiguration INSTANCE = new MongoConfiguration();
     }

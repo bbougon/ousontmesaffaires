@@ -3,7 +3,6 @@ package fr.bbougon.ousontmesaffaires.repositories.mongo;
 import fr.bbougon.ousontmesaffaires.repositories.Repository;
 import org.mongolink.MongoSession;
 
-import javax.annotation.PostConstruct;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 import java.util.UUID;
@@ -13,12 +12,6 @@ public class MongoRepository<T> implements Repository<T> {
     MongoRepository(MongoSession session) {
         this.session = session;
     }
-
-    @PostConstruct
-    private void startSession() {
-        session.start();
-    }
-
 
     public void persist(T entity) {
         session.save(entity);
