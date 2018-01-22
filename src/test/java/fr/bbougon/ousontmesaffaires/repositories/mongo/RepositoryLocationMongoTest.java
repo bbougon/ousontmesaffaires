@@ -25,7 +25,7 @@ public class RepositoryLocationMongoTest {
     public void canPersistLocation() {
         Location location = new Location();
         location.add(Item.create(Features.getFeaturesFromPayload(new JsonFileUtils("json/t-shirt.json").getPayload())));
-        LocationMongoRepository locationMongoRepository = new LocationMongoRepository(mongoRule.session);
+        LocationMongoRepository locationMongoRepository = new LocationMongoRepository(mongoRule.mongolinkSessionManager);
 
         locationMongoRepository.persist(location);
         mongoRule.cleanSession();

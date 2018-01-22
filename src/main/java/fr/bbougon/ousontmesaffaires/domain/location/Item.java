@@ -1,6 +1,8 @@
 package fr.bbougon.ousontmesaffaires.domain.location;
 
 import com.google.common.collect.Sets;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.List;
 import java.util.Set;
@@ -24,4 +26,24 @@ public class Item {
     }
 
     private Set<Feature> features = Sets.newHashSet();
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Item item = (Item) o;
+
+        return new EqualsBuilder()
+                .append(features, item.features)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(features)
+                .toHashCode();
+    }
 }

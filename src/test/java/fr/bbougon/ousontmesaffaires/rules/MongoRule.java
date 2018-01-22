@@ -1,38 +1,29 @@
 package fr.bbougon.ousontmesaffaires.rules;
 
-import com.google.common.collect.Lists;
-import com.mongodb.MongoClient;
-import com.mongodb.ServerAddress;
-import fr.bbougon.ousontmesaffaires.repositories.MongoConfiguration;
+import fr.bbougon.ousontmesaffaires.infrastructure.module.mongolink.MongolinkSessionManager;
+import fr.bbougon.ousontmesaffaires.repositories.FileRepositories;
 import org.junit.rules.ExternalResource;
-import org.mongolink.*;
 
 public class MongoRule extends ExternalResource {
 
     @Override
     public void before() throws Throwable {
-        session = MongoConfiguration.createSession(settings());
-        session.start();
+        mongolinkSessionManager = new MongolinkSessionManager("fr.bbougon.ousontmesaffaires.repositories.mongo.mapping", FileRepositories.dataBaseConfiguration().get().getSettings());
+        mongolinkSessionManager.start();
         super.before();
     }
 
     @Override
     public void after() {
-        session.getDb().drop();
-        session.stop();
+        mongolinkSessionManager.getSession().getDb().drop();
+        mongolinkSessionManager.getSession().stop();
         super.after();
     }
 
-    private Settings settings() {
-        return Settings.defaultInstance()
-                .withDatabase(new MongoClient(new ServerAddress("127.0.0.1", 27017), Lists.newArrayList()).getDatabase("ousontmesaffaires"))
-                .withDefaultUpdateStrategy(UpdateStrategies.DIFF);
-    }
-
     public void cleanSession() {
-        session.flush();
-        session.clear();
+        mongolinkSessionManager.getSession().flush();
+        mongolinkSessionManager.getSession().clear();
     }
 
-    public MongoSession session;
+    public MongolinkSessionManager mongolinkSessionManager;
 }

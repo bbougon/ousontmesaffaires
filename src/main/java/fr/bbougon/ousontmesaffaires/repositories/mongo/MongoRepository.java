@@ -1,7 +1,7 @@
 package fr.bbougon.ousontmesaffaires.repositories.mongo;
 
+import fr.bbougon.ousontmesaffaires.infrastructure.module.mongolink.MongolinkSessionManager;
 import fr.bbougon.ousontmesaffaires.repositories.Repository;
-import org.mongolink.MongoSession;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
@@ -9,23 +9,23 @@ import java.util.UUID;
 
 public class MongoRepository<T> implements Repository<T> {
 
-    MongoRepository(MongoSession session) {
-        this.session = session;
+    MongoRepository(MongolinkSessionManager mongolinkSessionManager) {
+        this.mongolinkSessionManager = mongolinkSessionManager;
     }
 
     public void persist(T entity) {
-        session.save(entity);
-        session.flush();
+        mongolinkSessionManager.getSession().save(entity);
+        mongolinkSessionManager.getSession().flush();
     }
 
     @Override
     public List<T> getAll() {
-        return session.getAll(persistentType());
+        return mongolinkSessionManager.getSession().getAll(persistentType());
     }
 
     @Override
     public T findById(final UUID id) {
-        return session.get(id, persistentType());
+        return mongolinkSessionManager.getSession().get(id, persistentType());
     }
 
     private Class<T> persistentType() {
@@ -33,5 +33,5 @@ public class MongoRepository<T> implements Repository<T> {
         return (Class<T>) superclass.getActualTypeArguments()[0];
     }
 
-    private final MongoSession session;
+    private final MongolinkSessionManager mongolinkSessionManager;
 }

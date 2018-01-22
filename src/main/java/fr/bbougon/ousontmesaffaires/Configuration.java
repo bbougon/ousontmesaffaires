@@ -10,9 +10,9 @@ public class Configuration {
     }
 
     public interface ServerConfiguration {
-        String getDescriptor();
 
         int getPort();
+
     }
 
     public interface DataBaseConfiguration {

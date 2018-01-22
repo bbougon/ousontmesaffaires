@@ -13,7 +13,6 @@ public class FileRepositoriesTest {
     public void canGetServerConfiguration() {
         ServerConfiguration serverConfiguration = FileRepositories.serverConfiguration().get();
 
-        assertThat(serverConfiguration.getDescriptor()).isEqualTo("src/main/package/dev/resources/web.xml");
         assertThat(serverConfiguration.getPort()).isEqualTo(8182);
     }
 

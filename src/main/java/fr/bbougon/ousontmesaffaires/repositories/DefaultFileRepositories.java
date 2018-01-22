@@ -15,17 +15,7 @@ public class DefaultFileRepositories extends FileRepositories {
 
     @Override
     public FileRepository<Configuration.ServerConfiguration> getServerConfiguration() {
-        return() -> new Configuration.ServerConfiguration() {
-            @Override
-            public String getDescriptor() {
-                return bundleMapped().get("server.descriptor");
-            }
-
-            @Override
-            public int getPort() {
-                return Integer.parseInt(bundleMapped().get("server.port"));
-            }
-        };
+        return() -> (Configuration.ServerConfiguration) () -> Integer.parseInt(bundleMapped().get("server.port"));
     }
 
     @Override

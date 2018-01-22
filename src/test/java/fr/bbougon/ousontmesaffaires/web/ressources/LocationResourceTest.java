@@ -1,14 +1,15 @@
-package fr.bbougon.ousontmesaffaires.boundaries;
+package fr.bbougon.ousontmesaffaires.web.ressources;
 
 import com.google.common.collect.Sets;
-import fr.bbougon.ousontmesaffaires.command.CommandHandlers;
+import fr.bbougon.ousontmesaffaires.command.CommandHandlersForTest;
 import fr.bbougon.ousontmesaffaires.domain.location.*;
-import fr.bbougon.ousontmesaffaires.repositories.WithMongoConfiguration;
-import fr.bbougon.ousontmesaffaires.repositories.memoire.LocationMemoryRepository;
+import fr.bbougon.ousontmesaffaires.repositories.MemoryRepositories;
+import fr.bbougon.ousontmesaffaires.repositories.Repositories;
 import fr.bbougon.ousontmesaffaires.test.utils.JsonFileUtils;
 import fr.bbougon.ousontmesaffaires.web.helpers.Encoder;
 import fr.bbougon.ousontmesaffaires.web.ressources.json.Features;
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 
 import javax.ws.rs.core.Response;
 import java.io.IOException;
@@ -20,12 +21,9 @@ import static org.fest.assertions.api.Assertions.assertThat;
 
 public class LocationResourceTest {
 
-    @Rule
-    public WithMongoConfiguration withMongoConfiguration = new WithMongoConfiguration();
-
     @Before
     public void before() {
-        locationRepository = new LocationMemoryRepository();
+        Repositories.initialise(new MemoryRepositories());
         locationResource = initialise();
     }
 
@@ -35,7 +33,7 @@ public class LocationResourceTest {
 
         assertThat(response.getStatus()).isEqualTo(CREATED.getStatusCode());
         assertThat(response.getLocation().getPath()).matches("^/location/[a-zA-Z0-9]{48}");
-        List<Location> locations = locationRepository.getAll();
+        List<Location> locations = Repositories.locationRepository().getAll();
         assertThat(locations).isNotNull();
         assertThat(locations.get(0).getItems()).isNotEmpty();
         assertThat(locations.get(0).getItems().get(0).getFeatures()).containsAll(Sets.newHashSet(
@@ -48,12 +46,12 @@ public class LocationResourceTest {
     public void canAddAnItemToALocation() {
         Location location = new Location();
         location.add(Item.create(Features.getFeaturesFromPayload("{\"item\":{\"type\":\"pantalon\"}}")));
-        locationRepository.persist(location);
+        Repositories.locationRepository().persist(location);
 
         Response response = locationResource.addItem(Encoder.toBase64(location.getId().toString()), new JsonFileUtils("json/pantalon.json").getPayload());
 
         assertThat(response.getStatus()).isEqualTo(NO_CONTENT.getStatusCode());
-        List<Location> locations = locationRepository.getAll();
+        List<Location> locations = Repositories.locationRepository().getAll();
         assertThat(locations.get(0).getItems()).hasSize(2);
         assertThat(locations.get(0).getItems().get(1).getFeatures()).containsAll(Sets.newHashSet(
                 Feature.create("type", "pantalon"),
@@ -70,10 +68,9 @@ public class LocationResourceTest {
 
     private LocationResource initialise() {
         LocationResource locationResource = new LocationResource();
-        locationResource.commandHandlers = new CommandHandlers(locationRepository);
+        locationResource.commandHandlers = new CommandHandlersForTest();
         return locationResource;
     }
 
     private LocationResource locationResource;
-    private LocationMemoryRepository locationRepository;
 }

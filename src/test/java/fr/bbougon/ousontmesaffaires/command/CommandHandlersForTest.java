@@ -3,22 +3,15 @@ package fr.bbougon.ousontmesaffaires.command;
 import fr.bbougon.ousontmesaffaires.command.location.ItemAddToLocationCommandHandler;
 import fr.bbougon.ousontmesaffaires.command.location.LocationAddCommandHandler;
 
-import javax.inject.Inject;
+public class CommandHandlersForTest extends CommandHandlers {
 
-public class CommandHandlers {
-
-    @Inject
-    private LocationAddCommandHandler locationAddCommandHandler;
-
-    @Inject
-    private ItemAddToLocationCommandHandler itemAddToLocationCommandHandler;
-
+    @Override
     public LocationAddCommandHandler locationAdd() {
-        return locationAddCommandHandler;
+        return new LocationAddCommandHandler();
     }
 
+    @Override
     public ItemAddToLocationCommandHandler itemAddToLocation() {
-        return itemAddToLocationCommandHandler;
+        return new ItemAddToLocationCommandHandler();
     }
-
 }

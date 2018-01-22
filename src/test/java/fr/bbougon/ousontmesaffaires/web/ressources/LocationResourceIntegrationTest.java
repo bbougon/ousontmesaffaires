@@ -18,16 +18,6 @@ public class LocationResourceIntegrationTest {
     @Rule
     public WithEmbeddedServer withEmbeddedServer = new WithEmbeddedServer();
 
-    @Before
-    public void before() {
-        withEmbeddedServer.start();
-    }
-
-    @After
-    public void after() {
-        withEmbeddedServer.stop();
-    }
-
     @Test
     public void canAddLocation() {
         Response response = createLocation("json/t-shirt.json");
@@ -51,7 +41,7 @@ public class LocationResourceIntegrationTest {
     private Response createLocation(final String resourceFilePath) {
         String payload = new JsonFileUtils(resourceFilePath).getPayload();
 
-        return ClientBuilder.newClient().target(withEmbeddedServer.getUrl())
+        return ClientBuilder.newClient().target("http://localhost:17000")
                 .path("/location")
                 .request()
                 .accept(MediaType.APPLICATION_JSON_TYPE)
