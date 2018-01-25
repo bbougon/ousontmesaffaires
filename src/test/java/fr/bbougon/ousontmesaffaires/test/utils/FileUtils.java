@@ -5,13 +5,13 @@ import com.google.common.io.Resources;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
-public class JsonFileUtils {
+public class FileUtils {
 
-    public JsonFileUtils(final String resourceFilePath) {
+    public FileUtils(final String resourceFilePath) {
         this.resourceFilePath = resourceFilePath;
     }
 
-    public String getPayload() {
+    public String getContent() {
         try {
             return Resources.toString(Resources.getResource(resourceFilePath), Charset.defaultCharset());
         } catch (IOException e) {

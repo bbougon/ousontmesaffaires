@@ -1,12 +1,12 @@
 package fr.bbougon.ousontmesaffaires.command.location;
 
 import com.google.inject.Inject;
-import fr.bbougon.ousontmesaffaires.OuSontMesAffairesApplication;
+import fr.bbougon.ousontmesaffaires.OuSontMesAffairesApplicationForTest;
 import fr.bbougon.ousontmesaffaires.command.CommandHandlers;
 import fr.bbougon.ousontmesaffaires.domain.location.Location;
 import fr.bbougon.ousontmesaffaires.infrastructure.module.mongolink.MongolinkSessionManager;
 import fr.bbougon.ousontmesaffaires.repositories.mongo.LocationMongoRepository;
-import fr.bbougon.ousontmesaffaires.test.utils.JsonFileUtils;
+import fr.bbougon.ousontmesaffaires.test.utils.FileUtils;
 import org.junit.*;
 import org.mongolink.MongoSession;
 
@@ -24,7 +24,7 @@ public class LocationAddCommandHandlerTest {
 
     @Before
     public void before() {
-        OuSontMesAffairesApplication ouSontMesAffairesApplication = new OuSontMesAffairesApplication();
+        OuSontMesAffairesApplicationForTest ouSontMesAffairesApplication = new OuSontMesAffairesApplicationForTest();
         ouSontMesAffairesApplication.getInjector().injectMembers(this);
     }
 
@@ -37,7 +37,7 @@ public class LocationAddCommandHandlerTest {
 
     @Test
     public void canAddALocation() {
-        LocationAddCommand locationAddCommand = new LocationAddCommand(new JsonFileUtils("json/t-shirt.json").getPayload());
+        LocationAddCommand locationAddCommand = new LocationAddCommand(new FileUtils("json/t-shirt.json").getContent());
 
         commandHandlers.locationAdd().execute(locationAddCommand);
 

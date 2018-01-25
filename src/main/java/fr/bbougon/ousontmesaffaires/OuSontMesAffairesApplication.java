@@ -2,9 +2,7 @@ package fr.bbougon.ousontmesaffaires;
 
 import com.google.common.collect.Sets;
 import com.google.inject.*;
-import fr.bbougon.ousontmesaffaires.infrastructure.*;
-import fr.bbougon.ousontmesaffaires.infrastructure.module.mongolink.MongoRequestFilter;
-import fr.bbougon.ousontmesaffaires.infrastructure.module.mongolink.MongoResponseFilter;
+import fr.bbougon.ousontmesaffaires.infrastructure.OuSontMesAffairesConfiguration;
 import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
 import org.jboss.resteasy.plugins.interceptors.CorsFilter;
 
@@ -18,7 +16,7 @@ import java.util.stream.Collectors;
 @ApplicationPath("/")
 public class OuSontMesAffairesApplication extends Application {
 
-    public OuSontMesAffairesApplication() {;
+    public OuSontMesAffairesApplication() {
         injector = Guice.createInjector(Stage.DEVELOPMENT, new OuSontMesAffairesConfiguration());
     }
 
@@ -28,8 +26,6 @@ public class OuSontMesAffairesApplication extends Application {
         corsFilter.getAllowedOrigins().add("*");
         Set<Object> instances = scanPackages().stream().map(injector::getInstance).collect(Collectors.toSet());
         instances.add(corsFilter);
-        //instances.add(injector.getInstance(MongoRequestFilter.class));
-        //instances.add(injector.getInstance(MongoResponseFilter.class));
         return instances;
     }
 
@@ -42,10 +38,6 @@ public class OuSontMesAffairesApplication extends Application {
             }
         }).scan();
         return result;
-    }
-
-    public Injector getInjector() {
-        return injector;
     }
 
     private final Injector injector;

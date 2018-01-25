@@ -1,16 +1,16 @@
 package fr.bbougon.ousontmesaffaires.web.ressources;
 
 import fr.bbougon.ousontmesaffaires.WithEmbeddedServer;
-import fr.bbougon.ousontmesaffaires.test.utils.JsonFileUtils;
-import org.junit.*;
+import fr.bbougon.ousontmesaffaires.test.utils.FileUtils;
+import org.junit.Rule;
+import org.junit.Test;
 
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import static javax.ws.rs.core.Response.Status.CREATED;
-import static javax.ws.rs.core.Response.Status.NO_CONTENT;
+import static javax.ws.rs.core.Response.Status.*;
 import static org.fest.assertions.api.Assertions.assertThat;
 
 public class LocationResourceIntegrationTest {
@@ -33,13 +33,26 @@ public class LocationResourceIntegrationTest {
                 .path("item")
                 .request()
                 .accept(MediaType.APPLICATION_JSON_TYPE)
-                .post(Entity.json(new JsonFileUtils("json/t-shirt.json").getPayload()), Response.class);
+                .post(Entity.json(new FileUtils("json/t-shirt.json").getContent()), Response.class);
 
         assertThat(response.getStatus()).isEqualTo(NO_CONTENT.getStatusCode());
     }
 
+    @Test
+    public void canGetLocation() {
+        Response location = createLocation("json/pantalon.json");
+
+        Response response = ClientBuilder.newClient().target(location.getLocation())
+                .request()
+                .accept(MediaType.APPLICATION_JSON_TYPE)
+                .get();
+
+        assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
+        assertThat(response.readEntity(String.class)).isEqualTo("{\"items\":[{\"item\":{\"taille\":\"3ans\",\"type\":\"pantalon\",\"couleur\":\"noir\"}}],\"qrcode\":\"a qr code\"}");
+    }
+
     private Response createLocation(final String resourceFilePath) {
-        String payload = new JsonFileUtils(resourceFilePath).getPayload();
+        String payload = new FileUtils(resourceFilePath).getContent();
 
         return ClientBuilder.newClient().target("http://localhost:17000")
                 .path("/location")

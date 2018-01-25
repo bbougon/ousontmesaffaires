@@ -5,9 +5,11 @@ import fr.bbougon.ousontmesaffaires.command.CommandHandlersForTest;
 import fr.bbougon.ousontmesaffaires.domain.location.*;
 import fr.bbougon.ousontmesaffaires.repositories.MemoryRepositories;
 import fr.bbougon.ousontmesaffaires.repositories.Repositories;
-import fr.bbougon.ousontmesaffaires.test.utils.JsonFileUtils;
-import fr.bbougon.ousontmesaffaires.web.helpers.Encoder;
+import fr.bbougon.ousontmesaffaires.test.utils.FileUtils;
+import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
+import fr.bbougon.ousontmesaffaires.web.helpers.URIBuilder;
 import fr.bbougon.ousontmesaffaires.web.ressources.json.Features;
+import org.jboss.resteasy.spi.ResteasyUriInfo;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,7 +31,7 @@ public class LocationResourceTest {
 
     @Test
     public void canAddLocation() throws IOException {
-        Response response = locationResource.add(new JsonFileUtils("json/t-shirt.json").getPayload());
+        Response response = locationResource.add(new FileUtils("json/t-shirt.json").getContent());
 
         assertThat(response.getStatus()).isEqualTo(CREATED.getStatusCode());
         assertThat(response.getLocation().getPath()).matches("^/location/[a-zA-Z0-9]{48}");
@@ -48,7 +50,7 @@ public class LocationResourceTest {
         location.add(Item.create(Features.getFeaturesFromPayload("{\"item\":{\"type\":\"pantalon\"}}")));
         Repositories.locationRepository().persist(location);
 
-        Response response = locationResource.addItem(Encoder.toBase64(location.getId().toString()), new JsonFileUtils("json/pantalon.json").getPayload());
+        Response response = locationResource.addItem(new Codec().urlSafeToBase64(location.getId().toString()), new FileUtils("json/pantalon.json").getContent());
 
         assertThat(response.getStatus()).isEqualTo(NO_CONTENT.getStatusCode());
         List<Location> locations = Repositories.locationRepository().getAll();
@@ -60,8 +62,20 @@ public class LocationResourceTest {
     }
 
     @Test
+    public void canGetALocation() {
+        Location location = new Location();
+        location.add(Item.create(Features.getFeaturesFromPayload("{\"item\": {\"type\": \"tshirt\",\"couleur\": \"blanc\",\"taille\": \"3ans\"}}")));
+        Repositories.locationRepository().persist(location);
+
+        Response response = locationResource.getLocation(new ResteasyUriInfo(new URIBuilder().build("http://locahost")), new Codec().urlSafeToBase64(location.getId().toString()));
+
+        assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
+        assertThat(response.getEntity()).isEqualTo(new FileUtils("json/expectedJsonResult.json").getContent());
+    }
+
+    @Test
     public void return404IfLocationNotFound() {
-        Response response = locationResource.addItem(Encoder.toBase64(UUID.randomUUID().toString()), new JsonFileUtils("json/pantalon.json").getPayload());
+        Response response = locationResource.addItem(new Codec().urlSafeToBase64(UUID.randomUUID().toString()), new FileUtils("json/pantalon.json").getContent());
 
         assertThat(response.getStatus()).isEqualTo(NOT_FOUND.getStatusCode());
     }
@@ -69,6 +83,7 @@ public class LocationResourceTest {
     private LocationResource initialise() {
         LocationResource locationResource = new LocationResource();
         locationResource.commandHandlers = new CommandHandlersForTest();
+        locationResource.codec = new Codec();
         return locationResource;
     }
 

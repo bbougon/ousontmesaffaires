@@ -37,7 +37,8 @@ public class WithEmbeddedServer extends ExternalResource {
     private void start() throws Exception {
         Configuration.ServerConfiguration configuration = Configuration.getServerConfiguration();
         server = new UndertowJaxrsServer();
-        server.deploy(new OuSontMesAffairesApplication());
+        OuSontMesAffairesApplicationForTest application = new OuSontMesAffairesApplicationForTest();
+        server.deploy(application);
         Undertow.Builder serverConfiguration = Undertow.builder().addHttpListener(configuration.getPort(), "localhost");
         server.start(serverConfiguration);
     }

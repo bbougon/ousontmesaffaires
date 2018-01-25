@@ -1,7 +1,6 @@
 package fr.bbougon.ousontmesaffaires.command;
 
-import fr.bbougon.ousontmesaffaires.command.location.ItemAddToLocationCommandHandler;
-import fr.bbougon.ousontmesaffaires.command.location.LocationAddCommandHandler;
+import fr.bbougon.ousontmesaffaires.command.location.*;
 
 import javax.inject.Inject;
 
@@ -13,6 +12,10 @@ public class CommandHandlers {
     @Inject
     private ItemAddToLocationCommandHandler itemAddToLocationCommandHandler;
 
+    public LocationGetCommandHandler locationGet() {
+        return locationGetCommandHandler;
+    }
+
     public LocationAddCommandHandler locationAdd() {
         return locationAddCommandHandler;
     }
@@ -20,5 +23,7 @@ public class CommandHandlers {
     public ItemAddToLocationCommandHandler itemAddToLocation() {
         return itemAddToLocationCommandHandler;
     }
+    @Inject
+    private LocationGetCommandHandler locationGetCommandHandler;
 
 }

@@ -13,8 +13,8 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.testTarget>1.8</maven.compiler.testTarget>
         <maven.compiler.testSource>1.8</maven.compiler.testSource>
-        <jersey.version>2.25</jersey.version>
-        <jetty.version>9.3.8.RC0</jetty.version>
+        <guice.version>4.1.0</guice.version>
+        <resteasy.version>3.1.4.Final</resteasy.version>
     </properties>
 
     <dependencies>
@@ -46,37 +46,47 @@
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-jaxrs</artifactId>
-            <version>3.1.4.Final</version>
+            <version>${resteasy.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-jackson2-provider</artifactId>
-            <version>3.1.4.Final</version>
+            <version>${resteasy.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-guice</artifactId>
-            <version>3.1.4.Final</version>
+            <version>${resteasy.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-undertow</artifactId>
-            <version>3.1.4.Final</version>
+            <version>${resteasy.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.inject.extensions</groupId>
             <artifactId>guice-persist</artifactId>
-            <version>4.1.0</version>
+            <version>${guice.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.inject.extensions</groupId>
             <artifactId>guice-servlet</artifactId>
-            <version>4.1.0</version>
+            <version>${guice.version}</version>
         </dependency>
         <dependency>
             <groupId>org.mongolink</groupId>
             <artifactId>mongolink</artifactId>
             <version>RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
+            <version>3.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>javase</artifactId>
+            <version>3.3.1</version>
         </dependency>
 
 
@@ -114,7 +124,7 @@
         <dependency>
             <groupId>com.google.inject.extensions</groupId>
             <artifactId>guice-testlib</artifactId>
-            <version>4.1.0</version>
+            <version>${guice.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -126,8 +136,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
                 </configuration>
             </plugin>
 

@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class TestAppender extends AppenderBase<ILoggingEvent> {
 
-    public static Map<Level, List<ILoggingEvent>> events = Maps.newHashMap();
+    private static Map<Level, List<ILoggingEvent>> events = Maps.newHashMap();
 
     public static String getFormattedMessage(final Level level, final int index) {
         return events.get(level).get(index).getFormattedMessage();
