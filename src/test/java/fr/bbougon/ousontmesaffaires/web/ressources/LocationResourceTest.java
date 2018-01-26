@@ -3,6 +3,7 @@ package fr.bbougon.ousontmesaffaires.web.ressources;
 import com.google.common.collect.Sets;
 import fr.bbougon.ousontmesaffaires.command.CommandHandlersForTest;
 import fr.bbougon.ousontmesaffaires.domain.location.*;
+import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGeneratorForTest;
 import fr.bbougon.ousontmesaffaires.repositories.MemoryRepositories;
 import fr.bbougon.ousontmesaffaires.repositories.Repositories;
 import fr.bbougon.ousontmesaffaires.test.utils.FileUtils;
@@ -84,6 +85,7 @@ public class LocationResourceTest {
         LocationResource locationResource = new LocationResource();
         locationResource.commandHandlers = new CommandHandlersForTest();
         locationResource.codec = new Codec();
+        locationResource.qrGenerator = new QRGeneratorForTest();
         return locationResource;
     }
 

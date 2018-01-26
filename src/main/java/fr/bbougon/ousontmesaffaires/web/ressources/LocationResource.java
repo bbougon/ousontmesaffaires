@@ -3,6 +3,7 @@ package fr.bbougon.ousontmesaffaires.web.ressources;
 import fr.bbougon.ousontmesaffaires.command.CommandHandlers;
 import fr.bbougon.ousontmesaffaires.command.Nothing;
 import fr.bbougon.ousontmesaffaires.command.location.*;
+import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGenerator;
 import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
 import fr.bbougon.ousontmesaffaires.web.helpers.URIBuilder;
 import org.apache.commons.lang3.tuple.Pair;
@@ -17,9 +18,6 @@ import static javax.ws.rs.core.Response.Status.OK;
 
 @Path(LocationResource.PATH)
 public class LocationResource {
-
-    @Inject
-    CommandHandlers commandHandlers;
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -43,9 +41,16 @@ public class LocationResource {
     @Path("/{UUID}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getLocation(@Context final UriInfo uriInfo, @PathParam("UUID") final String locationId) {
-        Pair<String, Object> result = commandHandlers.locationGet().execute(new LocationGetCommand(UUID.fromString(codec.fromBase64(locationId)), uriInfo));
+        Pair<String, Object> result = commandHandlers.locationGet().execute(new LocationGetCommand(UUID.fromString(codec.fromBase64(locationId)), uriInfo, qrGenerator));
         return Response.status(OK).entity(result.getLeft()).build();
     }
+
+    @Inject
+    CommandHandlers commandHandlers;
+
+    @Inject
+    QRGenerator qrGenerator;
+
     @Inject
     Codec codec;
 

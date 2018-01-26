@@ -1,7 +1,6 @@
 package fr.bbougon.ousontmesaffaires.command;
 
 import fr.bbougon.ousontmesaffaires.command.location.*;
-import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGeneratorForTest;
 
 public class CommandHandlersForTest extends CommandHandlers {
 
@@ -17,7 +16,7 @@ public class CommandHandlersForTest extends CommandHandlers {
 
     @Override
     public LocationGetCommandHandler locationGet() {
-        return new LocationGetCommandHandler(new QRGeneratorForTest());
+        return new LocationGetCommandHandler();
     }
 
 }
