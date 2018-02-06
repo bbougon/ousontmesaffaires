@@ -44,7 +44,7 @@ public class LocationAddCommandHandlerTest {
         mongolinkSessionManager.start();
         List<Location> locations = new LocationMongoRepository(mongolinkSessionManager).getAll();
         assertThat(locations).isNotEmpty();
-        assertThat(locations.get(0).getItems()).contains(locationAddCommand.getItem());
+        assertThat(locations.get(0).getItems()).contains(locationAddCommand.getLocation().getItems().get(0));
     }
 
 }

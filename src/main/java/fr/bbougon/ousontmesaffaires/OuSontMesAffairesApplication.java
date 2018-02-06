@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @ApplicationPath("/")
 public class OuSontMesAffairesApplication extends Application {
 
-    public OuSontMesAffairesApplication() {
+    OuSontMesAffairesApplication() {
         injector = Guice.createInjector(Stage.DEVELOPMENT, new OuSontMesAffairesConfiguration());
     }
 
@@ -24,6 +24,8 @@ public class OuSontMesAffairesApplication extends Application {
     public Set<Object> getSingletons() {
         CorsFilter corsFilter = new CorsFilter();
         corsFilter.getAllowedOrigins().add("*");
+        corsFilter.setExposedHeaders("Cache-Control, Content-Language, Content-Type, Expires, Last-Modified, Pragma, Location");
+        corsFilter.setAllowedHeaders("Location, Content-Type");
         Set<Object> instances = scanPackages().stream().map(injector::getInstance).collect(Collectors.toSet());
         instances.add(corsFilter);
         return instances;

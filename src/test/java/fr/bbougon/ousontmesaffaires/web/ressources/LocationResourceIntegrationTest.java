@@ -48,7 +48,8 @@ public class LocationResourceIntegrationTest {
                 .get();
 
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
-        assertThat(response.readEntity(String.class)).isEqualTo("{\"items\":[{\"item\":{\"taille\":\"3ans\",\"type\":\"pantalon\",\"couleur\":\"noir\"}}],\"qrcode\":\"a qr code\"}");
+        String locationId = location.getLocation().getPath().substring(location.getLocation().getPath().lastIndexOf("/") + 1);
+        assertThat(response.readEntity(String.class)).isEqualTo("{\"id\":\""+ locationId +"\",\"location\":\"placard\",\"items\":[{\"item\":{\"taille\":\"3ans\",\"type\":\"pantalon\",\"couleur\":\"noir\"}}],\"qrcode\":\"a qr code\"}");
     }
 
     private Response createLocation(final String resourceFilePath) {

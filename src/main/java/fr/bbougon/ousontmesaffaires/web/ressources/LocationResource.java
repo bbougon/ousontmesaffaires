@@ -41,7 +41,7 @@ public class LocationResource {
     @Path("/{UUID}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getLocation(@Context final UriInfo uriInfo, @PathParam("UUID") final String locationId) {
-        Pair<String, Object> result = commandHandlers.locationGet().execute(new LocationGetCommand(UUID.fromString(codec.fromBase64(locationId)), uriInfo, qrGenerator));
+        Pair<String, Object> result = commandHandlers.locationGet().execute(new LocationGetCommand(codec, locationId, uriInfo, qrGenerator));
         return Response.status(OK).entity(result.getLeft()).build();
     }
 

@@ -12,8 +12,7 @@ public class LocationAddCommandHandler implements CommandHandler<LocationAddComm
 
     @MongolinkTransaction
     public Pair<UUID, Object> execute(final LocationAddCommand locationAddCommand) {
-        Location location = new Location();
-        location.add(locationAddCommand.getItem());
+        Location location = locationAddCommand.getLocation();
         Repositories.locationRepository().persist(location);
         return Pair.of(location.getId(), location);
     }

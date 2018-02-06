@@ -22,6 +22,8 @@ public class LocationGetCommandHandler implements CommandHandler<LocationGetComm
             items.add(itemJson);
         });
         JsonObject locationJson = new JsonObject();
+        locationJson.addProperty("id", locationGetCommand.getId());
+        locationJson.addProperty("location", location.getLocation());
         locationJson.add("items", items);
         locationJson.addProperty("qrcode", locationGetCommand.getQrCode());
         String result = new GsonBuilder().create().toJson(locationJson);

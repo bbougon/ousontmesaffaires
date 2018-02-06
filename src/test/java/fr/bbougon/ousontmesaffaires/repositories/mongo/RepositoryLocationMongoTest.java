@@ -5,6 +5,7 @@ import fr.bbougon.ousontmesaffaires.domain.location.*;
 import fr.bbougon.ousontmesaffaires.rules.MongoRule;
 import fr.bbougon.ousontmesaffaires.test.utils.FileUtils;
 import fr.bbougon.ousontmesaffaires.web.ressources.json.Features;
+import fr.bbougon.ousontmesaffaires.web.ressources.json.LocationName;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mongolink.test.MongolinkRule;
@@ -23,8 +24,8 @@ public class RepositoryLocationMongoTest {
 
     @Test
     public void canPersistLocation() {
-        Location location = new Location();
-        location.add(Item.create(Features.getFeaturesFromPayload(new FileUtils("json/t-shirt.json").getContent())));
+        String payload = new FileUtils("json/t-shirt.json").getContent();
+        Location location = Location.create(LocationName.getNameFromPayload(payload), Item.create(Features.getFeaturesFromPayload(payload)));
         LocationMongoRepository locationMongoRepository = new LocationMongoRepository(mongoRule.mongolinkSessionManager);
 
         locationMongoRepository.persist(location);
@@ -32,6 +33,7 @@ public class RepositoryLocationMongoTest {
 
         List<Location> locations = locationMongoRepository.getAll();
         assertThat(locations).isNotEmpty();
+        assertThat(locations.get(0).getLocation()).isEqualTo("Cave");
         assertThat(locations.get(0).getItems()).isNotEmpty();
         assertThat(locations.get(0).getItems().get(0).getFeatures()).containsAll(Sets.newHashSet(
                 Feature.create("type", "tshirt"),

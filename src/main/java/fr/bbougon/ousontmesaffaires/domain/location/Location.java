@@ -8,8 +8,14 @@ import java.util.UUID;
 
 public class Location {
 
-    public Location() {
+    Location() {
         id = UUID.randomUUID();
+    }
+
+    public Location(final String location, final Item item) {
+        this();
+        this.location = location;
+        this.items.add(item);
     }
 
     public UUID getId() {
@@ -24,6 +30,15 @@ public class Location {
         items.add(item);
     }
 
+    public String getLocation() {
+        return location;
+    }
+
+    public static Location create(final String locationName, final Item item) {
+        return new Location(locationName, item);
+    }
+
     private final UUID id;
+    private String location;
     private List<Item> items = Lists.newArrayList();
 }

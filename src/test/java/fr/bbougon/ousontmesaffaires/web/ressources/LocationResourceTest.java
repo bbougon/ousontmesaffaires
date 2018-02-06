@@ -10,6 +10,7 @@ import fr.bbougon.ousontmesaffaires.test.utils.FileUtils;
 import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
 import fr.bbougon.ousontmesaffaires.web.helpers.URIBuilder;
 import fr.bbougon.ousontmesaffaires.web.ressources.json.Features;
+import fr.bbougon.ousontmesaffaires.web.ressources.json.LocationName;
 import org.jboss.resteasy.spi.ResteasyUriInfo;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,6 +39,7 @@ public class LocationResourceTest {
         assertThat(response.getLocation().getPath()).matches("^/location/[a-zA-Z0-9]{48}");
         List<Location> locations = Repositories.locationRepository().getAll();
         assertThat(locations).isNotNull();
+        assertThat(locations.get(0).getLocation()).isEqualTo("Cave");
         assertThat(locations.get(0).getItems()).isNotEmpty();
         assertThat(locations.get(0).getItems().get(0).getFeatures()).containsAll(Sets.newHashSet(
                 Feature.create("type", "tshirt"),
@@ -47,8 +49,8 @@ public class LocationResourceTest {
 
     @Test
     public void canAddAnItemToALocation() {
-        Location location = new Location();
-        location.add(Item.create(Features.getFeaturesFromPayload("{\"item\":{\"type\":\"pantalon\"}}")));
+        String payload = "{\"location\":\"Cave\",\"item\":{\"type\":\"pantalon\"}}";
+        Location location = Location.create(LocationName.getNameFromPayload(payload), Item.create(Features.getFeaturesFromPayload(payload)));
         Repositories.locationRepository().persist(location);
 
         Response response = locationResource.addItem(new Codec().urlSafeToBase64(location.getId().toString()), new FileUtils("json/pantalon.json").getContent());
@@ -64,14 +66,15 @@ public class LocationResourceTest {
 
     @Test
     public void canGetALocation() {
-        Location location = new Location();
-        location.add(Item.create(Features.getFeaturesFromPayload("{\"item\": {\"type\": \"tshirt\",\"couleur\": \"blanc\",\"taille\": \"3ans\"}}")));
+        String payload = "{\"location\": \"Bureau\",\"item\": {\"type\": \"tshirt\",\"couleur\": \"blanc\",\"taille\": \"3ans\"}}";
+        Location location = Location.create(LocationName.getNameFromPayload(payload), Item.create(Features.getFeaturesFromPayload(payload)));
         Repositories.locationRepository().persist(location);
+        String locationId = new Codec().urlSafeToBase64(location.getId().toString());
 
-        Response response = locationResource.getLocation(new ResteasyUriInfo(new URIBuilder().build("http://locahost")), new Codec().urlSafeToBase64(location.getId().toString()));
+        Response response = locationResource.getLocation(new ResteasyUriInfo(new URIBuilder().build("http://locahost")), locationId);
 
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
-        assertThat(response.getEntity()).isEqualTo(new FileUtils("json/expectedJsonResult.json").getContent());
+        assertThat(response.getEntity()).isEqualTo(new FileUtils("json/expectedJsonResult.json").getContent().replace("ID_TO_REPLACE", locationId));
     }
 
     @Test
