@@ -18,6 +18,10 @@ public class CommandHandlers {
         return locationGetCommandHandler;
     }
 
+    public LocationsGetCommandHandler locationsGet() {
+        return locationsGetCommandHandler;
+    }
+
     @Inject
     private LocationAddCommandHandler locationAddCommandHandler;
 
@@ -26,5 +30,8 @@ public class CommandHandlers {
 
     @Inject
     private LocationGetCommandHandler locationGetCommandHandler;
+
+    @Inject
+    private LocationsGetCommandHandler locationsGetCommandHandler;
 
 }

@@ -19,6 +19,12 @@ import static javax.ws.rs.core.Response.Status.OK;
 @Path(LocationResource.PATH)
 public class LocationResource {
 
+    @GET
+    public Response getAll(@Context final UriInfo uriInfo) {
+        Pair<String, Object> locations = commandHandlers.locationsGet().execute(new LocationsGetCommand(codec, qrGenerator));
+        return Response.ok().entity(locations.getLeft()).build();
+    }
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response add(final String payload) {
@@ -54,5 +60,5 @@ public class LocationResource {
     @Inject
     Codec codec;
 
-    static final String PATH = "/location";
+    static final String PATH = "/locations";
 }

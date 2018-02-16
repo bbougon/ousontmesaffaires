@@ -1,5 +1,6 @@
 package fr.bbougon.ousontmesaffaires.web.ressources;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import fr.bbougon.ousontmesaffaires.command.CommandHandlersForTest;
 import fr.bbougon.ousontmesaffaires.domain.location.*;
@@ -36,7 +37,7 @@ public class LocationResourceTest {
         Response response = locationResource.add(new FileUtils("json/t-shirt.json").getContent());
 
         assertThat(response.getStatus()).isEqualTo(CREATED.getStatusCode());
-        assertThat(response.getLocation().getPath()).matches("^/location/[a-zA-Z0-9]{48}");
+        assertThat(response.getLocation().getPath()).matches("^/locations/[a-zA-Z0-9]{48}");
         List<Location> locations = Repositories.locationRepository().getAll();
         assertThat(locations).isNotNull();
         assertThat(locations.get(0).getLocation()).isEqualTo("Cave");
@@ -82,6 +83,20 @@ public class LocationResourceTest {
         Response response = locationResource.addItem(new Codec().urlSafeToBase64(UUID.randomUUID().toString()), new FileUtils("json/pantalon.json").getContent());
 
         assertThat(response.getStatus()).isEqualTo(NOT_FOUND.getStatusCode());
+    }
+
+    @Test
+    public void canGetAllLocations() {
+        Location location1 = Location.create("Location 1", Item.create(Lists.newArrayList(Feature.create("type", "chaussure"))));
+        Location location2 = Location.create("Location 2", Item.create(Lists.newArrayList(Feature.create("type", "pantalon"))));
+        Repositories.locationRepository().persist(location1);
+        Repositories.locationRepository().persist(location2);
+
+        Response response = locationResource.getAll(new ResteasyUriInfo(new URIBuilder().build("http://locahost")));
+
+        assertThat(response.getEntity()).isEqualTo(new FileUtils("json/expectedJsonsResult.json").getContent()
+                .replace("ID_TO_REPLACE_1", new Codec().urlSafeToBase64(location1.getId().toString()))
+                .replace("ID_TO_REPLACE_2", new Codec().urlSafeToBase64(location2.getId().toString())));
     }
 
     private LocationResource initialise() {

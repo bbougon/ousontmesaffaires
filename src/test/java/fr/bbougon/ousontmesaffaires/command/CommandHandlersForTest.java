@@ -19,4 +19,8 @@ public class CommandHandlersForTest extends CommandHandlers {
         return new LocationGetCommandHandler();
     }
 
+    @Override
+    public LocationsGetCommandHandler locationsGet() {
+        return new LocationsGetCommandHandler();
+    }
 }

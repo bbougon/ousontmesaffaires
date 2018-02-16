@@ -52,11 +52,26 @@ public class LocationResourceIntegrationTest {
         assertThat(response.readEntity(String.class)).isEqualTo("{\"id\":\""+ locationId +"\",\"location\":\"placard\",\"items\":[{\"item\":{\"taille\":\"3ans\",\"type\":\"pantalon\",\"couleur\":\"noir\"}}],\"qrcode\":\"a qr code\"}");
     }
 
+    @Test
+    public void canGetAllLocations() {
+        Response location = createLocation("json/pantalon.json");
+
+        Response response = ClientBuilder.newClient().target("http://localhost:17000")
+                .path(LocationResource.PATH)
+                .request()
+                .accept(MediaType.APPLICATION_JSON_TYPE)
+                .get();
+
+        assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
+        String locationId = location.getLocation().getPath().substring(location.getLocation().getPath().lastIndexOf("/") + 1);
+        assertThat(response.readEntity(String.class)).contains("{\"id\":\""+ locationId +"\",\"location\":\"placard\",\"items\":[{\"item\":{\"taille\":\"3ans\",\"type\":\"pantalon\",\"couleur\":\"noir\"}}],\"qrcode\":\"a qr code\"}");
+    }
+
     private Response createLocation(final String resourceFilePath) {
         String payload = new FileUtils(resourceFilePath).getContent();
 
         return ClientBuilder.newClient().target("http://localhost:17000")
-                .path("/location")
+                .path("/locations")
                 .request()
                 .accept(MediaType.APPLICATION_JSON_TYPE)
                 .post(Entity.json(payload), Response.class);
