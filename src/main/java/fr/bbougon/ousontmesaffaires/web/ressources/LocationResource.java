@@ -1,12 +1,11 @@
 package fr.bbougon.ousontmesaffaires.web.ressources;
 
-import fr.bbougon.ousontmesaffaires.command.CommandHandlers;
-import fr.bbougon.ousontmesaffaires.command.Nothing;
 import fr.bbougon.ousontmesaffaires.command.location.*;
+import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandBus;
+import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandResponse;
 import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGenerator;
 import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
 import fr.bbougon.ousontmesaffaires.web.helpers.URIBuilder;
-import org.apache.commons.lang3.tuple.Pair;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -21,23 +20,23 @@ public class LocationResource {
 
     @GET
     public Response getAll(@Context final UriInfo uriInfo) {
-        Pair<String, Object> locations = commandHandlers.locationsGet().execute(new LocationsGetCommand(codec, qrGenerator));
-        return Response.ok().entity(locations.getLeft()).build();
+        CommandResponse commandResponse = commandBus.send(new LocationsGetCommand(codec, qrGenerator));
+        return Response.ok().entity(commandResponse.getResponse()).build();
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response add(final String payload) {
-        Pair<UUID, Object> pair = commandHandlers.locationAdd().execute(new LocationAddCommand(payload));
-        return Response.created(new URIBuilder().build(PATH + "/" + codec.urlSafeToBase64(pair.getKey().toString()))).build();
+        CommandResponse commandResponse = commandBus.send(new LocationAddCommand(payload));
+        return Response.created(new URIBuilder().build(PATH + "/" + codec.urlSafeToBase64(commandResponse.getResponse().toString()))).build();
     }
 
     @POST
     @Path("/{UUID}/item")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addItem(@PathParam("UUID") final String locationId, final String payload) {
-        Pair<Nothing, Object> pair = commandHandlers.itemAddToLocation().execute(new ItemAddToLocationCommand(UUID.fromString(codec.fromBase64(locationId)), payload));
-        if (pair.getRight() == null) {
+        CommandResponse commandResponse = commandBus.send(new ItemAddToLocationCommand(UUID.fromString(codec.fromBase64(locationId)), payload));
+        if (commandResponse.isEmpty()) {
             return Response.status(NOT_FOUND).build();
         }
         return Response.noContent().build();
@@ -47,12 +46,12 @@ public class LocationResource {
     @Path("/{UUID}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getLocation(@Context final UriInfo uriInfo, @PathParam("UUID") final String locationId) {
-        Pair<String, Object> result = commandHandlers.locationGet().execute(new LocationGetCommand(codec, locationId, uriInfo, qrGenerator));
-        return Response.status(OK).entity(result.getLeft()).build();
+        CommandResponse commandResponse = commandBus.send(new LocationGetCommand(codec, locationId, uriInfo, qrGenerator));
+        return Response.status(OK).entity(commandResponse.getResponse()).build();
     }
 
     @Inject
-    CommandHandlers commandHandlers;
+    CommandBus commandBus;
 
     @Inject
     QRGenerator qrGenerator;

@@ -3,7 +3,9 @@ package fr.bbougon.ousontmesaffaires.web.ressources;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import fr.bbougon.ousontmesaffaires.command.CommandHandlersForTest;
+import fr.bbougon.ousontmesaffaires.command.location.*;
 import fr.bbougon.ousontmesaffaires.domain.location.*;
+import fr.bbougon.ousontmesaffaires.infrastructure.module.transactional.TransactionalMiddleware;
 import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGeneratorForTest;
 import fr.bbougon.ousontmesaffaires.repositories.MemoryRepositories;
 import fr.bbougon.ousontmesaffaires.repositories.Repositories;
@@ -101,7 +103,12 @@ public class LocationResourceTest {
 
     private LocationResource initialise() {
         LocationResource locationResource = new LocationResource();
-        locationResource.commandHandlers = new CommandHandlersForTest();
+        locationResource.commandBus = new TransactionalMiddleware(new CommandHandlersForTest(Sets.newHashSet(
+                new LocationAddCommandHandler(),
+                new ItemAddToLocationCommandHandler(),
+                new LocationGetCommandHandler(),
+                new LocationsGetCommandHandler()
+        )));
         locationResource.codec = new Codec();
         locationResource.qrGenerator = new QRGeneratorForTest();
         return locationResource;

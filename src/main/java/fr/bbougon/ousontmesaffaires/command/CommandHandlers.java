@@ -1,37 +1,25 @@
 package fr.bbougon.ousontmesaffaires.command;
 
-import fr.bbougon.ousontmesaffaires.command.location.*;
-
 import javax.inject.Inject;
+import java.lang.reflect.ParameterizedType;
+import java.util.Set;
 
 public class CommandHandlers {
 
-    public LocationAddCommandHandler locationAdd() {
-        return locationAddCommandHandler;
+    @Inject
+    public CommandHandlers(Set<CommandHandler> commandHandlers) {
+        this.commandHandlers = commandHandlers;
     }
 
-    public ItemAddToLocationCommandHandler itemAddToLocation() {
-        return itemAddToLocationCommandHandler;
+    public CommandHandler get(final Class<? extends Command> commandClass) {
+        return commandHandlers.stream().filter(commandHandler -> commandType(commandHandler.getClass()).equals(commandClass)).findFirst().orElseThrow(UnknownCommandException::new);
     }
 
-    public LocationGetCommandHandler locationGet() {
-        return locationGetCommandHandler;
+    private <T> Class<T> commandType(final Class<?> commandHandlerClass) {
+        ParameterizedType type = (ParameterizedType) commandHandlerClass.getGenericInterfaces()[0];
+        return (Class<T>) type.getActualTypeArguments()[0];
     }
 
-    public LocationsGetCommandHandler locationsGet() {
-        return locationsGetCommandHandler;
-    }
-
-    @Inject
-    private LocationAddCommandHandler locationAddCommandHandler;
-
-    @Inject
-    private ItemAddToLocationCommandHandler itemAddToLocationCommandHandler;
-
-    @Inject
-    private LocationGetCommandHandler locationGetCommandHandler;
-
-    @Inject
-    private LocationsGetCommandHandler locationsGetCommandHandler;
+    private final Set<CommandHandler> commandHandlers;
 
 }

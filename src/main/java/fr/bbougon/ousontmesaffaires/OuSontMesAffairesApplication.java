@@ -17,7 +17,11 @@ import java.util.stream.Collectors;
 public class OuSontMesAffairesApplication extends Application {
 
     OuSontMesAffairesApplication() {
-        injector = Guice.createInjector(Stage.DEVELOPMENT, new OuSontMesAffairesConfiguration());
+        injector = Guice.createInjector(Stage.DEVELOPMENT, getConfiguration());
+    }
+
+    OuSontMesAffairesConfiguration getConfiguration() {
+        return new OuSontMesAffairesConfiguration();
     }
 
     @Override
@@ -42,5 +46,5 @@ public class OuSontMesAffairesApplication extends Application {
         return result;
     }
 
-    private final Injector injector;
+    final Injector injector;
 }

@@ -1,26 +1,11 @@
 package fr.bbougon.ousontmesaffaires.command;
 
-import fr.bbougon.ousontmesaffaires.command.location.*;
+import java.util.Set;
 
 public class CommandHandlersForTest extends CommandHandlers {
 
-    @Override
-    public LocationAddCommandHandler locationAdd() {
-        return new LocationAddCommandHandler();
+    public CommandHandlersForTest(final Set set) {
+        super(set);
     }
 
-    @Override
-    public ItemAddToLocationCommandHandler itemAddToLocation() {
-        return new ItemAddToLocationCommandHandler();
-    }
-
-    @Override
-    public LocationGetCommandHandler locationGet() {
-        return new LocationGetCommandHandler();
-    }
-
-    @Override
-    public LocationsGetCommandHandler locationsGet() {
-        return new LocationsGetCommandHandler();
-    }
 }
