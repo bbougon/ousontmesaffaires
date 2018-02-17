@@ -1,5 +1,7 @@
 package fr.bbougon.ousontmesaffaires.repositories;
 
+import fr.bbougon.ousontmesaffaires.domain.location.LocationRepository;
+
 import javax.inject.Inject;
 
 public abstract class Repositories {

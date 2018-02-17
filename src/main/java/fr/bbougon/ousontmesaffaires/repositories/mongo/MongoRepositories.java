@@ -1,5 +1,6 @@
 package fr.bbougon.ousontmesaffaires.repositories.mongo;
 
+import fr.bbougon.ousontmesaffaires.domain.location.LocationRepository;
 import fr.bbougon.ousontmesaffaires.repositories.*;
 
 import javax.inject.Inject;
