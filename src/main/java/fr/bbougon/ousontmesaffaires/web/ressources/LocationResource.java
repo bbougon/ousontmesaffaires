@@ -10,6 +10,7 @@ import fr.bbougon.ousontmesaffaires.web.helpers.URIBuilder;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.net.URI;
 import java.util.UUID;
 
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
@@ -28,7 +29,11 @@ public class LocationResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response add(final String payload) {
         CommandResponse commandResponse = commandBus.send(new LocationAddCommand(payload));
-        return Response.created(new URIBuilder().build(PATH + "/" + codec.urlSafeToBase64(commandResponse.getResponse().toString()))).build();
+        URI uri = new URIBuilder().build(PATH + "/" + codec.urlSafeToBase64(commandResponse.getResponse().toString()));
+        if(uri == null) {
+            return Response.serverError().build();
+        }
+        return Response.created(uri).build();
     }
 
     @POST

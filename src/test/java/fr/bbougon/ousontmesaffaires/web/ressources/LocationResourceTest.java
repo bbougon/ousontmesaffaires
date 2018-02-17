@@ -1,5 +1,6 @@
 package fr.bbougon.ousontmesaffaires.web.ressources;
 
+import ch.qos.logback.classic.Level;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import fr.bbougon.ousontmesaffaires.command.CommandHandlersForTest;
@@ -10,6 +11,7 @@ import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGeneratorForTest;
 import fr.bbougon.ousontmesaffaires.repositories.MemoryRepositories;
 import fr.bbougon.ousontmesaffaires.repositories.Repositories;
 import fr.bbougon.ousontmesaffaires.test.utils.FileUtils;
+import fr.bbougon.ousontmesaffaires.test.utils.TestAppender;
 import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
 import fr.bbougon.ousontmesaffaires.web.helpers.URIBuilder;
 import fr.bbougon.ousontmesaffaires.web.ressources.json.Features;
@@ -31,7 +33,7 @@ public class LocationResourceTest {
     @Before
     public void before() {
         Repositories.initialise(new MemoryRepositories());
-        locationResource = initialise();
+        locationResource = initialise(new Codec());
     }
 
     @Test
@@ -48,6 +50,21 @@ public class LocationResourceTest {
                 Feature.create("type", "tshirt"),
                 Feature.create("couleur", "blanc"),
                 Feature.create("taille", "3ans")));
+    }
+
+    @Test
+    public void canHandleUriErrorOnAddLocation() throws IOException {
+        locationResource.codec = new Codec() {
+            @Override
+            public String urlSafeToBase64(final String dataToEncode) {
+                return "&&&&?&\";^%";
+            }
+        };
+
+        Response response = locationResource.add(new FileUtils("json/t-shirt.json").getContent());
+
+        assertThat(response.getStatus()).isEqualTo(INTERNAL_SERVER_ERROR.getStatusCode());
+        assertThat(TestAppender.hasMessageInLevel(Level.WARN, "Error while building URI for path : " + LocationResource.PATH + "/&&&&?&\";^%")).isTrue();
     }
 
     @Test
@@ -101,7 +118,7 @@ public class LocationResourceTest {
                 .replace("ID_TO_REPLACE_2", new Codec().urlSafeToBase64(location2.getId().toString())));
     }
 
-    private LocationResource initialise() {
+    private LocationResource initialise(final Codec codec) {
         LocationResource locationResource = new LocationResource();
         locationResource.commandBus = new TransactionalMiddleware(new CommandHandlersForTest(Sets.newHashSet(
                 new LocationAddCommandHandler(),
@@ -109,7 +126,7 @@ public class LocationResourceTest {
                 new LocationGetCommandHandler(),
                 new LocationsGetCommandHandler()
         )));
-        locationResource.codec = new Codec();
+        locationResource.codec = codec;
         locationResource.qrGenerator = new QRGeneratorForTest();
         return locationResource;
     }

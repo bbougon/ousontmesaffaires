@@ -1,11 +1,12 @@
 package fr.bbougon.ousontmesaffaires.infrastructure;
 
-import fr.bbougon.ousontmesaffaires.infrastructure.module.QRModuleForTest;
+import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGenerator;
+import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGeneratorForTest;
 
 public class OuSontMesAffairesConfigurationForTest extends OuSontMesAffairesConfiguration {
 
     @Override
-    void installQRModule() {
-        install(new QRModuleForTest());
+    void bindQRGenerator() {
+        bind(QRGenerator.class).to(QRGeneratorForTest.class);
     }
 }

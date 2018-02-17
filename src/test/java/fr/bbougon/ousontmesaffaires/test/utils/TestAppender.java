@@ -12,11 +12,12 @@ import java.util.Map;
 
 public class TestAppender extends AppenderBase<ILoggingEvent> {
 
-    private static Map<Level, List<ILoggingEvent>> events = Maps.newHashMap();
-
-    public static String getFormattedMessage(final Level level, final int index) {
-        return events.get(level).get(index).getFormattedMessage();
+    public static boolean hasMessageInLevel(final Level level, final String message) {
+        List<ILoggingEvent> events = TestAppender.events.get(level);
+        return events.stream().anyMatch(event-> message.equals(event.getFormattedMessage()));
     }
+
+    private static Map<Level, List<ILoggingEvent>> events = Maps.newHashMap();
 
     @Override
     protected void append(ILoggingEvent e) {
