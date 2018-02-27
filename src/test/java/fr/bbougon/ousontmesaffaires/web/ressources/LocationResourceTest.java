@@ -111,7 +111,7 @@ public class LocationResourceTest {
         Repositories.locationRepository().persist(location1);
         Repositories.locationRepository().persist(location2);
 
-        Response response = locationResource.getAll(new ResteasyUriInfo(new URIBuilder().build("http://locahost")));
+        Response response = locationResource.getAll();
 
         assertThat(response.getEntity()).isEqualTo(new FileUtils("json/expectedJsonsResult.json").getContent()
                 .replace("ID_TO_REPLACE_1", new Codec().urlSafeToBase64(location1.getId().toString()))

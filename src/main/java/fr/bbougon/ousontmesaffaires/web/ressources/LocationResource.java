@@ -20,7 +20,7 @@ import static javax.ws.rs.core.Response.Status.OK;
 public class LocationResource {
 
     @GET
-    public Response getAll(@Context final UriInfo uriInfo) {
+    public Response getAll() {
         CommandResponse commandResponse = commandBus.send(new LocationsGetCommand(codec, qrGenerator));
         return Response.ok().entity(commandResponse.getResponse()).build();
     }
