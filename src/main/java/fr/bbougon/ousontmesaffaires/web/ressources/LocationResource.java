@@ -6,6 +6,7 @@ import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandResponse;
 import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGenerator;
 import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
 import fr.bbougon.ousontmesaffaires.web.helpers.URIBuilder;
+import org.apache.commons.lang3.Validate;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -28,6 +29,8 @@ public class LocationResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response add(final String payload) {
+        Validate.notNull(payload, "Payload cannot be null.");
+        Validate.notEmpty(payload.trim(), "Payload cannot be empty.");
         CommandResponse commandResponse = commandBus.send(new LocationAddCommand(payload));
         URI uri = new URIBuilder().build(PATH + "/" + codec.urlSafeToBase64(commandResponse.getResponse().toString()));
         if(uri == null) {

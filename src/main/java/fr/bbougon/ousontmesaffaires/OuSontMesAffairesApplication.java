@@ -9,6 +9,7 @@ import org.jboss.resteasy.plugins.interceptors.CorsFilter;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Application;
+import javax.ws.rs.ext.Provider;
 import java.lang.reflect.Modifier;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -37,9 +38,15 @@ public class OuSontMesAffairesApplication extends Application {
 
     private Set<Class<?>> scanPackages() {
         Set<Class<?>> result = Sets.newHashSet();
-        String packageName = "fr.bbougon.ousontmesaffaires.web";
-        new FastClasspathScanner(packageName).matchClassesWithAnnotation(Path.class, processor -> {
-            if(!Modifier.isAbstract(processor.getModifiers()) && processor.getCanonicalName().startsWith(packageName)) {
+        String resourcesPackageName = "fr.bbougon.ousontmesaffaires.web";
+        new FastClasspathScanner(resourcesPackageName).matchClassesWithAnnotation(Path.class, processor -> {
+            if(!Modifier.isAbstract(processor.getModifiers()) && processor.getCanonicalName().startsWith(resourcesPackageName)) {
+                result.add(processor);
+            }
+        }).scan();
+        String mapperPackageName = "fr.bbougon.ousontmesaffaires.web.mappers";
+        new FastClasspathScanner(mapperPackageName).matchClassesWithAnnotation(Provider.class, processor -> {
+            if(!Modifier.isAbstract(processor.getModifiers()) && processor.getCanonicalName().startsWith(mapperPackageName)) {
                 result.add(processor);
             }
         }).scan();

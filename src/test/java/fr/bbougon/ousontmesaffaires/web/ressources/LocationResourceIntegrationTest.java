@@ -67,6 +67,19 @@ public class LocationResourceIntegrationTest {
         assertThat(response.readEntity(String.class)).contains("{\"id\":\""+ locationId +"\",\"location\":\"placard\",\"items\":[{\"item\":{\"taille\":\"3ans\",\"type\":\"pantalon\",\"couleur\":\"noir\"}}],\"qrcode\":\"a qr code\"}");
     }
 
+    @Test
+    public void exceptionsAreWrapped() {
+        Response response = ClientBuilder.newClient().target("http://localhost:17000")
+                .path("/locations")
+                .request()
+                .accept(MediaType.APPLICATION_JSON_TYPE)
+                .post(Entity.json(""), Response.class);
+
+        assertThat(response.getStatus()).isEqualTo(INTERNAL_SERVER_ERROR.getStatusCode());
+        assertThat(response.getMediaType()).isEqualTo(MediaType.APPLICATION_JSON_TYPE);
+        assertThat(response.readEntity(String.class)).isEqualTo("Error has been thrown trying to access resource '/locations' (method POST): Payload cannot be empty.");
+    }
+
     private Response createLocation(final String resourceFilePath) {
         String payload = new FileUtils(resourceFilePath).getContent();
 

@@ -21,12 +21,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import javax.ws.rs.core.Response;
-import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
 import static javax.ws.rs.core.Response.Status.*;
 import static org.fest.assertions.api.Assertions.assertThat;
+import static org.fest.assertions.api.Assertions.failBecauseExceptionWasNotThrown;
 
 public class LocationResourceTest {
 
@@ -37,7 +37,7 @@ public class LocationResourceTest {
     }
 
     @Test
-    public void canAddLocation() throws IOException {
+    public void canAddLocation() {
         Response response = locationResource.add(new FileUtils("json/t-shirt.json").getContent());
 
         assertThat(response.getStatus()).isEqualTo(CREATED.getStatusCode());
@@ -53,7 +53,7 @@ public class LocationResourceTest {
     }
 
     @Test
-    public void canHandleUriErrorOnAddLocation() throws IOException {
+    public void canHandleUriErrorOnAddLocation() {
         locationResource.codec = new Codec() {
             @Override
             public String urlSafeToBase64(final String dataToEncode) {
@@ -116,6 +116,26 @@ public class LocationResourceTest {
         assertThat(response.getEntity()).isEqualTo(new FileUtils("json/expectedJsonsResult.json").getContent()
                 .replace("ID_TO_REPLACE_1", new Codec().urlSafeToBase64(location1.getId().toString()))
                 .replace("ID_TO_REPLACE_2", new Codec().urlSafeToBase64(location2.getId().toString())));
+    }
+
+    @Test
+    public void checkPayloadIsNotNullWhenAddingLocation() {
+        try {
+            locationResource.add(null);
+            failBecauseExceptionWasNotThrown(NullPointerException.class);
+        } catch (NullPointerException exception) {
+            assertThat(exception.getMessage()).isEqualTo("Payload cannot be null.");
+        }
+    }
+
+    @Test
+    public void checkPayloadIsNotEmptyWhenAddingLocation() {
+        try {
+            locationResource.add("   ");
+            failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
+        } catch (IllegalArgumentException exception) {
+            assertThat(exception.getMessage()).isEqualTo("Payload cannot be empty.");
+        }
     }
 
     private LocationResource initialise(final Codec codec) {
