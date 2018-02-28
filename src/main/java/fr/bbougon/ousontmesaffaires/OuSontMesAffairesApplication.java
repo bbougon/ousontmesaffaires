@@ -37,16 +37,15 @@ public class OuSontMesAffairesApplication extends Application {
     }
 
     private Set<Class<?>> scanPackages() {
+        Set<Class<?>> result = scanPackages("fr.bbougon.ousontmesaffaires.web", Path.class);
+        result.addAll(scanPackages("fr.bbougon.ousontmesaffaires.web.mappers", Provider.class));
+        return result;
+    }
+
+    private Set<Class<?>> scanPackages(final String resourcesPackageName, final Class<?> annotation) {
         Set<Class<?>> result = Sets.newHashSet();
-        String resourcesPackageName = "fr.bbougon.ousontmesaffaires.web";
-        new FastClasspathScanner(resourcesPackageName).matchClassesWithAnnotation(Path.class, processor -> {
+        new FastClasspathScanner(resourcesPackageName).matchClassesWithAnnotation(annotation, processor -> {
             if(!Modifier.isAbstract(processor.getModifiers()) && processor.getCanonicalName().startsWith(resourcesPackageName)) {
-                result.add(processor);
-            }
-        }).scan();
-        String mapperPackageName = "fr.bbougon.ousontmesaffaires.web.mappers";
-        new FastClasspathScanner(mapperPackageName).matchClassesWithAnnotation(Provider.class, processor -> {
-            if(!Modifier.isAbstract(processor.getModifiers()) && processor.getCanonicalName().startsWith(mapperPackageName)) {
                 result.add(processor);
             }
         }).scan();
