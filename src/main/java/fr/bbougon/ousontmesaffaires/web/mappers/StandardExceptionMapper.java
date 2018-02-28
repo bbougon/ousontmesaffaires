@@ -26,8 +26,10 @@ public class StandardExceptionMapper implements ExceptionMapper<Throwable> {
                 Class<?> aClass = Class.forName(stackTraceElement.getClassName());
                 Path path = aClass.getAnnotation(Path.class);
                 if (path != null) {
-                    messageBuilder.append("Error has been thrown trying to access resource ");
-                    messageBuilder.append("'").append(path.value()).append("'");
+                    if(messageBuilder.indexOf(RESOURCE_MESSAGE) == -1) {
+                        messageBuilder.append(RESOURCE_MESSAGE);
+                        messageBuilder.append("'").append(path.value()).append("'");
+                    }
                     List<Method> methods = Lists.newArrayList(aClass.getMethods());
                     methods.stream()
                             .filter(method -> method.getName().equals(stackTraceElement.getMethodName()))
@@ -49,4 +51,6 @@ public class StandardExceptionMapper implements ExceptionMapper<Throwable> {
                 .entity(messageBuilder.append(throwable.getMessage()).toString())
                 .build();
     }
+
+    private static final String RESOURCE_MESSAGE = "Error has been thrown trying to access resource ";
 }

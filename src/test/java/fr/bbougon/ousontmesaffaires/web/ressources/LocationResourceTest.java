@@ -138,6 +138,26 @@ public class LocationResourceTest {
         }
     }
 
+    @Test
+    public void checkPayloadIsNotNullWhenAddingItemToLocation() {
+        try {
+            locationResource.addItem("id", null);
+            failBecauseExceptionWasNotThrown(NullPointerException.class);
+        } catch (NullPointerException exception) {
+            assertThat(exception.getMessage()).isEqualTo("Payload cannot be null.");
+        }
+    }
+
+    @Test
+    public void checkPayloadIsNotEmptyWhenAddingItemToLocation() {
+        try {
+            locationResource.addItem("id", "  ");
+            failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
+        } catch (IllegalArgumentException exception) {
+            assertThat(exception.getMessage()).isEqualTo("Payload cannot be empty.");
+        }
+    }
+
     private LocationResource initialise(final Codec codec) {
         LocationResource locationResource = new LocationResource();
         locationResource.commandBus = new TransactionalMiddleware(new CommandHandlersForTest(Sets.newHashSet(

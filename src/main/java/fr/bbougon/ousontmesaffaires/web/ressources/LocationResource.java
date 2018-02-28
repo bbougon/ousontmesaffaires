@@ -29,8 +29,7 @@ public class LocationResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response add(final String payload) {
-        Validate.notNull(payload, "Payload cannot be null.");
-        Validate.notEmpty(payload.trim(), "Payload cannot be empty.");
+        checkPayload(payload);
         CommandResponse commandResponse = commandBus.send(new LocationAddCommand(payload));
         URI uri = new URIBuilder().build(PATH + "/" + codec.urlSafeToBase64(commandResponse.getResponse().toString()));
         if(uri == null) {
@@ -43,11 +42,17 @@ public class LocationResource {
     @Path("/{UUID}/item")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addItem(@PathParam("UUID") final String locationId, final String payload) {
+        checkPayload(payload);
         CommandResponse commandResponse = commandBus.send(new ItemAddToLocationCommand(UUID.fromString(codec.fromBase64(locationId)), payload));
         if (commandResponse.isEmpty()) {
             return Response.status(NOT_FOUND).build();
         }
         return Response.noContent().build();
+    }
+
+    private void checkPayload(final String payload) {
+        Validate.notNull(payload, "Payload cannot be null.");
+        Validate.notEmpty(payload.trim(), "Payload cannot be empty.");
     }
 
     @GET
