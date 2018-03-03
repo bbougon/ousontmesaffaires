@@ -50,17 +50,17 @@ public class LocationResource {
         return Response.noContent().build();
     }
 
-    private void checkPayload(final String payload) {
-        Validate.notNull(payload, "Payload cannot be null.");
-        Validate.notEmpty(payload.trim(), "Payload cannot be empty.");
-    }
-
     @GET
     @Path("/{UUID}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getLocation(@Context final UriInfo uriInfo, @PathParam("UUID") final String locationId) {
         CommandResponse commandResponse = commandBus.send(new LocationGetCommand(codec, locationId, uriInfo, qrGenerator));
         return Response.status(OK).entity(commandResponse.getResponse()).build();
+    }
+
+    private void checkPayload(final String payload) {
+        Validate.notNull(payload, "Payload cannot be null.");
+        Validate.notEmpty(payload.trim(), "Payload cannot be empty.");
     }
 
     @Inject
