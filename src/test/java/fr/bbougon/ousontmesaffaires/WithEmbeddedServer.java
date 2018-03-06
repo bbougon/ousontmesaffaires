@@ -1,5 +1,6 @@
 package fr.bbougon.ousontmesaffaires;
 
+import fr.bbougon.ousontmesaffaires.infrastructure.ConfigurationProperties;
 import fr.bbougon.ousontmesaffaires.repositories.*;
 import io.undertow.Undertow;
 import org.jboss.resteasy.plugins.server.undertow.UndertowJaxrsServer;
@@ -17,7 +18,7 @@ public class WithEmbeddedServer extends ExternalResource {
     @Override
     public void after() {
         server.stop();
-        FileRepositories.initialise(new DefaultFileRepositories());
+        FileRepositories.initialise(new DefaultFileRepositories(new ConfigurationProperties()));
     }
 
     private void loadConfiguration() {

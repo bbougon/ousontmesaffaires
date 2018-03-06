@@ -1,6 +1,7 @@
 package fr.bbougon.ousontmesaffaires.repositories;
 
 import fr.bbougon.ousontmesaffaires.Configuration.ServerConfiguration;
+import fr.bbougon.ousontmesaffaires.infrastructure.ConfigurationProperties;
 
 import static fr.bbougon.ousontmesaffaires.Configuration.DataBaseConfiguration;
 
@@ -23,7 +24,7 @@ public abstract class FileRepositories {
     protected abstract FileRepository<DataBaseConfiguration> getDataBaseConfiguration();
 
     private static class SingletonHolder {
-        static FileRepositories INSTANCE = new DefaultFileRepositories();
+        static FileRepositories INSTANCE = new DefaultFileRepositories(new ConfigurationProperties());
     }
 
 }

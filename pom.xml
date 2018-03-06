@@ -17,6 +17,8 @@
         <resteasy.version>3.1.4.Final</resteasy.version>
     </properties>
 
+    <packaging>jar</packaging>
+
     <dependencies>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -132,7 +134,6 @@
             <version>${guice.version}</version>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 
     <build>
@@ -185,38 +186,63 @@
                     <mainClass>fr.bbougon.ousontmesaffaires.Main</mainClass>
                 </configuration>
             </plugin>
-
-
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
             </plugin>
         </plugins>
 
-        <resources>
-            <resource>
-                <directory>${project.basedir}/src/main/resources</directory>
+        <testResources>
+            <testResource>
+                <directory>${project.basedir}/src/test/resources</directory>
                 <includes>
                     <include>
-                        **/*.properties
+                        **/*.*
                     </include>
                 </includes>
-            </resource>
-            <resource>
-                <directory>${project.basedir}/src/main/package/dev/resources</directory>
-                <includes>
-                    <include>
-                        configuration_fr_FR.properties
-                    </include>
-                    <include>
-                        jetty-logging.properties
-                    </include>
-                    <include>
-                        logback.xml
-                    </include>
-                </includes>
-            </resource>
-        </resources>
+            </testResource>
+        </testResources>
     </build>
+
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <build>
+                <finalName>ousontmesaffaires-dev</finalName>
+                <resources>
+                    <resource>
+                        <directory>${project.basedir}/src/main/package/dev/resources</directory>
+                        <includes>
+                            <include>
+                                *.properties
+                            </include>
+                            <include>
+                                logback.xml
+                            </include>
+                        </includes>
+                    </resource>
+                </resources>
+            </build>
+        </profile>
+        <profile>
+            <id>docker</id>
+            <build>
+                <finalName>ousontmesaffaires-docker</finalName>
+                <resources>
+                    <resource>
+                        <directory>${project.basedir}/src/main/package/docker/resources</directory>
+                        <includes>
+                            <include>
+                                *.properties
+                            </include>
+                            <include>
+                                logback.xml
+                            </include>
+                        </includes>
+                    </resource>
+                </resources>
+            </build>
+        </profile>
+    </profiles>
 
 
 </project>

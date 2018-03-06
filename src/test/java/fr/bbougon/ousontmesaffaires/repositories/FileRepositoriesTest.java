@@ -21,6 +21,6 @@ public class FileRepositoriesTest {
         Configuration.DataBaseConfiguration dataBaseConfiguration = FileRepositories.dataBaseConfiguration().get();
 
         assertThat(dataBaseConfiguration.getSettings().getUpdateStrategy()).isEqualTo(UpdateStrategies.DIFF);
-        assertThat(dataBaseConfiguration.getSettings().buildDatabase().getName()).isEqualTo("ousontmesaffaires");
+        assertThat(dataBaseConfiguration.getSettings().buildDatabase().getName()).isEqualTo("ousontmesaffaires-test");
     }
 }

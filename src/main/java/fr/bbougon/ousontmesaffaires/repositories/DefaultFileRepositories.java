@@ -1,40 +1,35 @@
 package fr.bbougon.ousontmesaffaires.repositories;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.mongodb.MongoClient;
 import com.mongodb.ServerAddress;
 import fr.bbougon.ousontmesaffaires.Configuration;
+import fr.bbougon.ousontmesaffaires.infrastructure.ConfigurationProperties;
 import org.mongolink.Settings;
 import org.mongolink.UpdateStrategies;
 
-import java.util.Map;
-import java.util.ResourceBundle;
-
 public class DefaultFileRepositories extends FileRepositories {
+
+    public DefaultFileRepositories(final ConfigurationProperties configurationProperties) {
+        this.configurationProperties = configurationProperties;
+    }
 
     @Override
     public FileRepository<Configuration.ServerConfiguration> getServerConfiguration() {
-        return() -> (Configuration.ServerConfiguration) () -> Integer.parseInt(bundleMapped().get("server.port"));
+        return () -> (Configuration.ServerConfiguration) configurationProperties::serverPort;
     }
 
     @Override
     protected FileRepository<Configuration.DataBaseConfiguration> getDataBaseConfiguration() {
-        return () -> (Configuration.DataBaseConfiguration) () -> {
-            Map<String, String> configuration = bundleMapped();
-            String host = configuration.get("database.host");
-            int port = Integer.parseInt(configuration.get("database.port"));
-            String dataBase = configuration.get("database.name");
-            return Settings.defaultInstance()
-                    .withDatabase(new MongoClient(new ServerAddress(host, port), Lists.newArrayList()).getDatabase(dataBase))
-                    .withDefaultUpdateStrategy(UpdateStrategies.DIFF);
-        };
+        return () -> (Configuration.DataBaseConfiguration) this::getSettings;
     }
 
-    private Map<String, String> bundleMapped() {
-        ResourceBundle bundle = ResourceBundle.getBundle("configuration");
-        Map<String, String> result = Maps.newHashMap();
-        bundle.keySet().forEach(key -> result.put(key, bundle.getString(key)));
-        return result;
+    private Settings getSettings() {
+        return Settings.defaultInstance()
+                .withDatabase(new MongoClient(new ServerAddress(configurationProperties.databaseHost(), configurationProperties.databasePort()),
+                        Lists.newArrayList()).getDatabase(configurationProperties.databaseName()))
+                .withDefaultUpdateStrategy(UpdateStrategies.DIFF);
     }
+
+    private final ConfigurationProperties configurationProperties;
 }
