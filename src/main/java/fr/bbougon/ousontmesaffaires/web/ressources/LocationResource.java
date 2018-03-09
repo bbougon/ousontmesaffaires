@@ -1,6 +1,10 @@
 package fr.bbougon.ousontmesaffaires.web.ressources;
 
-import fr.bbougon.ousontmesaffaires.command.location.*;
+import fr.bbougon.ousontmesaffaires.command.location.GenerateStickersCommand;
+import fr.bbougon.ousontmesaffaires.command.location.ItemAddToLocationCommand;
+import fr.bbougon.ousontmesaffaires.command.location.LocationAddCommand;
+import fr.bbougon.ousontmesaffaires.command.location.LocationGetCommand;
+import fr.bbougon.ousontmesaffaires.command.location.LocationsGetCommand;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandBus;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandResponse;
 import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGenerator;
@@ -9,8 +13,18 @@ import fr.bbougon.ousontmesaffaires.web.helpers.URIBuilder;
 import org.apache.commons.lang3.Validate;
 
 import javax.inject.Inject;
-import javax.ws.rs.*;
-import javax.ws.rs.core.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+import java.io.File;
 import java.net.URI;
 import java.util.UUID;
 
@@ -61,6 +75,11 @@ public class LocationResource {
     private void checkPayload(final String payload) {
         Validate.notNull(payload, "Payload cannot be null.");
         Validate.notEmpty(payload.trim(), "Payload cannot be empty.");
+    }
+
+    public Response generateStickers(final String locationId) {
+        CommandResponse<File> commandResponse = commandBus.send(new GenerateStickersCommand(codec, locationId));
+        return Response.ok(commandResponse.getResponse()).header(HttpHeaders.CONTENT_DISPOSITION, "filename=" + commandResponse.getResponse().getName()).build();
     }
 
     @Inject

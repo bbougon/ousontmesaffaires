@@ -7,6 +7,7 @@ import fr.bbougon.ousontmesaffaires.command.CommandHandlersForTest;
 import fr.bbougon.ousontmesaffaires.command.location.*;
 import fr.bbougon.ousontmesaffaires.domain.location.*;
 import fr.bbougon.ousontmesaffaires.infrastructure.module.transactional.TransactionalMiddleware;
+import fr.bbougon.ousontmesaffaires.infrastructure.pdf.PdfGeneratorForTest;
 import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGeneratorForTest;
 import fr.bbougon.ousontmesaffaires.repositories.MemoryRepositories;
 import fr.bbougon.ousontmesaffaires.repositories.Repositories;
@@ -21,6 +22,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import javax.ws.rs.core.Response;
+import java.io.File;
 import java.util.List;
 import java.util.UUID;
 
@@ -158,13 +160,27 @@ public class LocationResourceTest {
         }
     }
 
+    @Test
+    public void canGeneratePdfWithSticker() {
+        Location location = Location.create("Location 1", Item.create(Lists.newArrayList(Feature.create("type", "chaussure"))));
+        Repositories.locationRepository().persist(location);
+        String locationId = new Codec().urlSafeToBase64(location.getId().toString());
+
+        Response response = locationResource.generateStickers(locationId);
+
+        assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
+        assertThat(response.getEntity()).isEqualTo(new File("src/test/resources/file/expected.pdf"));
+        assertThat(response.getHeaderString("Content-Disposition")).isEqualTo("filename=expected.pdf");
+    }
+
     private LocationResource initialise(final Codec codec) {
         LocationResource locationResource = new LocationResource();
         locationResource.commandBus = new TransactionalMiddleware(new CommandHandlersForTest(Sets.newHashSet(
                 new LocationAddCommandHandler(),
                 new ItemAddToLocationCommandHandler(),
                 new LocationGetCommandHandler(),
-                new LocationsGetCommandHandler()
+                new LocationsGetCommandHandler(),
+                new GenerateStickersCommandHandler(new PdfGeneratorForTest())
         )));
         locationResource.codec = codec;
         locationResource.qrGenerator = new QRGeneratorForTest();

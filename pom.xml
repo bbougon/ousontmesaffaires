@@ -95,7 +95,11 @@
             <artifactId>javase</artifactId>
             <version>3.3.1</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>jbig2-imageio</artifactId>
+            <version>RELEASE</version>
+        </dependency>
 
 
         <dependency>

@@ -7,6 +7,8 @@ import fr.bbougon.ousontmesaffaires.command.CommandHandler;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandBus;
 import fr.bbougon.ousontmesaffaires.infrastructure.module.mongolink.MongolinkModule;
 import fr.bbougon.ousontmesaffaires.infrastructure.module.transactional.TransactionalMiddleware;
+import fr.bbougon.ousontmesaffaires.infrastructure.pdf.DefaultPdfGenerator;
+import fr.bbougon.ousontmesaffaires.infrastructure.pdf.PdfGenerator;
 import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGenerator;
 import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGeneratorEngine;
 import fr.bbougon.ousontmesaffaires.repositories.FileRepositories;
@@ -24,8 +26,13 @@ public class OuSontMesAffairesConfiguration extends AbstractModule {
         installMiddleWare();
         install(new MongolinkModule("fr.bbougon.ousontmesaffaires.repositories.mongo.mapping", FileRepositories.dataBaseConfiguration().get().getSettings()));
         bindQRGenerator();
+        bindPdfGenerator();
         bind(Repositories.class).to(MongoRepositories.class).in(Singleton.class);
         requestStaticInjection(Repositories.class);
+    }
+
+    private void bindPdfGenerator() {
+        bind(PdfGenerator.class).to(DefaultPdfGenerator.class);
     }
 
     void bindQRGenerator() {
