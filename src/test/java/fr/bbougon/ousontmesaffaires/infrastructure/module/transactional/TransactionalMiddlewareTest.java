@@ -12,12 +12,14 @@ import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGenerator;
 import fr.bbougon.ousontmesaffaires.repositories.mongo.LocationMongoRepository;
 import fr.bbougon.ousontmesaffaires.test.utils.FileUtils;
 import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.mongolink.MongoSession;
 
 import java.util.List;
 
-import static org.fest.assertions.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class TransactionalMiddlewareTest {
 

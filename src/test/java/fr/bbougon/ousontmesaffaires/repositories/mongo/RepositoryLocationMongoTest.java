@@ -1,7 +1,9 @@
 package fr.bbougon.ousontmesaffaires.repositories.mongo;
 
 import com.google.common.collect.Sets;
-import fr.bbougon.ousontmesaffaires.domain.location.*;
+import fr.bbougon.ousontmesaffaires.domain.location.Feature;
+import fr.bbougon.ousontmesaffaires.domain.location.Item;
+import fr.bbougon.ousontmesaffaires.domain.location.Location;
 import fr.bbougon.ousontmesaffaires.rules.MongoRule;
 import fr.bbougon.ousontmesaffaires.test.utils.FileUtils;
 import fr.bbougon.ousontmesaffaires.web.ressources.json.Features;
@@ -12,7 +14,7 @@ import org.mongolink.test.MongolinkRule;
 
 import java.util.List;
 
-import static org.fest.assertions.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class RepositoryLocationMongoTest {
 

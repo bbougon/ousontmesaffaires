@@ -1,12 +1,14 @@
 package fr.bbougon.ousontmesaffaires.infrastructure;
 
 import com.google.common.collect.Maps;
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
 
 import java.util.HashMap;
 
 import static fr.bbougon.ousontmesaffaires.infrastructure.WithSystemEnvironment.*;
-import static org.fest.assertions.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ConfigurationPropertiesTest {
 

@@ -1,13 +1,15 @@
 package fr.bbougon.ousontmesaffaires.infrastructure.module.mongolink;
 
-import com.google.inject.*;
+import com.google.inject.Guice;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.google.inject.testing.fieldbinder.BoundFieldModule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mongolink.Settings;
 
-import static org.fest.assertions.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class MongolinkModuleTest {
 

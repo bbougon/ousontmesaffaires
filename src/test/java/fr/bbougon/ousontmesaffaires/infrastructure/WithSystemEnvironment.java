@@ -22,10 +22,10 @@ public class WithSystemEnvironment extends ExternalResource {
 
     private static Map<String, String> VARIABLES = Maps.newHashMap();
 
-    public static final String DATABASE_HOST = "a-host";
-    public static final String DATABASE_PORT = "12345";
-    public static final String DATABASE_NAME = "database";
-    public static final String SERVER_PORT = "6789";
+    static final String DATABASE_HOST = "a-host";
+    static final String DATABASE_PORT = "12345";
+    static final String DATABASE_NAME = "database";
+    static final String SERVER_PORT = "6789";
 
     static {
         VARIABLES.put("DATABASE_HOST", DATABASE_HOST);

@@ -5,7 +5,7 @@ import fr.bbougon.ousontmesaffaires.Configuration.ServerConfiguration;
 import org.junit.Test;
 import org.mongolink.UpdateStrategies;
 
-import static org.fest.assertions.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class FileRepositoriesTest {
 

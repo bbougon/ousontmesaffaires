@@ -4,8 +4,14 @@ import ch.qos.logback.classic.Level;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import fr.bbougon.ousontmesaffaires.command.CommandHandlersForTest;
-import fr.bbougon.ousontmesaffaires.command.location.*;
-import fr.bbougon.ousontmesaffaires.domain.location.*;
+import fr.bbougon.ousontmesaffaires.command.location.GenerateStickersCommandHandler;
+import fr.bbougon.ousontmesaffaires.command.location.ItemAddToLocationCommandHandler;
+import fr.bbougon.ousontmesaffaires.command.location.LocationAddCommandHandler;
+import fr.bbougon.ousontmesaffaires.command.location.LocationGetCommandHandler;
+import fr.bbougon.ousontmesaffaires.command.location.LocationsGetCommandHandler;
+import fr.bbougon.ousontmesaffaires.domain.location.Feature;
+import fr.bbougon.ousontmesaffaires.domain.location.Item;
+import fr.bbougon.ousontmesaffaires.domain.location.Location;
 import fr.bbougon.ousontmesaffaires.infrastructure.module.transactional.TransactionalMiddleware;
 import fr.bbougon.ousontmesaffaires.infrastructure.pdf.PdfGeneratorForTest;
 import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGeneratorForTest;
@@ -27,8 +33,8 @@ import java.util.List;
 import java.util.UUID;
 
 import static javax.ws.rs.core.Response.Status.*;
-import static org.fest.assertions.api.Assertions.assertThat;
-import static org.fest.assertions.api.Assertions.failBecauseExceptionWasNotThrown;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 
 public class LocationResourceTest {
 
