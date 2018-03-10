@@ -15,8 +15,8 @@ import fr.bbougon.ousontmesaffaires.domain.location.Location;
 import fr.bbougon.ousontmesaffaires.infrastructure.module.transactional.TransactionalMiddleware;
 import fr.bbougon.ousontmesaffaires.infrastructure.pdf.PdfGeneratorForTest;
 import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGeneratorForTest;
-import fr.bbougon.ousontmesaffaires.repositories.MemoryRepositories;
 import fr.bbougon.ousontmesaffaires.repositories.Repositories;
+import fr.bbougon.ousontmesaffaires.repositories.WithMemoryRepositories;
 import fr.bbougon.ousontmesaffaires.test.utils.FileUtils;
 import fr.bbougon.ousontmesaffaires.test.utils.TestAppender;
 import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
@@ -25,6 +25,7 @@ import fr.bbougon.ousontmesaffaires.web.ressources.json.Features;
 import fr.bbougon.ousontmesaffaires.web.ressources.json.LocationName;
 import org.jboss.resteasy.spi.ResteasyUriInfo;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
 import javax.ws.rs.core.Response;
@@ -38,9 +39,11 @@ import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 
 public class LocationResourceTest {
 
+    @Rule
+    public WithMemoryRepositories withMemoryRepositories = new WithMemoryRepositories();
+
     @Before
     public void before() {
-        Repositories.initialise(new MemoryRepositories());
         locationResource = initialise(new Codec());
     }
 
@@ -172,7 +175,7 @@ public class LocationResourceTest {
         Repositories.locationRepository().persist(location);
         String locationId = new Codec().urlSafeToBase64(location.getId().toString());
 
-        Response response = locationResource.generateStickers(locationId);
+        Response response = locationResource.generateStickers(new ResteasyUriInfo(new URIBuilder().build("http://localhost/locations/" + locationId + "/stickers")), locationId);
 
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
         assertThat(response.getEntity()).isEqualTo(new File("src/test/resources/file/expected.pdf"));
@@ -186,7 +189,7 @@ public class LocationResourceTest {
                 new ItemAddToLocationCommandHandler(),
                 new LocationGetCommandHandler(),
                 new LocationsGetCommandHandler(),
-                new GenerateStickersCommandHandler(new PdfGeneratorForTest())
+                new GenerateStickersCommandHandler(new PdfGeneratorForTest(), new QRGeneratorForTest())
         )));
         locationResource.codec = codec;
         locationResource.qrGenerator = new QRGeneratorForTest();

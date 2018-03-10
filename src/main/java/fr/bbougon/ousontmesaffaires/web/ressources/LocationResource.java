@@ -72,8 +72,8 @@ public class LocationResource {
         return Response.status(OK).entity(commandResponse.getResponse()).build();
     }
 
-    public Response generateStickers(final String locationId) {
-        CommandResponse<File> commandResponse = commandBus.send(new GenerateStickersCommand(codec, null, locationId));
+    public Response generateStickers(@Context final UriInfo uriInfo, final String locationId) {
+        CommandResponse<File> commandResponse = commandBus.send(new GenerateStickersCommand(codec, uriInfo, locationId));
         return Response.ok(commandResponse.getResponse()).header(HttpHeaders.CONTENT_DISPOSITION, "filename=" + commandResponse.getResponse().getName()).build();
     }
 

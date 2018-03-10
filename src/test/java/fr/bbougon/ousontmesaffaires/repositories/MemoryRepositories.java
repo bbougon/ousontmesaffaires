@@ -4,6 +4,10 @@ import fr.bbougon.ousontmesaffaires.domain.location.LocationRepository;
 import fr.bbougon.ousontmesaffaires.repositories.memoire.LocationMemoryRepository;
 
 public class MemoryRepositories extends Repositories {
+
+    MemoryRepositories() {
+    }
+
     @Override
     protected LocationRepository getLocationRepository() {
         return locationMemoryRepository;

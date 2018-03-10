@@ -7,20 +7,20 @@ import fr.bbougon.ousontmesaffaires.domain.location.Feature;
 import fr.bbougon.ousontmesaffaires.domain.location.Item;
 import fr.bbougon.ousontmesaffaires.domain.location.Location;
 import fr.bbougon.ousontmesaffaires.infrastructure.pdf.PdfGenerator;
+import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGenerator;
+import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGeneratorForTest;
 import fr.bbougon.ousontmesaffaires.repositories.Repositories;
+import fr.bbougon.ousontmesaffaires.repositories.WithMemoryRepositories;
 import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
 import fr.bbougon.ousontmesaffaires.web.helpers.URIBuilder;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jboss.resteasy.spi.ResteasyUriInfo;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import javax.ws.rs.core.UriInfo;
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,33 +33,38 @@ public class GenerateStickersCommandHandlerTest {
     @Rule
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
+    @Rule
+    public WithMemoryRepositories withMemoryRepositories = new WithMemoryRepositories();
+
     @Before
-    public void before() throws IOException {
-        file = temporaryFolder.newFile();
+    public void before() {
         pdfGenerator = mock(PdfGenerator.class);
-        uriInfo = new ResteasyUriInfo(new URIBuilder().build("http://locahost/uuid/stickers"));
+        qrCodeGenerator = new QRGeneratorForTest();
         codec = new Codec();
+        location = Location.create("Location 1", Item.create(Lists.newArrayList(Feature.create("type", "chaussure"))));
+        Repositories.locationRepository().persist(location);
+        uriInfo = new ResteasyUriInfo(new URIBuilder().build("http://localhost/locations/"
+                + codec.urlSafeToBase64(location.getId().toString())
+                + "/stickers"));
     }
 
-    @Ignore
     @Test
-    public void canGenerateASticker() throws IOException {
-        Location location = Location.create("Location 1", Item.create(Lists.newArrayList(Feature.create("type", "chaussure"))));
-        Repositories.locationRepository().persist(location);
+    public void canGenerateASticker() {
         String locationId = new Codec().urlSafeToBase64(location.getId().toString());
-        GenerateStickersCommandHandler generateStickersCommandHandler = new GenerateStickersCommandHandler(pdfGenerator);
+        GenerateStickersCommandHandler generateStickersCommandHandler = new GenerateStickersCommandHandler(pdfGenerator, qrCodeGenerator);
 
         Pair<File, Object> result = generateStickersCommandHandler.execute(new GenerateStickersCommand(codec, uriInfo, locationId));
 
         assertThat(result).isNotNull();
         HashMap<String, String> content = Maps.newHashMap();
         content.put("title", location.getLocation());
-        content.put("image", codec.urlSafeToBase64(uriInfo.getAbsolutePath().toASCIIString()));
-        verify(pdfGenerator).generate("Location_1", content);
+        content.put("image", qrCodeGenerator.encodeToBase64(uriInfo.getBaseUri().toASCIIString() + "locations/" + locationId));
+        verify(pdfGenerator).generate("Location_1.pdf", content);
     }
 
-    private File file;
     private PdfGenerator pdfGenerator;
     private ResteasyUriInfo uriInfo;
     private Codec codec;
+    private QRGenerator qrCodeGenerator;
+    private Location location;
 }
