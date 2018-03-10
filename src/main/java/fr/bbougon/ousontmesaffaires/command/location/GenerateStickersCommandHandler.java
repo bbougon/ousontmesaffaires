@@ -1,5 +1,6 @@
 package fr.bbougon.ousontmesaffaires.command.location;
 
+import com.google.common.collect.Maps;
 import fr.bbougon.ousontmesaffaires.command.CommandHandler;
 import fr.bbougon.ousontmesaffaires.infrastructure.pdf.PdfGenerator;
 import org.apache.commons.lang3.tuple.Pair;
@@ -16,7 +17,7 @@ public class GenerateStickersCommandHandler implements CommandHandler<GenerateSt
 
     @Override
     public Pair<File, Object> execute(final GenerateStickersCommand command) {
-        return Pair.of(pdfGenerator.generate("", "content"), command);
+        return Pair.of(pdfGenerator.generate("", Maps.newHashMap()), command);
     }
 
     private final PdfGenerator pdfGenerator;

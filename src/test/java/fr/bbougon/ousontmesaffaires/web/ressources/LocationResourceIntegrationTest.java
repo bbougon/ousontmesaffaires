@@ -49,7 +49,7 @@ public class LocationResourceIntegrationTest {
 
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
         String locationId = location.getLocation().getPath().substring(location.getLocation().getPath().lastIndexOf("/") + 1);
-        assertThat(response.readEntity(String.class)).isEqualTo("{\"id\":\""+ locationId +"\",\"location\":\"placard\",\"items\":[{\"item\":{\"taille\":\"3ans\",\"type\":\"pantalon\",\"couleur\":\"noir\"}}],\"qrcode\":\"a qr code\"}");
+        assertThat(response.readEntity(String.class)).isEqualTo("{\"id\":\"" + locationId + "\",\"location\":\"placard\",\"items\":[{\"item\":{\"taille\":\"3ans\",\"type\":\"pantalon\",\"couleur\":\"noir\"}}],\"qrcode\":\"http://localhost:17000/locations/" + locationId + "\"}");
     }
 
     @Test
@@ -64,7 +64,7 @@ public class LocationResourceIntegrationTest {
 
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
         String locationId = location.getLocation().getPath().substring(location.getLocation().getPath().lastIndexOf("/") + 1);
-        assertThat(response.readEntity(String.class)).contains("{\"id\":\""+ locationId +"\",\"location\":\"placard\",\"items\":[{\"item\":{\"taille\":\"3ans\",\"type\":\"pantalon\",\"couleur\":\"noir\"}}],\"qrcode\":\"a qr code\"}");
+        assertThat(response.readEntity(String.class)).contains("{\"id\":\"" + locationId + "\",\"location\":\"placard\",\"items\":[{\"item\":{\"taille\":\"3ans\",\"type\":\"pantalon\",\"couleur\":\"noir\"}}],\"qrcode\":\"http://localhost:17000/locations/" + locationId + "\"}");
     }
 
     @Test

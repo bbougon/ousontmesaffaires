@@ -12,6 +12,8 @@ import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGenerator;
 import fr.bbougon.ousontmesaffaires.repositories.mongo.LocationMongoRepository;
 import fr.bbougon.ousontmesaffaires.test.utils.FileUtils;
 import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
+import fr.bbougon.ousontmesaffaires.web.helpers.URIBuilder;
+import org.jboss.resteasy.spi.ResteasyUriInfo;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,7 +51,7 @@ public class TransactionalMiddlewareTest {
 
     @Test
     public void canGetEmptyLocations() {
-        CommandResponse commandResponse = commandBus.send(new LocationsGetCommand(codec, qrGenerator));
+        CommandResponse commandResponse = commandBus.send(new LocationsGetCommand(codec, qrGenerator, new ResteasyUriInfo(new URIBuilder().build("http://localhost/locations/"))));
 
         assertThat(commandResponse.getResponse()).isEqualTo("[]");
     }

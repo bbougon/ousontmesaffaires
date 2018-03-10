@@ -35,8 +35,8 @@ import static javax.ws.rs.core.Response.Status.OK;
 public class LocationResource {
 
     @GET
-    public Response getAll() {
-        CommandResponse commandResponse = commandBus.send(new LocationsGetCommand(codec, qrGenerator));
+    public Response getAll(@Context UriInfo uriInfo) {
+        CommandResponse commandResponse = commandBus.send(new LocationsGetCommand(codec, qrGenerator, uriInfo));
         return Response.ok().entity(commandResponse.getResponse()).build();
     }
 
@@ -72,14 +72,14 @@ public class LocationResource {
         return Response.status(OK).entity(commandResponse.getResponse()).build();
     }
 
+    public Response generateStickers(final String locationId) {
+        CommandResponse<File> commandResponse = commandBus.send(new GenerateStickersCommand(codec, null, locationId));
+        return Response.ok(commandResponse.getResponse()).header(HttpHeaders.CONTENT_DISPOSITION, "filename=" + commandResponse.getResponse().getName()).build();
+    }
+
     private void checkPayload(final String payload) {
         Validate.notNull(payload, "Payload cannot be null.");
         Validate.notEmpty(payload.trim(), "Payload cannot be empty.");
-    }
-
-    public Response generateStickers(final String locationId) {
-        CommandResponse<File> commandResponse = commandBus.send(new GenerateStickersCommand(codec, locationId));
-        return Response.ok(commandResponse.getResponse()).header(HttpHeaders.CONTENT_DISPOSITION, "filename=" + commandResponse.getResponse().getName()).build();
     }
 
     @Inject
@@ -91,5 +91,5 @@ public class LocationResource {
     @Inject
     Codec codec;
 
-    static final String PATH = "/locations";
+    public static final String PATH = "/locations";
 }

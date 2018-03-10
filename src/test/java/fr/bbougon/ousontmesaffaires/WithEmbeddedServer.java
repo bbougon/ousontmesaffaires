@@ -1,7 +1,9 @@
 package fr.bbougon.ousontmesaffaires;
 
 import fr.bbougon.ousontmesaffaires.infrastructure.ConfigurationProperties;
-import fr.bbougon.ousontmesaffaires.repositories.*;
+import fr.bbougon.ousontmesaffaires.repositories.DefaultFileRepositories;
+import fr.bbougon.ousontmesaffaires.repositories.FileRepositories;
+import fr.bbougon.ousontmesaffaires.repositories.FileRepository;
 import io.undertow.Undertow;
 import org.jboss.resteasy.plugins.server.undertow.UndertowJaxrsServer;
 import org.junit.rules.ExternalResource;
@@ -35,7 +37,7 @@ public class WithEmbeddedServer extends ExternalResource {
         });
     }
 
-    private void start() throws Exception {
+    private void start() {
         Configuration.ServerConfiguration configuration = Configuration.getServerConfiguration();
         server = new UndertowJaxrsServer();
         OuSontMesAffairesApplicationForTest application = new OuSontMesAffairesApplicationForTest();

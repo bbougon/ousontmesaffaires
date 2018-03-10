@@ -1,1 +1,1 @@
-[{"id":"ID_TO_REPLACE_1","location":"Location 1","items":[{"item":{"type":"chaussure"}}],"qrcode":"a qr code"},{"id":"ID_TO_REPLACE_2","location":"Location 2","items":[{"item":{"type":"pantalon"}}],"qrcode":"a qr code"}]
+[{"id":"ID_TO_REPLACE_1","location":"Location 1","items":[{"item":{"type":"chaussure"}}],"qrcode":"http://localhost/locations/ID_TO_REPLACE_1"},{"id":"ID_TO_REPLACE_2","location":"Location 2","items":[{"item":{"type":"pantalon"}}],"qrcode":"http://localhost/locations/ID_TO_REPLACE_2"}]
