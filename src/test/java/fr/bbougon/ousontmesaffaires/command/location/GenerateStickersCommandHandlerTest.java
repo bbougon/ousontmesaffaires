@@ -12,7 +12,7 @@ import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGeneratorForTest;
 import fr.bbougon.ousontmesaffaires.repositories.Repositories;
 import fr.bbougon.ousontmesaffaires.repositories.WithMemoryRepositories;
 import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
-import fr.bbougon.ousontmesaffaires.web.helpers.URIBuilder;
+import fr.bbougon.ousontmesaffaires.web.ressources.UriInfoBuilderForTest;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jboss.resteasy.spi.ResteasyUriInfo;
 import org.junit.Before;
@@ -25,9 +25,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.*;
 
 
 public class GenerateStickersCommandHandlerTest {
@@ -45,9 +43,7 @@ public class GenerateStickersCommandHandlerTest {
         codec = new Codec();
         location = Location.create("Location 1", Item.create(Lists.newArrayList(Feature.create("type", "chaussure"))));
         Repositories.locationRepository().persist(location);
-        uriInfo = new ResteasyUriInfo(new URIBuilder().build("http://localhost/locations/"
-                + codec.urlSafeToBase64(location.getId().toString())
-                + "/stickers"));
+        uriInfo = new UriInfoBuilderForTest().forStickers(codec.urlSafeToBase64(location.getId().toString()));
     }
 
     @Test

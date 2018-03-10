@@ -20,10 +20,8 @@ import fr.bbougon.ousontmesaffaires.repositories.WithMemoryRepositories;
 import fr.bbougon.ousontmesaffaires.test.utils.FileUtils;
 import fr.bbougon.ousontmesaffaires.test.utils.TestAppender;
 import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
-import fr.bbougon.ousontmesaffaires.web.helpers.URIBuilder;
 import fr.bbougon.ousontmesaffaires.web.ressources.json.Features;
 import fr.bbougon.ousontmesaffaires.web.ressources.json.LocationName;
-import org.jboss.resteasy.spi.ResteasyUriInfo;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -102,7 +100,7 @@ public class LocationResourceTest {
         Repositories.locationRepository().persist(location);
         String locationId = new Codec().urlSafeToBase64(location.getId().toString());
 
-        Response response = locationResource.getLocation(new ResteasyUriInfo(new URIBuilder().build("http://localhost/locations/" + locationId)), locationId);
+        Response response = locationResource.getLocation(new UriInfoBuilderForTest().forLocation(locationId), locationId);
 
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
         assertThat(response.getEntity()).isEqualTo(new FileUtils("json/expectedJsonResult.json").getContent().replace("ID_TO_REPLACE", locationId));
@@ -122,7 +120,7 @@ public class LocationResourceTest {
         Repositories.locationRepository().persist(location1);
         Repositories.locationRepository().persist(location2);
 
-        Response response = locationResource.getAll(new ResteasyUriInfo(new URIBuilder().build("http://localhost/locations")));
+        Response response = locationResource.getAll(new UriInfoBuilderForTest().forLocations());
 
         assertThat(response.getEntity()).isEqualTo(new FileUtils("json/expectedJsonsResult.json").getContent()
                 .replace("ID_TO_REPLACE_1", new Codec().urlSafeToBase64(location1.getId().toString()))
@@ -175,7 +173,7 @@ public class LocationResourceTest {
         Repositories.locationRepository().persist(location);
         String locationId = new Codec().urlSafeToBase64(location.getId().toString());
 
-        Response response = locationResource.generateStickers(new ResteasyUriInfo(new URIBuilder().build("http://localhost/locations/" + locationId + "/stickers")), locationId);
+        Response response = locationResource.generateStickers(new UriInfoBuilderForTest().forStickers(locationId), locationId);
 
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
         assertThat(response.getEntity()).isEqualTo(new File("src/test/resources/file/expected.pdf"));
@@ -185,7 +183,8 @@ public class LocationResourceTest {
     @Test
     public void return404IfLocationNotFoundWhenGeneratingSticker() {
         String locationId = new Codec().urlSafeToBase64(UUID.randomUUID().toString());
-        Response response = locationResource.generateStickers(new ResteasyUriInfo(new URIBuilder().build("http://localhost/locations/" + locationId + "/stickers")), locationId);
+
+        Response response = locationResource.generateStickers(new UriInfoBuilderForTest().forStickers(locationId), locationId);
 
         assertThat(response.getStatus()).isEqualTo(NOT_FOUND.getStatusCode());
     }
