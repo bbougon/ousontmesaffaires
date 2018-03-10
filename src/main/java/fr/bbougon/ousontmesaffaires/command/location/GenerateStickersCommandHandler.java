@@ -23,6 +23,9 @@ public class GenerateStickersCommandHandler implements CommandHandler<GenerateSt
     @Override
     public Pair<File, Object> execute(final GenerateStickersCommand command) {
         Location location = Repositories.locationRepository().findById(command.getUUID());
+        if(location == null) {
+            return Pair.of(null, null);
+        }
         return Pair.of(pdfGenerator.generate(getPdfName(location), getPdfContent(command, location)), command);
     }
 

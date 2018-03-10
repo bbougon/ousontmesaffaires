@@ -74,6 +74,9 @@ public class LocationResource {
 
     public Response generateStickers(@Context final UriInfo uriInfo, final String locationId) {
         CommandResponse<File> commandResponse = commandBus.send(new GenerateStickersCommand(codec, uriInfo, locationId));
+        if(commandResponse.isEmpty()) {
+            return Response.status(NOT_FOUND).build();
+        }
         return Response.ok(commandResponse.getResponse()).header(HttpHeaders.CONTENT_DISPOSITION, "filename=" + commandResponse.getResponse().getName()).build();
     }
 

@@ -22,10 +22,12 @@ import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 
 
 public class GenerateStickersCommandHandlerTest {
@@ -60,6 +62,18 @@ public class GenerateStickersCommandHandlerTest {
         content.put("title", location.getLocation());
         content.put("image", qrCodeGenerator.encodeToBase64(uriInfo.getBaseUri().toASCIIString() + "locations/" + locationId));
         verify(pdfGenerator).generate("Location_1.pdf", content);
+    }
+
+    @Test
+    public void doNotGenerateAnyStickerIfLocationNotFound() {
+        GenerateStickersCommandHandler commandHandler = new GenerateStickersCommandHandler(pdfGenerator, qrCodeGenerator);
+
+        Pair<File, Object> result = commandHandler.execute(new GenerateStickersCommand(codec, uriInfo, new Codec().urlSafeToBase64(UUID.randomUUID().toString())));
+
+        assertThat(result).isNotNull();
+        assertThat(result.getLeft()).isNull();
+        assertThat(result.getRight()).isNull();
+        verifyZeroInteractions(pdfGenerator);
     }
 
     private PdfGenerator pdfGenerator;

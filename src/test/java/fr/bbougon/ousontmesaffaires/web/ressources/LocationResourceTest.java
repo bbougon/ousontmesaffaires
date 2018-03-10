@@ -182,6 +182,14 @@ public class LocationResourceTest {
         assertThat(response.getHeaderString("Content-Disposition")).isEqualTo("filename=expected.pdf");
     }
 
+    @Test
+    public void return404IfLocationNotFoundWhenGeneratingSticker() {
+        String locationId = new Codec().urlSafeToBase64(UUID.randomUUID().toString());
+        Response response = locationResource.generateStickers(new ResteasyUriInfo(new URIBuilder().build("http://localhost/locations/" + locationId + "/stickers")), locationId);
+
+        assertThat(response.getStatus()).isEqualTo(NOT_FOUND.getStatusCode());
+    }
+
     private LocationResource initialise(final Codec codec) {
         LocationResource locationResource = new LocationResource();
         locationResource.commandBus = new TransactionalMiddleware(new CommandHandlersForTest(Sets.newHashSet(
