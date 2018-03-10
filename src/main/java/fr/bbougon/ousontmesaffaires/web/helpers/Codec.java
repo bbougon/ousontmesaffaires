@@ -14,11 +14,15 @@ public class Codec {
         return Base64.encodeBase64URLSafeString(dataToEncode.getBytes());
     }
 
-    public String fromBase64(final String locationId) {
-        return new String(Base64.decodeBase64(locationId.getBytes()));
+    public String fromBase64(final String dataToDecode) {
+        return new String(Base64.decodeBase64(dataToDecode.getBytes()));
     }
 
     public String toBase64(final byte[] binaryData) {
         return Base64.encodeBase64String(binaryData);
+    }
+
+    public byte[] decodeBase64(final String dataToDecode) {
+        return Base64.decodeBase64(dataToDecode);
     }
 }

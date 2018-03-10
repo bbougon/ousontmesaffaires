@@ -7,6 +7,7 @@ import fr.bbougon.ousontmesaffaires.domain.location.Feature;
 import fr.bbougon.ousontmesaffaires.domain.location.Item;
 import fr.bbougon.ousontmesaffaires.domain.location.Location;
 import fr.bbougon.ousontmesaffaires.infrastructure.pdf.PdfGenerator;
+import fr.bbougon.ousontmesaffaires.infrastructure.pdf.StickerContent;
 import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGenerator;
 import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGeneratorForTest;
 import fr.bbougon.ousontmesaffaires.repositories.Repositories;
@@ -18,20 +19,18 @@ import org.jboss.resteasy.spi.ResteasyUriInfo;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.UUID;
 
+import static fr.bbougon.ousontmesaffaires.infrastructure.pdf.StickerContent.IMAGE;
+import static fr.bbougon.ousontmesaffaires.infrastructure.pdf.StickerContent.TITLE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 
 public class GenerateStickersCommandHandlerTest {
-
-    @Rule
-    public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
     @Rule
     public WithMemoryRepositories withMemoryRepositories = new WithMemoryRepositories();
@@ -48,15 +47,15 @@ public class GenerateStickersCommandHandlerTest {
 
     @Test
     public void canGenerateASticker() {
-        String locationId = new Codec().urlSafeToBase64(location.getId().toString());
+        String locationId = codec.urlSafeToBase64(location.getId().toString());
         GenerateStickersCommandHandler generateStickersCommandHandler = new GenerateStickersCommandHandler(pdfGenerator, qrCodeGenerator);
 
         Pair<File, Object> result = generateStickersCommandHandler.execute(new GenerateStickersCommand(codec, uriInfo, locationId));
 
         assertThat(result).isNotNull();
-        HashMap<String, String> content = Maps.newHashMap();
-        content.put("title", location.getLocation());
-        content.put("image", qrCodeGenerator.encodeToBase64(uriInfo.getBaseUri().toASCIIString() + "locations/" + locationId));
+        HashMap<StickerContent, String> content = Maps.newHashMap();
+        content.put(TITLE, location.getLocation());
+        content.put(IMAGE, qrCodeGenerator.encodeToBase64(uriInfo.getBaseUri().toASCIIString() + "locations/" + locationId));
         verify(pdfGenerator).generate("Location_1.pdf", content);
     }
 

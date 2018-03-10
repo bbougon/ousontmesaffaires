@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import fr.bbougon.ousontmesaffaires.command.CommandHandler;
 import fr.bbougon.ousontmesaffaires.domain.location.Location;
 import fr.bbougon.ousontmesaffaires.infrastructure.pdf.PdfGenerator;
+import fr.bbougon.ousontmesaffaires.infrastructure.pdf.StickerContent;
 import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGenerator;
 import fr.bbougon.ousontmesaffaires.repositories.Repositories;
 import org.apache.commons.lang3.tuple.Pair;
@@ -11,6 +12,9 @@ import org.apache.commons.lang3.tuple.Pair;
 import javax.inject.Inject;
 import java.io.File;
 import java.util.HashMap;
+
+import static fr.bbougon.ousontmesaffaires.infrastructure.pdf.StickerContent.IMAGE;
+import static fr.bbougon.ousontmesaffaires.infrastructure.pdf.StickerContent.TITLE;
 
 public class GenerateStickersCommandHandler implements CommandHandler<GenerateStickersCommand, File> {
 
@@ -29,8 +33,8 @@ public class GenerateStickersCommandHandler implements CommandHandler<GenerateSt
         return Pair.of(pdfGenerator.generate(getPdfName(location), getPdfContent(command, location)), command);
     }
 
-    private HashMap<String, String> getPdfContent(final GenerateStickersCommand command, final Location location) {
-        HashMap<String, String> content = Maps.newHashMap();
+    private HashMap<StickerContent, String> getPdfContent(final GenerateStickersCommand command, final Location location) {
+        HashMap<StickerContent, String> content = Maps.newHashMap();
         content.put(TITLE, location.getLocation());
         content.put(IMAGE, qrCodeGenerator.encodeToBase64(command.getLocationUrl()));
         return content;
@@ -42,6 +46,4 @@ public class GenerateStickersCommandHandler implements CommandHandler<GenerateSt
 
     private final PdfGenerator pdfGenerator;
     private final QRGenerator qrCodeGenerator;
-    private static final String TITLE = "title";
-    private static final String IMAGE = "image";
 }
