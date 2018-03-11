@@ -3,7 +3,6 @@ package fr.bbougon.ousontmesaffaires.infrastructure.qrcode;
 import ch.qos.logback.classic.Level;
 import fr.bbougon.ousontmesaffaires.test.utils.FileUtilsForTest;
 import fr.bbougon.ousontmesaffaires.test.utils.TestAppender;
-import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -12,7 +11,7 @@ public class QRGeneratorEngineTest {
 
     @Test
     public void canGenerateQRCode() {
-        QRGeneratorEngine qrGeneratorEngine = new QRGeneratorEngine(new Codec());
+        QRGeneratorEngine qrGeneratorEngine = new QRGeneratorEngine();
 
         String qrCOde = qrGeneratorEngine.encodeToBase64("http://localhost");
 
@@ -23,7 +22,7 @@ public class QRGeneratorEngineTest {
     public void logWarnOnExceptions() {
         String content = new FileUtilsForTest("file/large-file.txt").getContent();
 
-        String encodedQRCode = new QRGeneratorEngine(new Codec()).encodeToBase64(content);
+        String encodedQRCode = new QRGeneratorEngine().encodeToBase64(content);
 
         assertThat(encodedQRCode).isNull();
         assertThat(TestAppender.hasMessageInLevel(Level.DEBUG, "Error while generating QRCode for content : " + content)).isTrue();

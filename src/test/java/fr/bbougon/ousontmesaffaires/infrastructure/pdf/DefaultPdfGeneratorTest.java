@@ -6,9 +6,8 @@ import com.google.zxing.MultiFormatReader;
 import com.google.zxing.Result;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
-import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGeneratorEngine;
-import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
 import fr.bbougon.ousontmesaffaires.command.sticker.Sticker;
+import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGeneratorEngine;
 import org.apache.pdfbox.pdfparser.PDFStreamParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -44,8 +43,7 @@ public class DefaultPdfGeneratorTest {
     public void canGeneratePdf() throws Exception {
         HashMap<StickerContent, String> content = Maps.newHashMap();
         content.put(TITLE, "A title");
-        Codec codec = new Codec();
-        content.put(IMAGE, new QRGeneratorEngine(codec).encodeToBase64("My content"));
+        content.put(IMAGE, new QRGeneratorEngine().encodeToBase64("My content"));
 
         new DefaultPdfGenerator().generate(sticker, content);
 
@@ -57,8 +55,7 @@ public class DefaultPdfGeneratorTest {
     @Test
     public void canGeneratePdfIfNoTitleGiven() throws Exception {
         HashMap<StickerContent, String> content = Maps.newHashMap();
-        Codec codec = new Codec();
-        content.put(IMAGE, new QRGeneratorEngine(codec).encodeToBase64("My content"));
+        content.put(IMAGE, new QRGeneratorEngine().encodeToBase64("My content"));
 
         new DefaultPdfGenerator().generate(sticker, content);
 
@@ -86,6 +83,11 @@ public class DefaultPdfGeneratorTest {
         } catch (IllegalArgumentException e) {
             assertThat(e.getMessage()).isEqualTo("The content must contain a qrcode image.");
         }
+    }
+
+    @Test
+    public void handleExceptionsInPdfGeneration() {
+
     }
 
     private void assertQrCode(final String qrCodeContent, final PDDocument document) throws IOException {

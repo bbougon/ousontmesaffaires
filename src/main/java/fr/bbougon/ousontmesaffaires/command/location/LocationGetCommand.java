@@ -9,7 +9,8 @@ import java.util.UUID;
 
 public class LocationGetCommand implements Command<String> {
 
-    public LocationGetCommand(final Codec codec, final String base64LocationId, final UriInfo uriInfo, final QRGenerator qrGenerator) {
+    public LocationGetCommand(final String base64LocationId, final UriInfo uriInfo, final QRGenerator qrGenerator) {
+        Codec codec = new Codec();
         this.id = base64LocationId;
         this.uuid = codec.fromString(codec.fromBase64(this.id));
         qrCode = qrGenerator.encodeToBase64(uriInfo.getAbsolutePath().toASCIIString());

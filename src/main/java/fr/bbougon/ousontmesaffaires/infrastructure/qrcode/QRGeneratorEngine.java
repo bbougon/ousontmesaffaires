@@ -9,16 +9,10 @@ import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 public class QRGeneratorEngine implements QRGenerator {
-
-    @Inject
-    public QRGeneratorEngine(final Codec codec) {
-        this.codec = codec;
-    }
 
     @Override
     public String encodeToBase64(final String content) {
@@ -33,7 +27,7 @@ public class QRGeneratorEngine implements QRGenerator {
         }
     }
 
-    private final Codec codec;
+    private final Codec codec = new Codec();
     private static final String FORMAT = "png";
     private static final int WIDTH = 150;
     private static final int HEIGHT = 150;

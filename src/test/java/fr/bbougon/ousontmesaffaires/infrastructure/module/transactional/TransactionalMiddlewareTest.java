@@ -11,7 +11,6 @@ import fr.bbougon.ousontmesaffaires.infrastructure.module.mongolink.MongolinkSes
 import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGenerator;
 import fr.bbougon.ousontmesaffaires.repositories.mongo.LocationMongoRepository;
 import fr.bbougon.ousontmesaffaires.test.utils.FileUtilsForTest;
-import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
 import fr.bbougon.ousontmesaffaires.web.ressources.UriInfoBuilderForTest;
 import org.junit.After;
 import org.junit.Before;
@@ -26,9 +25,6 @@ public class TransactionalMiddlewareTest {
 
     @Inject
     private CommandBus commandBus;
-
-    @Inject
-    private Codec codec;
 
     @Inject
     private QRGenerator qrGenerator;
@@ -50,7 +46,7 @@ public class TransactionalMiddlewareTest {
 
     @Test
     public void canGetEmptyLocations() {
-        CommandResponse commandResponse = commandBus.send(new LocationsGetCommand(codec, qrGenerator, new UriInfoBuilderForTest().forLocations()));
+        CommandResponse commandResponse = commandBus.send(new LocationsGetCommand(qrGenerator, new UriInfoBuilderForTest().forLocations()));
 
         assertThat(commandResponse.getResponse()).isEqualTo("[]");
     }

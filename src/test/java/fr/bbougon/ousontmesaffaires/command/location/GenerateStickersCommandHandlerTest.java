@@ -52,7 +52,7 @@ public class GenerateStickersCommandHandlerTest {
         String locationId = codec.urlSafeToBase64(location.getId().toString());
         GenerateStickersCommandHandler generateStickersCommandHandler = new GenerateStickersCommandHandler(pdfGenerator, qrCodeGenerator);
 
-        Pair<Sticker, Object> result = generateStickersCommandHandler.execute(new GenerateStickersCommand(codec, uriInfo, locationId));
+        Pair<Sticker, Object> result = generateStickersCommandHandler.execute(new GenerateStickersCommand(uriInfo, locationId));
 
         assertThat(result).isNotNull();
         HashMap<StickerContent, String> content = Maps.newHashMap();
@@ -65,7 +65,7 @@ public class GenerateStickersCommandHandlerTest {
     public void doNotGenerateAnyStickerIfLocationNotFound() {
         GenerateStickersCommandHandler commandHandler = new GenerateStickersCommandHandler(pdfGenerator, qrCodeGenerator);
 
-        Pair<Sticker, Object> result = commandHandler.execute(new GenerateStickersCommand(codec, uriInfo, new Codec().urlSafeToBase64(UUID.randomUUID().toString())));
+        Pair<Sticker, Object> result = commandHandler.execute(new GenerateStickersCommand(uriInfo, new Codec().urlSafeToBase64(UUID.randomUUID().toString())));
 
         assertThat(result).isNotNull();
         assertThat(result.getLeft()).isNull();

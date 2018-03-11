@@ -36,7 +36,7 @@ public class LocationResource {
 
     @GET
     public Response getAll(@Context UriInfo uriInfo) {
-        CommandResponse commandResponse = commandBus.send(new LocationsGetCommand(codec, qrGenerator, uriInfo));
+        CommandResponse commandResponse = commandBus.send(new LocationsGetCommand(qrGenerator, uriInfo));
         return Response.ok().entity(commandResponse.getResponse()).build();
     }
 
@@ -68,12 +68,12 @@ public class LocationResource {
     @Path("/{UUID}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getLocation(@Context final UriInfo uriInfo, @PathParam("UUID") final String locationId) {
-        CommandResponse commandResponse = commandBus.send(new LocationGetCommand(codec, locationId, uriInfo, qrGenerator));
+        CommandResponse commandResponse = commandBus.send(new LocationGetCommand(locationId, uriInfo, qrGenerator));
         return Response.status(OK).entity(commandResponse.getResponse()).build();
     }
 
     public Response generateStickers(@Context final UriInfo uriInfo, final String locationId) {
-        CommandResponse<Sticker> commandResponse = commandBus.send(new GenerateStickersCommand(codec, uriInfo, locationId));
+        CommandResponse<Sticker> commandResponse = commandBus.send(new GenerateStickersCommand(uriInfo, locationId));
         if(commandResponse.isEmpty()) {
             return Response.status(NOT_FOUND).build();
         }
