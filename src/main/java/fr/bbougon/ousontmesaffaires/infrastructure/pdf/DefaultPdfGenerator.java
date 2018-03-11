@@ -8,6 +8,7 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -33,6 +34,9 @@ public class DefaultPdfGenerator implements PdfGenerator {
             document.save(sticker.getContent());
             document.close();
         } catch (Exception e) {
+            String message = String.format("Error during PDF generation (%s)", sticker.getName());
+            LoggerFactory.getLogger(DefaultPdfGenerator.class).warn(message, e);
+            throw new PdfGenerationException(message);
         }
     }
 

@@ -18,7 +18,7 @@ public class TransactionalMiddleware implements CommandBus {
     @MongolinkTransaction
     @Override
     public <TResponse> CommandResponse send(final Command<TResponse> command) {
-        return new CommandResponse<>(commandHandlers.get(command.getClass()).execute(command));
+        return new CommandResponse<TResponse>(commandHandlers.get(command.getClass()).execute(command));
     }
 
     private final CommandHandlers commandHandlers;
