@@ -3,16 +3,13 @@ package fr.bbougon.ousontmesaffaires.command.sticker;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import java.io.ByteArrayOutputStream;
-
 public class Sticker {
 
     public Sticker(final String name) {
         this.name = name;
-        content = new ByteArrayOutputStream();
     }
 
-    public ByteArrayOutputStream getContent() {
+    public byte[] getContent() {
         return content;
     }
 
@@ -20,7 +17,11 @@ public class Sticker {
         return name;
     }
 
-    private ByteArrayOutputStream content;
+    public void setContent(final byte[] content) {
+        this.content = content;
+    }
+
+    private byte[] content;
     private String name;
 
 

@@ -4,11 +4,11 @@ import ch.qos.logback.classic.Level;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import fr.bbougon.ousontmesaffaires.command.CommandHandlersForTest;
-import fr.bbougon.ousontmesaffaires.command.sticker.GenerateStickersCommandHandler;
 import fr.bbougon.ousontmesaffaires.command.location.ItemAddToLocationCommandHandler;
 import fr.bbougon.ousontmesaffaires.command.location.LocationAddCommandHandler;
 import fr.bbougon.ousontmesaffaires.command.location.LocationGetCommandHandler;
 import fr.bbougon.ousontmesaffaires.command.location.LocationsGetCommandHandler;
+import fr.bbougon.ousontmesaffaires.command.sticker.GenerateStickersCommandHandler;
 import fr.bbougon.ousontmesaffaires.domain.location.Feature;
 import fr.bbougon.ousontmesaffaires.domain.location.Item;
 import fr.bbougon.ousontmesaffaires.domain.location.Location;
@@ -27,7 +27,6 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import javax.ws.rs.core.Response;
-import java.io.ByteArrayOutputStream;
 import java.util.List;
 import java.util.UUID;
 
@@ -176,7 +175,7 @@ public class LocationResourceTest {
         Response response = locationResource.generateStickers(new UriInfoBuilderForTest().forStickers(locationId), locationId);
 
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
-        assertThat(((ByteArrayOutputStream) response.getEntity()).size()).isGreaterThan(0);
+        assertThat(((byte[]) response.getEntity())).isNotEmpty();
         assertThat(response.getHeaderString("Content-Disposition")).isEqualTo("filename=Location_1.pdf");
     }
 

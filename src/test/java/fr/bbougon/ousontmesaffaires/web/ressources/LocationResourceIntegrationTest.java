@@ -4,6 +4,7 @@ import fr.bbougon.ousontmesaffaires.WithEmbeddedServer;
 import fr.bbougon.ousontmesaffaires.test.utils.FileUtilsForTest;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -17,6 +18,9 @@ public class LocationResourceIntegrationTest {
 
     @Rule
     public WithEmbeddedServer withEmbeddedServer = new WithEmbeddedServer();
+
+    @Rule
+    public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
     @Test
     public void canAddLocation() {

@@ -1,7 +1,7 @@
 package fr.bbougon.ousontmesaffaires.infrastructure.pdf;
 
-import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
 import fr.bbougon.ousontmesaffaires.command.sticker.Sticker;
+import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
 import org.apache.commons.lang3.Validate;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -10,6 +10,7 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.slf4j.LoggerFactory;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -30,9 +31,10 @@ public class DefaultPdfGenerator implements PdfGenerator {
             PDPageContentStream contentStream = new PDPageContentStream(document, page);
             addTitle(content, contentStream);
             addQrCode(content, document, contentStream);
-
-            document.save(sticker.getContent());
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            document.save(outputStream);
             document.close();
+            sticker.setContent(outputStream.toByteArray());
         } catch (Exception e) {
             String message = String.format("Error during PDF generation (%s)", sticker.getName());
             LoggerFactory.getLogger(DefaultPdfGenerator.class).warn(message, e);

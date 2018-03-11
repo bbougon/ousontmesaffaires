@@ -11,8 +11,15 @@ import org.mongolink.Settings;
 
 public class WithEmbeddedServer extends ExternalResource {
 
+    public WithEmbeddedServer(final boolean withQrCode) {
+        this.withQrCode = withQrCode;
+    }
+
+    public WithEmbeddedServer() {
+    }
+
     @Override
-    public void before() throws Exception {
+    public void before() {
         loadConfiguration();
         start();
     }
@@ -40,11 +47,18 @@ public class WithEmbeddedServer extends ExternalResource {
     private void start() {
         Configuration.ServerConfiguration configuration = Configuration.getServerConfiguration();
         server = new UndertowJaxrsServer();
-        OuSontMesAffairesApplicationForTest application = new OuSontMesAffairesApplicationForTest();
+        OuSontMesAffairesApplication application;
+        if(!withQrCode) {
+            application = new OuSontMesAffairesApplicationForTest();
+        } else {
+            application = new OuSontMesAffairesApplication();
+        }
         server.deploy(application);
         Undertow.Builder serverConfiguration = Undertow.builder().addHttpListener(configuration.getPort(), "localhost");
         server.start(serverConfiguration);
     }
+
+    private boolean withQrCode;
 
     private UndertowJaxrsServer server;
 }

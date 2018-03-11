@@ -72,7 +72,9 @@ public class LocationResource {
         return Response.status(OK).entity(commandResponse.getResponse()).build();
     }
 
-    public Response generateStickers(@Context final UriInfo uriInfo, final String locationId) {
+    @GET
+    @Path("/{UUID}/sticker")
+    public Response generateStickers(@Context final UriInfo uriInfo, @PathParam("UUID") final String locationId) {
         CommandResponse<Sticker> commandResponse = commandBus.send(new GenerateStickersCommand(uriInfo, locationId));
         if(commandResponse.isEmpty()) {
             return Response.status(NOT_FOUND).build();
