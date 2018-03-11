@@ -5,9 +5,9 @@ import com.google.common.io.Resources;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
-public class FileUtils {
+public class FileUtilsForTest {
 
-    public FileUtils(final String resourceFilePath) {
+    public FileUtilsForTest(final String resourceFilePath) {
         this.resourceFilePath = resourceFilePath;
     }
 

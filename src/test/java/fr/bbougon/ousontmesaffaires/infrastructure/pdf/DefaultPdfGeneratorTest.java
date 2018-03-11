@@ -8,6 +8,7 @@ import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
 import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGeneratorEngine;
 import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
+import fr.bbougon.ousontmesaffaires.command.sticker.Sticker;
 import org.apache.pdfbox.pdfparser.PDFStreamParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -15,6 +16,7 @@ import org.apache.pdfbox.pdmodel.PDResources;
 import org.apache.pdfbox.pdmodel.graphics.PDXObject;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.pdfbox.text.PDFTextStripper;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -33,6 +35,11 @@ public class DefaultPdfGeneratorTest {
     @Rule
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
+    @Before
+    public void before() {
+        sticker = new Sticker("file.pdf");
+    }
+
     @Test
     public void canGeneratePdf() throws Exception {
         HashMap<StickerContent, String> content = Maps.newHashMap();
@@ -40,9 +47,9 @@ public class DefaultPdfGeneratorTest {
         Codec codec = new Codec();
         content.put(IMAGE, new QRGeneratorEngine(codec).encodeToBase64("My content"));
 
-        File pdf = new DefaultPdfGenerator().generate("file.pdf", content);
+        new DefaultPdfGenerator().generate(sticker, content);
 
-        PDDocument document = PDDocument.load(pdf);
+        PDDocument document = PDDocument.load(sticker.getContent().toByteArray());
         assertTitle("A title", document);
         assertQrCode("My content", document);
     }
@@ -53,16 +60,16 @@ public class DefaultPdfGeneratorTest {
         Codec codec = new Codec();
         content.put(IMAGE, new QRGeneratorEngine(codec).encodeToBase64("My content"));
 
-        File pdf = new DefaultPdfGenerator().generate("file.pdf", content);
+        new DefaultPdfGenerator().generate(sticker, content);
 
-        PDDocument document = PDDocument.load(pdf);
+        PDDocument document = PDDocument.load(sticker.getContent().toByteArray());
         assertQrCode("My content", document);
     }
 
     @Test
     public void canNotGeneratePdfWithEmptyContent() {
         try {
-            new DefaultPdfGenerator().generate("file.pdf", Maps.newHashMap());
+            new DefaultPdfGenerator().generate(sticker, Maps.newHashMap());
             failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
         } catch (Exception e) {
             assertThat(e.getMessage()).isEqualTo("The content cannot be empty.");
@@ -74,7 +81,7 @@ public class DefaultPdfGeneratorTest {
         try {
             HashMap<StickerContent, String> content = Maps.newHashMap();
             content.put(TITLE, "A title");
-            new DefaultPdfGenerator().generate("file.pdf", content);
+            new DefaultPdfGenerator().generate(sticker, content);
             failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
         } catch (IllegalArgumentException e) {
             assertThat(e.getMessage()).isEqualTo("The content must contain a qrcode image.");
@@ -111,4 +118,6 @@ public class DefaultPdfGeneratorTest {
         String text = pdfTextStripper.getText(document);
         assertThat(text).contains(title);
     }
+
+    private Sticker sticker;
 }

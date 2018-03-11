@@ -1,6 +1,7 @@
 package fr.bbougon.ousontmesaffaires.infrastructure.pdf;
 
 import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
+import fr.bbougon.ousontmesaffaires.command.sticker.Sticker;
 import org.apache.commons.lang3.Validate;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -8,7 +9,6 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -18,7 +18,7 @@ import static fr.bbougon.ousontmesaffaires.infrastructure.pdf.StickerContent.TIT
 public class DefaultPdfGenerator implements PdfGenerator {
 
     @Override
-    public File generate(final String filePath, final HashMap<StickerContent, String> content) {
+    public void generate(final Sticker sticker, final HashMap<StickerContent, String> content) {
         Validate.notEmpty(content, "The content cannot be empty.");
         validateImage(content);
         try {
@@ -30,11 +30,9 @@ public class DefaultPdfGenerator implements PdfGenerator {
             addTitle(content, contentStream);
             addQrCode(content, document, contentStream);
 
-            document.save(filePath);
+            document.save(sticker.getContent());
             document.close();
-            return new File(filePath);
         } catch (Exception e) {
-            return null;
         }
     }
 
@@ -46,7 +44,7 @@ public class DefaultPdfGenerator implements PdfGenerator {
 
     private void addQrCode(final HashMap<StickerContent, String> content, final PDDocument document, final PDPageContentStream contentStream) throws IOException {
         PDImageXObject image = PDImageXObject.createFromByteArray(document, new Codec().decodeBase64(content.get(IMAGE)), null);
-        contentStream.drawImage(image, 0, 0);
+        contentStream.drawImage(image, 100, 200);
         contentStream.close();
     }
 

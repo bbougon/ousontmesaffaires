@@ -4,7 +4,7 @@ import ch.qos.logback.classic.Level;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import fr.bbougon.ousontmesaffaires.command.CommandHandlersForTest;
-import fr.bbougon.ousontmesaffaires.command.location.GenerateStickersCommandHandler;
+import fr.bbougon.ousontmesaffaires.command.sticker.GenerateStickersCommandHandler;
 import fr.bbougon.ousontmesaffaires.command.location.ItemAddToLocationCommandHandler;
 import fr.bbougon.ousontmesaffaires.command.location.LocationAddCommandHandler;
 import fr.bbougon.ousontmesaffaires.command.location.LocationGetCommandHandler;
@@ -17,7 +17,7 @@ import fr.bbougon.ousontmesaffaires.infrastructure.pdf.PdfGeneratorForTest;
 import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGeneratorForTest;
 import fr.bbougon.ousontmesaffaires.repositories.Repositories;
 import fr.bbougon.ousontmesaffaires.repositories.WithMemoryRepositories;
-import fr.bbougon.ousontmesaffaires.test.utils.FileUtils;
+import fr.bbougon.ousontmesaffaires.test.utils.FileUtilsForTest;
 import fr.bbougon.ousontmesaffaires.test.utils.TestAppender;
 import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
 import fr.bbougon.ousontmesaffaires.web.ressources.json.Features;
@@ -27,7 +27,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import javax.ws.rs.core.Response;
-import java.io.File;
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 import java.util.UUID;
 
@@ -47,7 +47,7 @@ public class LocationResourceTest {
 
     @Test
     public void canAddLocation() {
-        Response response = locationResource.add(new FileUtils("json/t-shirt.json").getContent());
+        Response response = locationResource.add(new FileUtilsForTest("json/t-shirt.json").getContent());
 
         assertThat(response.getStatus()).isEqualTo(CREATED.getStatusCode());
         assertThat(response.getLocation().getPath()).matches("^/locations/[a-zA-Z0-9]{48}");
@@ -70,7 +70,7 @@ public class LocationResourceTest {
             }
         };
 
-        Response response = locationResource.add(new FileUtils("json/t-shirt.json").getContent());
+        Response response = locationResource.add(new FileUtilsForTest("json/t-shirt.json").getContent());
 
         assertThat(response.getStatus()).isEqualTo(INTERNAL_SERVER_ERROR.getStatusCode());
         assertThat(TestAppender.hasMessageInLevel(Level.WARN, "Error while building URI for path : " + LocationResource.PATH + "/&&&&?&\";^%")).isTrue();
@@ -82,7 +82,7 @@ public class LocationResourceTest {
         Location location = Location.create(LocationName.getNameFromPayload(payload), Item.create(Features.getFeaturesFromPayload(payload)));
         Repositories.locationRepository().persist(location);
 
-        Response response = locationResource.addItem(new Codec().urlSafeToBase64(location.getId().toString()), new FileUtils("json/pantalon.json").getContent());
+        Response response = locationResource.addItem(new Codec().urlSafeToBase64(location.getId().toString()), new FileUtilsForTest("json/pantalon.json").getContent());
 
         assertThat(response.getStatus()).isEqualTo(NO_CONTENT.getStatusCode());
         List<Location> locations = Repositories.locationRepository().getAll();
@@ -103,12 +103,12 @@ public class LocationResourceTest {
         Response response = locationResource.getLocation(new UriInfoBuilderForTest().forLocation(locationId), locationId);
 
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
-        assertThat(response.getEntity()).isEqualTo(new FileUtils("json/expectedJsonResult.json").getContent().replace("ID_TO_REPLACE", locationId));
+        assertThat(response.getEntity()).isEqualTo(new FileUtilsForTest("json/expectedJsonResult.json").getContent().replace("ID_TO_REPLACE", locationId));
     }
 
     @Test
     public void return404IfLocationNotFound() {
-        Response response = locationResource.addItem(new Codec().urlSafeToBase64(UUID.randomUUID().toString()), new FileUtils("json/pantalon.json").getContent());
+        Response response = locationResource.addItem(new Codec().urlSafeToBase64(UUID.randomUUID().toString()), new FileUtilsForTest("json/pantalon.json").getContent());
 
         assertThat(response.getStatus()).isEqualTo(NOT_FOUND.getStatusCode());
     }
@@ -122,7 +122,7 @@ public class LocationResourceTest {
 
         Response response = locationResource.getAll(new UriInfoBuilderForTest().forLocations());
 
-        assertThat(response.getEntity()).isEqualTo(new FileUtils("json/expectedJsonsResult.json").getContent()
+        assertThat(response.getEntity()).isEqualTo(new FileUtilsForTest("json/expectedJsonsResult.json").getContent()
                 .replace("ID_TO_REPLACE_1", new Codec().urlSafeToBase64(location1.getId().toString()))
                 .replace("ID_TO_REPLACE_2", new Codec().urlSafeToBase64(location2.getId().toString())));
     }
@@ -176,8 +176,8 @@ public class LocationResourceTest {
         Response response = locationResource.generateStickers(new UriInfoBuilderForTest().forStickers(locationId), locationId);
 
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
-        assertThat(response.getEntity()).isEqualTo(new File("src/test/resources/file/expected.pdf"));
-        assertThat(response.getHeaderString("Content-Disposition")).isEqualTo("filename=expected.pdf");
+        assertThat(((ByteArrayOutputStream) response.getEntity()).size()).isGreaterThan(0);
+        assertThat(response.getHeaderString("Content-Disposition")).isEqualTo("filename=Location_1.pdf");
     }
 
     @Test

@@ -1,7 +1,7 @@
 package fr.bbougon.ousontmesaffaires.web.ressources;
 
 import fr.bbougon.ousontmesaffaires.WithEmbeddedServer;
-import fr.bbougon.ousontmesaffaires.test.utils.FileUtils;
+import fr.bbougon.ousontmesaffaires.test.utils.FileUtilsForTest;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -33,7 +33,7 @@ public class LocationResourceIntegrationTest {
                 .path("item")
                 .request()
                 .accept(MediaType.APPLICATION_JSON_TYPE)
-                .post(Entity.json(new FileUtils("json/t-shirt.json").getContent()), Response.class);
+                .post(Entity.json(new FileUtilsForTest("json/t-shirt.json").getContent()), Response.class);
 
         assertThat(response.getStatus()).isEqualTo(NO_CONTENT.getStatusCode());
     }
@@ -81,7 +81,7 @@ public class LocationResourceIntegrationTest {
     }
 
     private Response createLocation(final String resourceFilePath) {
-        String payload = new FileUtils(resourceFilePath).getContent();
+        String payload = new FileUtilsForTest(resourceFilePath).getContent();
 
         return ClientBuilder.newClient().target("http://localhost:17000")
                 .path("/locations")

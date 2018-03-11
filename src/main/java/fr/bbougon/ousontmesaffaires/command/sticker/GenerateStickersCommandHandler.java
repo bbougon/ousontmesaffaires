@@ -1,4 +1,4 @@
-package fr.bbougon.ousontmesaffaires.command.location;
+package fr.bbougon.ousontmesaffaires.command.sticker;
 
 import com.google.common.collect.Maps;
 import fr.bbougon.ousontmesaffaires.command.CommandHandler;
@@ -10,13 +10,12 @@ import fr.bbougon.ousontmesaffaires.repositories.Repositories;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.inject.Inject;
-import java.io.File;
 import java.util.HashMap;
 
 import static fr.bbougon.ousontmesaffaires.infrastructure.pdf.StickerContent.IMAGE;
 import static fr.bbougon.ousontmesaffaires.infrastructure.pdf.StickerContent.TITLE;
 
-public class GenerateStickersCommandHandler implements CommandHandler<GenerateStickersCommand, File> {
+public class GenerateStickersCommandHandler implements CommandHandler<GenerateStickersCommand, Sticker> {
 
     @Inject
     public GenerateStickersCommandHandler(final PdfGenerator pdfGenerator, final QRGenerator qrCodeGenerator) {
@@ -25,12 +24,14 @@ public class GenerateStickersCommandHandler implements CommandHandler<GenerateSt
     }
 
     @Override
-    public Pair<File, Object> execute(final GenerateStickersCommand command) {
+    public Pair<Sticker, Object> execute(final GenerateStickersCommand command) {
         Location location = Repositories.locationRepository().findById(command.getUUID());
         if(location == null) {
             return Pair.of(null, null);
         }
-        return Pair.of(pdfGenerator.generate(getPdfName(location), getPdfContent(command, location)), command);
+        Sticker sticker = new Sticker(location.getLocation().replace(" ", "_") + ".pdf");
+        pdfGenerator.generate(sticker, getPdfContent(command, location));
+        return Pair.of(sticker, command);
     }
 
     private HashMap<StickerContent, String> getPdfContent(final GenerateStickersCommand command, final Location location) {
@@ -38,10 +39,6 @@ public class GenerateStickersCommandHandler implements CommandHandler<GenerateSt
         content.put(TITLE, location.getLocation());
         content.put(IMAGE, qrCodeGenerator.encodeToBase64(command.getLocationUrl()));
         return content;
-    }
-
-    private String getPdfName(final Location location) {
-        return location.getLocation().replace(" ", "_") + ".pdf";
     }
 
     private final PdfGenerator pdfGenerator;

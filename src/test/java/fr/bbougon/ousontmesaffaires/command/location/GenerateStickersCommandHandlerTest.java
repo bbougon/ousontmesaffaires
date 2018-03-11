@@ -3,6 +3,8 @@ package fr.bbougon.ousontmesaffaires.command.location;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import fr.bbougon.ousontmesaffaires.command.sticker.GenerateStickersCommand;
+import fr.bbougon.ousontmesaffaires.command.sticker.GenerateStickersCommandHandler;
 import fr.bbougon.ousontmesaffaires.domain.location.Feature;
 import fr.bbougon.ousontmesaffaires.domain.location.Item;
 import fr.bbougon.ousontmesaffaires.domain.location.Location;
@@ -13,6 +15,7 @@ import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGeneratorForTest;
 import fr.bbougon.ousontmesaffaires.repositories.Repositories;
 import fr.bbougon.ousontmesaffaires.repositories.WithMemoryRepositories;
 import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
+import fr.bbougon.ousontmesaffaires.command.sticker.Sticker;
 import fr.bbougon.ousontmesaffaires.web.ressources.UriInfoBuilderForTest;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jboss.resteasy.spi.ResteasyUriInfo;
@@ -20,7 +23,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -50,20 +52,20 @@ public class GenerateStickersCommandHandlerTest {
         String locationId = codec.urlSafeToBase64(location.getId().toString());
         GenerateStickersCommandHandler generateStickersCommandHandler = new GenerateStickersCommandHandler(pdfGenerator, qrCodeGenerator);
 
-        Pair<File, Object> result = generateStickersCommandHandler.execute(new GenerateStickersCommand(codec, uriInfo, locationId));
+        Pair<Sticker, Object> result = generateStickersCommandHandler.execute(new GenerateStickersCommand(codec, uriInfo, locationId));
 
         assertThat(result).isNotNull();
         HashMap<StickerContent, String> content = Maps.newHashMap();
         content.put(TITLE, location.getLocation());
         content.put(IMAGE, qrCodeGenerator.encodeToBase64(uriInfo.getBaseUri().toASCIIString() + "locations/" + locationId));
-        verify(pdfGenerator).generate("Location_1.pdf", content);
+        verify(pdfGenerator).generate(new Sticker("Location_1.pdf"), content);
     }
 
     @Test
     public void doNotGenerateAnyStickerIfLocationNotFound() {
         GenerateStickersCommandHandler commandHandler = new GenerateStickersCommandHandler(pdfGenerator, qrCodeGenerator);
 
-        Pair<File, Object> result = commandHandler.execute(new GenerateStickersCommand(codec, uriInfo, new Codec().urlSafeToBase64(UUID.randomUUID().toString())));
+        Pair<Sticker, Object> result = commandHandler.execute(new GenerateStickersCommand(codec, uriInfo, new Codec().urlSafeToBase64(UUID.randomUUID().toString())));
 
         assertThat(result).isNotNull();
         assertThat(result.getLeft()).isNull();

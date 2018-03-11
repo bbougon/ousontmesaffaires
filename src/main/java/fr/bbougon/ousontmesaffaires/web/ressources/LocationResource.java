@@ -1,10 +1,11 @@
 package fr.bbougon.ousontmesaffaires.web.ressources;
 
-import fr.bbougon.ousontmesaffaires.command.location.GenerateStickersCommand;
+import fr.bbougon.ousontmesaffaires.command.sticker.GenerateStickersCommand;
 import fr.bbougon.ousontmesaffaires.command.location.ItemAddToLocationCommand;
 import fr.bbougon.ousontmesaffaires.command.location.LocationAddCommand;
 import fr.bbougon.ousontmesaffaires.command.location.LocationGetCommand;
 import fr.bbougon.ousontmesaffaires.command.location.LocationsGetCommand;
+import fr.bbougon.ousontmesaffaires.command.sticker.Sticker;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandBus;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandResponse;
 import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGenerator;
@@ -24,7 +25,6 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.io.File;
 import java.net.URI;
 import java.util.UUID;
 
@@ -73,11 +73,11 @@ public class LocationResource {
     }
 
     public Response generateStickers(@Context final UriInfo uriInfo, final String locationId) {
-        CommandResponse<File> commandResponse = commandBus.send(new GenerateStickersCommand(codec, uriInfo, locationId));
+        CommandResponse<Sticker> commandResponse = commandBus.send(new GenerateStickersCommand(codec, uriInfo, locationId));
         if(commandResponse.isEmpty()) {
             return Response.status(NOT_FOUND).build();
         }
-        return Response.ok(commandResponse.getResponse()).header(HttpHeaders.CONTENT_DISPOSITION, "filename=" + commandResponse.getResponse().getName()).build();
+        return Response.ok(commandResponse.getResponse().getContent()).header(HttpHeaders.CONTENT_DISPOSITION, "filename=" + commandResponse.getResponse().getName()).build();
     }
 
     private void checkPayload(final String payload) {

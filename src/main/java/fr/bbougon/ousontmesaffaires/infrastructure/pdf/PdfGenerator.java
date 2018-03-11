@@ -1,10 +1,11 @@
 package fr.bbougon.ousontmesaffaires.infrastructure.pdf;
 
-import java.io.File;
+import fr.bbougon.ousontmesaffaires.command.sticker.Sticker;
+
 import java.util.HashMap;
 
 public interface PdfGenerator {
 
-    File generate(String filePath, HashMap<StickerContent, String> content);
+    void generate(Sticker sticker, HashMap<StickerContent, String> content);
 
 }

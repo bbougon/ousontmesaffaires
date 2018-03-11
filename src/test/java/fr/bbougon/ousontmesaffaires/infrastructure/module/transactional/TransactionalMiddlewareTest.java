@@ -10,7 +10,7 @@ import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandResponse;
 import fr.bbougon.ousontmesaffaires.infrastructure.module.mongolink.MongolinkSessionManager;
 import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGenerator;
 import fr.bbougon.ousontmesaffaires.repositories.mongo.LocationMongoRepository;
-import fr.bbougon.ousontmesaffaires.test.utils.FileUtils;
+import fr.bbougon.ousontmesaffaires.test.utils.FileUtilsForTest;
 import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
 import fr.bbougon.ousontmesaffaires.web.ressources.UriInfoBuilderForTest;
 import org.junit.After;
@@ -57,7 +57,7 @@ public class TransactionalMiddlewareTest {
 
     @Test
     public void canAddALocation() {
-        LocationAddCommand locationAddCommand = new LocationAddCommand(new FileUtils("json/t-shirt.json").getContent());
+        LocationAddCommand locationAddCommand = new LocationAddCommand(new FileUtilsForTest("json/t-shirt.json").getContent());
 
         commandBus.send(locationAddCommand);
 

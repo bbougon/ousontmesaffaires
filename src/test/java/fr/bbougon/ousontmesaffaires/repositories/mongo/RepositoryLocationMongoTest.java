@@ -5,7 +5,7 @@ import fr.bbougon.ousontmesaffaires.domain.location.Feature;
 import fr.bbougon.ousontmesaffaires.domain.location.Item;
 import fr.bbougon.ousontmesaffaires.domain.location.Location;
 import fr.bbougon.ousontmesaffaires.rules.MongoRule;
-import fr.bbougon.ousontmesaffaires.test.utils.FileUtils;
+import fr.bbougon.ousontmesaffaires.test.utils.FileUtilsForTest;
 import fr.bbougon.ousontmesaffaires.web.ressources.json.Features;
 import fr.bbougon.ousontmesaffaires.web.ressources.json.LocationName;
 import org.junit.Rule;
@@ -26,7 +26,7 @@ public class RepositoryLocationMongoTest {
 
     @Test
     public void canPersistLocation() {
-        String payload = new FileUtils("json/t-shirt.json").getContent();
+        String payload = new FileUtilsForTest("json/t-shirt.json").getContent();
         Location location = Location.create(LocationName.getNameFromPayload(payload), Item.create(Features.getFeaturesFromPayload(payload)));
         LocationMongoRepository locationMongoRepository = new LocationMongoRepository(mongoRule.mongolinkSessionManager);
 

@@ -1,7 +1,7 @@
 package fr.bbougon.ousontmesaffaires.infrastructure.qrcode;
 
 import ch.qos.logback.classic.Level;
-import fr.bbougon.ousontmesaffaires.test.utils.FileUtils;
+import fr.bbougon.ousontmesaffaires.test.utils.FileUtilsForTest;
 import fr.bbougon.ousontmesaffaires.test.utils.TestAppender;
 import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
 import org.junit.Test;
@@ -21,7 +21,7 @@ public class QRGeneratorEngineTest {
 
     @Test
     public void logWarnOnExceptions() {
-        String content = new FileUtils("file/large-file.txt").getContent();
+        String content = new FileUtilsForTest("file/large-file.txt").getContent();
 
         String encodedQRCode = new QRGeneratorEngine(new Codec()).encodeToBase64(content);
 
