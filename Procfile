@@ -1,1 +1,1 @@
-web: java $JAVA_OPTS -jar ousontmesaffaires-docker-jar-with-dependencies.jar
+web: java $JAVA_OPTS -jar ousontmesaffaires-heroku.jar
