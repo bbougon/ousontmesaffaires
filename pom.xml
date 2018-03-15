@@ -209,6 +209,25 @@
 
     <profiles>
         <profile>
+            <id>heroku</id>
+            <build>
+                <finalName>ousontmesaffaires-heroku</finalName>
+                <resources>
+                    <resource>
+                        <directory>${project.basedir}/src/main/package/dev/resources</directory>
+                        <includes>
+                            <include>
+                                *.properties
+                            </include>
+                            <include>
+                                logback.xml
+                            </include>
+                        </includes>
+                    </resource>
+                </resources>
+            </build>
+        </profile>
+        <profile>
             <id>dev</id>
             <build>
                 <finalName>ousontmesaffaires-dev</finalName>
