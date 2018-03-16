@@ -20,17 +20,22 @@ public class WithSystemEnvironment extends ExternalResource {
         };
     }
 
+
     private static Map<String, String> VARIABLES = Maps.newHashMap();
 
     static final String DATABASE_HOST = "a-host";
     static final String DATABASE_PORT = "12345";
     static final String DATABASE_NAME = "database";
+    static final String DATABASE_USER = "a-user";
+    static final String DATABASE_PASSWORD = "a-password";
     static final String SERVER_PORT = "6789";
 
     static {
         VARIABLES.put("DATABASE_HOST", DATABASE_HOST);
         VARIABLES.put("DATABASE_PORT", DATABASE_PORT);
         VARIABLES.put("DATABASE_NAME", DATABASE_NAME);
+        VARIABLES.put("DATABASE_USER", DATABASE_USER);
+        VARIABLES.put("DATABASE_PASSWORD", DATABASE_PASSWORD);
         VARIABLES.put("SERVER_PORT", SERVER_PORT);
     }
 }
