@@ -241,7 +241,7 @@
                 <finalName>ousontmesaffaires-heroku</finalName>
                 <resources>
                     <resource>
-                        <directory>${project.basedir}/src/main/package/dev/resources</directory>
+                        <directory>${project.basedir}/src/main/package/heroku/resources</directory>
                         <includes>
                             <include>
                                 *.properties
