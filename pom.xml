@@ -152,6 +152,17 @@
             </plugin>
 
             <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>fr.bbougon.ousontmesaffaires.Main</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>2.6</version>
                 <configuration>
@@ -220,7 +231,9 @@
                             <execution>
                                 <id>copy-dependencies</id>
                                 <phase>package</phase>
-                                <goals><goal>copy-dependencies</goal></goals>
+                                <goals>
+                                    <goal>copy-dependencies</goal>
+                                </goals>
                             </execution>
                         </executions>
                     </plugin>
