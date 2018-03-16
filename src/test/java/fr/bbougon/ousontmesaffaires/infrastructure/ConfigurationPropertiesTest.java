@@ -6,6 +6,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.HashMap;
+import java.util.ResourceBundle;
 
 import static fr.bbougon.ousontmesaffaires.infrastructure.WithSystemEnvironment.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,7 +29,7 @@ public class ConfigurationPropertiesTest {
 
     @Test
     public void canSetPropertiesFromStandardConfiguration() {
-        ConfigurationProperties configurationProperties = new ConfigurationProperties();
+        ConfigurationProperties configurationProperties = new ConfigurationProperties(ResourceBundle.getBundle("configuration-for-tests"));
 
         assertThat(configurationProperties.databaseHost()).isEqualTo("127.0.0.1");
         assertThat(configurationProperties.databaseName()).isEqualTo("ousontmesaffaires-test");

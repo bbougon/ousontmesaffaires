@@ -9,6 +9,8 @@ import fr.bbougon.ousontmesaffaires.infrastructure.ConfigurationProperties;
 import org.mongolink.Settings;
 import org.mongolink.UpdateStrategies;
 
+import java.util.List;
+
 public class DefaultFileRepositories extends FileRepositories {
 
     public DefaultFileRepositories(final ConfigurationProperties configurationProperties) {
@@ -26,11 +28,19 @@ public class DefaultFileRepositories extends FileRepositories {
     }
 
     private Settings getSettings() {
-//        MongoCredential.createCredential()
+        List<MongoCredential> credentialsList = getCredentials();
         return Settings.defaultInstance()
                 .withDatabase(new MongoClient(new ServerAddress(configurationProperties.databaseHost(), configurationProperties.databasePort()),
-                        Lists.newArrayList()).getDatabase(configurationProperties.databaseName()))
+                        credentialsList).getDatabase(configurationProperties.databaseName()))
                 .withDefaultUpdateStrategy(UpdateStrategies.DIFF);
+    }
+
+    private List<MongoCredential> getCredentials() {
+        if(configurationProperties.hasCredentials()) {
+            MongoCredential credential = MongoCredential.createCredential(configurationProperties.databaseUser(), configurationProperties.databaseName(), configurationProperties.databasePassword().toCharArray());
+            return Lists.newArrayList(credential);
+        }
+        return Lists.newArrayList();
     }
 
     private final ConfigurationProperties configurationProperties;

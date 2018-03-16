@@ -12,13 +12,16 @@ public class ConfigurationProperties {
 
 
     public ConfigurationProperties() {
-        this.keys = Maps.newHashMap();
-        ResourceBundle bundle = ResourceBundle.getBundle("configuration");
-        bundle.keySet().forEach(key -> keys.put(key, bundle.getString(key)));
+        this(ResourceBundle.getBundle("configuration"));
     }
 
     ConfigurationProperties(final HashMap<String, String> keys) {
         this.keys = keys;
+    }
+
+    ConfigurationProperties(final ResourceBundle bundle) {
+        this.keys = Maps.newHashMap();
+        bundle.keySet().forEach(key -> keys.put(key, bundle.getString(key)));
     }
 
     public int serverPort() {
@@ -65,6 +68,10 @@ public class ConfigurationProperties {
 
     private boolean isEnvironmentVariable(final String key) {
         return keys.get(key).startsWith(LINUX_ENV_PREFIX);
+    }
+
+    public boolean hasCredentials() {
+        return keys.get(DATABASE_USER) != null && keys.get(DATABASE_PASSWORD) != null;
     }
 
 

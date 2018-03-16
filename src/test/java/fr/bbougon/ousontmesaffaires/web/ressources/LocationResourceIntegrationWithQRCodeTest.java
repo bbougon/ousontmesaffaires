@@ -38,6 +38,7 @@ public class LocationResourceIntegrationWithQRCodeTest {
         PDDocument document = PDDocument.load(pdfStream);
         assertTitle("placard", document);
         assertQrCode(location.getLocation().toASCIIString(), document);
+        document.close();
     }
 
     private Response createLocation(final String resourceFilePath) {
