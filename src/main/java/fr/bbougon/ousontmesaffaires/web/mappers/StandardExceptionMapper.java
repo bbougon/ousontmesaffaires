@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.HttpMethod;
 import javax.ws.rs.Path;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
@@ -19,6 +20,9 @@ public class StandardExceptionMapper implements ExceptionMapper<Throwable> {
 
     @Override
     public Response toResponse(final Throwable throwable) {
+        if(throwable instanceof WebApplicationException){
+            return ((WebApplicationException) throwable).getResponse();
+        }
         StringBuilder messageBuilder = new StringBuilder();
         String packageName = "fr.bbougon.ousontmesaffaires.web.ressources";
         Lists.newArrayList(throwable.getStackTrace()).stream().filter(stackTraceElement -> stackTraceElement.getClassName().contains(packageName)).forEach(stackTraceElement -> {
