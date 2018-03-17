@@ -1,10 +1,10 @@
 package fr.bbougon.ousontmesaffaires.web.ressources;
 
-import fr.bbougon.ousontmesaffaires.command.sticker.GenerateStickersCommand;
 import fr.bbougon.ousontmesaffaires.command.location.ItemAddToLocationCommand;
 import fr.bbougon.ousontmesaffaires.command.location.LocationAddCommand;
 import fr.bbougon.ousontmesaffaires.command.location.LocationGetCommand;
 import fr.bbougon.ousontmesaffaires.command.location.LocationsGetCommand;
+import fr.bbougon.ousontmesaffaires.command.sticker.GenerateStickersCommand;
 import fr.bbougon.ousontmesaffaires.command.sticker.Sticker;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandBus;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandResponse;
@@ -20,6 +20,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
@@ -73,9 +74,9 @@ public class LocationResource {
     }
 
     @GET
-    @Path("/{UUID}/sticker")
-    public Response generateStickers(@Context final UriInfo uriInfo, @PathParam("UUID") final String locationId) {
-        CommandResponse<Sticker> commandResponse = commandBus.send(new GenerateStickersCommand(uriInfo, locationId));
+    @Path("/sticker")
+    public Response generateStickers(@QueryParam("locationId") final String locationId, @QueryParam("for") final String forLocation) {
+        CommandResponse<Sticker> commandResponse = commandBus.send(new GenerateStickersCommand(locationId, forLocation));
         if(commandResponse.isEmpty()) {
             return Response.status(NOT_FOUND).build();
         }

@@ -26,9 +26,14 @@ public class LocationResourceIntegrationWithQRCodeTest {
     @Test
     public void canGenerateSticker() throws IOException {
         Response location = createLocation("json/pantalon.json");
+        String stringUri = location.getLocation().toASCIIString();
+        String locationId = stringUri.substring(stringUri.lastIndexOf("/") + 1);
 
-        Response response = ClientBuilder.newClient().target(location.getLocation())
+        Response response = ClientBuilder.newClient().target("http://localhost:17000")
+                .path("locations")
                 .path("sticker")
+                .queryParam("locationId", locationId)
+                .queryParam("for", "http://another-host/locations")
                 .request()
                 .accept(MediaType.APPLICATION_OCTET_STREAM_TYPE)
                 .get();
@@ -37,7 +42,7 @@ public class LocationResourceIntegrationWithQRCodeTest {
         InputStream pdfStream = response.readEntity(InputStream.class);
         PDDocument document = PDDocument.load(pdfStream);
         assertTitle("placard", document);
-        assertQrCode(location.getLocation().toASCIIString(), document);
+        assertQrCode("http://another-host/locations/" + locationId, document);
         document.close();
     }
 
