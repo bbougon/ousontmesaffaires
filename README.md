@@ -8,7 +8,7 @@ https://travis-ci.org/bbougon/ousontmesaffaires
 ## Docker
 
 ### Building container
-`docker build -t ou-sont-mes-affaires .`
+`docker build -t ou-sont-mes-affaires-api .`
 
 ### Creating bridge network
 `docker network create --driver=bridge --subnet=192.168.100.0/24 bridge-ou-sont-mes-affaires`
@@ -21,7 +21,7 @@ https://travis-ci.org/bbougon/ousontmesaffaires
 ### Running Ou Sont Mes Affaires container
 ***Run container***
 ```bash
-docker run -d --rm --name ou-sont-mes-affaires-server --publish 8080:8182 -w /usr/src/ousontmesaffaires/ --ip 192.168.100.10 --network=bridge-ou-sont-mes-affaires ou-sont-mes-affaires java -jar ousontmesaffaires-docker-jar-with-dependencies.jar
+docker run -d --rm --name ou-sont-mes-affaires-server --publish 8080:8182 -w /usr/src/ousontmesaffaires/ --ip 192.168.100.10 --network=bridge-ou-sont-mes-affaires ou-sont-mes-affaires-api java -jar ousontmesaffaires-docker-jar-with-dependencies.jar
 ```
 
 ### Running Ou Sont Mes Affaires angular container
