@@ -172,7 +172,7 @@ public class LocationResourceTest {
         Repositories.locationRepository().persist(location);
         String locationId = new Codec().urlSafeToBase64(location.getId().toString());
 
-        Response response = locationResource.generateStickers(locationId, "a-host");
+        Response response = locationResource.generateStickers(locationId, "{\"url\": \"a-host\"}");
 
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
         assertThat(((byte[]) response.getEntity())).isNotEmpty();
@@ -183,7 +183,7 @@ public class LocationResourceTest {
     public void return404IfLocationNotFoundWhenGeneratingSticker() {
         String locationId = new Codec().urlSafeToBase64(UUID.randomUUID().toString());
 
-        Response response = locationResource.generateStickers(locationId, "a-host");
+        Response response = locationResource.generateStickers(locationId, "{\"url\": \"a-host\"}");
 
         assertThat(response.getStatus()).isEqualTo(NOT_FOUND.getStatusCode());
     }

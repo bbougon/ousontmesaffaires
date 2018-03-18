@@ -14,13 +14,7 @@ import fr.bbougon.ousontmesaffaires.web.helpers.URIBuilder;
 import org.apache.commons.lang3.Validate;
 
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
@@ -29,6 +23,7 @@ import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.UUID;
 
+import static javax.ws.rs.core.HttpHeaders.CONTENT_DISPOSITION;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 import static javax.ws.rs.core.Response.Status.OK;
 
@@ -73,14 +68,15 @@ public class LocationResource {
         return Response.status(OK).entity(commandResponse.getResponse()).build();
     }
 
-    @GET
-    @Path("/sticker")
-    public Response generateStickers(@QueryParam("locationId") final String locationId, @QueryParam("for") final String forLocation) {
-        CommandResponse<Sticker> commandResponse = commandBus.send(new GenerateStickersCommand(locationId, forLocation));
+    @PUT
+    @Path("/sticker/{UUID}")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response generateStickers(@PathParam("UUID") final String locationId, final String payload) {
+        CommandResponse<Sticker> commandResponse = commandBus.send(new GenerateStickersCommand(locationId, payload));
         if(commandResponse.isEmpty()) {
             return Response.status(NOT_FOUND).build();
         }
-        return Response.ok(commandResponse.getResponse().getContent()).header(HttpHeaders.CONTENT_DISPOSITION, "filename=" + commandResponse.getResponse().getName()).build();
+        return Response.ok(commandResponse.getResponse().getContent()).header(CONTENT_DISPOSITION, "filename=" + commandResponse.getResponse().getName()).build();
     }
 
     private void checkPayload(final String payload) {

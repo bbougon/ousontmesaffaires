@@ -32,11 +32,10 @@ public class LocationResourceIntegrationWithQRCodeTest {
         Response response = ClientBuilder.newClient().target("http://localhost:17000")
                 .path("locations")
                 .path("sticker")
-                .queryParam("locationId", locationId)
-                .queryParam("for", "http://another-host/locations")
+                .path(locationId)
                 .request()
                 .accept(MediaType.APPLICATION_OCTET_STREAM_TYPE)
-                .get();
+                .put(Entity.json("{\"url\": \"http://another-host/locations/\"}"));
 
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
         InputStream pdfStream = response.readEntity(InputStream.class);

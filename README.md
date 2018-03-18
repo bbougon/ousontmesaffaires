@@ -24,6 +24,11 @@ https://travis-ci.org/bbougon/ousontmesaffaires
 docker run -d --rm --name ou-sont-mes-affaires-server --publish 8080:8182 -w /usr/src/ousontmesaffaires/ --ip 192.168.100.10 --network=bridge-ou-sont-mes-affaires ou-sont-mes-affaires-api java -jar ousontmesaffaires-docker-jar-with-dependencies.jar
 ```
 
+***Run in debug mode***
+```bash
+docker run -d --rm --name ou-sont-mes-affaires-server --publish 8080:8182 --publish 8787:8787 -w /usr/src/ousontmesaffaires/ --ip 192.168.100.10 --network=bridge-ou-sont-mes-affaires ou-sont-mes-affaires-api java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8787,suspend=n -jar ousontmesaffaires-docker-jar-with-dependencies.jar
+```
+
 ### Running Ou Sont Mes Affaires angular container
 
 ```
@@ -36,6 +41,10 @@ docker run -d --rm --name ou-sont-mes-affaires-angular --publish 4200:80 --ip 19
 `docker network ls`
 
 `docker ***COMMAND*** inspect`
+
+`docker exec -it ou-sont-mes-affaires-server /bin/bash`
+
+`docker logs ou-sont-mes-affaires-server`
 
 
 
