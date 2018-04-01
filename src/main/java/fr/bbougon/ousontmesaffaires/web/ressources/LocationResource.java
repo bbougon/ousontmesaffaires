@@ -4,8 +4,6 @@ import fr.bbougon.ousontmesaffaires.command.location.ItemAddToLocationCommand;
 import fr.bbougon.ousontmesaffaires.command.location.LocationAddCommand;
 import fr.bbougon.ousontmesaffaires.command.location.LocationGetCommand;
 import fr.bbougon.ousontmesaffaires.command.location.LocationsGetCommand;
-import fr.bbougon.ousontmesaffaires.command.sticker.GenerateStickersCommand;
-import fr.bbougon.ousontmesaffaires.command.sticker.Sticker;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandBus;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandResponse;
 import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGenerator;
@@ -14,16 +12,19 @@ import fr.bbougon.ousontmesaffaires.web.helpers.URIBuilder;
 import org.apache.commons.lang3.Validate;
 
 import javax.inject.Inject;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.UUID;
 
-import static javax.ws.rs.core.HttpHeaders.CONTENT_DISPOSITION;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 import static javax.ws.rs.core.Response.Status.OK;
 
@@ -66,17 +67,6 @@ public class LocationResource {
     public Response getLocation(@Context final UriInfo uriInfo, @PathParam("UUID") final String locationId) {
         CommandResponse commandResponse = commandBus.send(new LocationGetCommand(locationId, uriInfo, qrGenerator));
         return Response.status(OK).entity(commandResponse.getResponse()).build();
-    }
-
-    @PUT
-    @Path("/sticker/{UUID}")
-    @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    public Response generateStickers(@PathParam("UUID") final String locationId, final String payload) {
-        CommandResponse<Sticker> commandResponse = commandBus.send(new GenerateStickersCommand(locationId, payload));
-        if(commandResponse.isEmpty()) {
-            return Response.status(NOT_FOUND).build();
-        }
-        return Response.ok(commandResponse.getResponse().getContent()).header(CONTENT_DISPOSITION, "filename=" + commandResponse.getResponse().getName()).build();
     }
 
     private void checkPayload(final String payload) {

@@ -8,12 +8,10 @@ import fr.bbougon.ousontmesaffaires.command.location.ItemAddToLocationCommandHan
 import fr.bbougon.ousontmesaffaires.command.location.LocationAddCommandHandler;
 import fr.bbougon.ousontmesaffaires.command.location.LocationGetCommandHandler;
 import fr.bbougon.ousontmesaffaires.command.location.LocationsGetCommandHandler;
-import fr.bbougon.ousontmesaffaires.command.sticker.GenerateStickersCommandHandler;
 import fr.bbougon.ousontmesaffaires.domain.location.Feature;
 import fr.bbougon.ousontmesaffaires.domain.location.Item;
 import fr.bbougon.ousontmesaffaires.domain.location.Location;
 import fr.bbougon.ousontmesaffaires.infrastructure.module.transactional.TransactionalMiddleware;
-import fr.bbougon.ousontmesaffaires.infrastructure.pdf.PdfGeneratorForTest;
 import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGeneratorForTest;
 import fr.bbougon.ousontmesaffaires.repositories.Repositories;
 import fr.bbougon.ousontmesaffaires.repositories.WithMemoryRepositories;
@@ -166,36 +164,13 @@ public class LocationResourceTest {
         }
     }
 
-    @Test
-    public void canGeneratePdfWithSticker() {
-        Location location = Location.create("Location 1", Item.create(Lists.newArrayList(Feature.create("type", "chaussure"))));
-        Repositories.locationRepository().persist(location);
-        String locationId = new Codec().urlSafeToBase64(location.getId().toString());
-
-        Response response = locationResource.generateStickers(locationId, "{\"url\": \"a-host\"}");
-
-        assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
-        assertThat(((byte[]) response.getEntity())).isNotEmpty();
-        assertThat(response.getHeaderString("Content-Disposition")).isEqualTo("filename=Location_1.pdf");
-    }
-
-    @Test
-    public void return404IfLocationNotFoundWhenGeneratingSticker() {
-        String locationId = new Codec().urlSafeToBase64(UUID.randomUUID().toString());
-
-        Response response = locationResource.generateStickers(locationId, "{\"url\": \"a-host\"}");
-
-        assertThat(response.getStatus()).isEqualTo(NOT_FOUND.getStatusCode());
-    }
-
     private LocationResource initialise(final Codec codec) {
         LocationResource locationResource = new LocationResource();
         locationResource.commandBus = new TransactionalMiddleware(new CommandHandlersForTest(Sets.newHashSet(
                 new LocationAddCommandHandler(),
                 new ItemAddToLocationCommandHandler(),
                 new LocationGetCommandHandler(),
-                new LocationsGetCommandHandler(),
-                new GenerateStickersCommandHandler(new PdfGeneratorForTest(), new QRGeneratorForTest())
+                new LocationsGetCommandHandler()
         )));
         locationResource.codec = codec;
         locationResource.qrGenerator = new QRGeneratorForTest();
