@@ -1,6 +1,6 @@
 package fr.bbougon.ousontmesaffaires.repositories;
 
-import fr.bbougon.ousontmesaffaires.domain.location.LocationRepository;
+import fr.bbougon.ousontmesaffaires.domain.container.ContainerRepository;
 
 import javax.inject.Inject;
 
@@ -10,11 +10,11 @@ public abstract class Repositories {
         Repositories.repositories = repositories;
     }
 
-    public static LocationRepository locationRepository() {
-        return repositories.getLocationRepository();
+    public static ContainerRepository containerRepository() {
+        return repositories.getContainerRepository();
     }
 
-    protected abstract LocationRepository getLocationRepository();
+    protected abstract ContainerRepository getContainerRepository();
 
     @Inject
     private static Repositories repositories;

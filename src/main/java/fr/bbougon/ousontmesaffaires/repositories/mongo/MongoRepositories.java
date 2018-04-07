@@ -1,6 +1,6 @@
 package fr.bbougon.ousontmesaffaires.repositories.mongo;
 
-import fr.bbougon.ousontmesaffaires.domain.location.LocationRepository;
+import fr.bbougon.ousontmesaffaires.domain.container.ContainerRepository;
 import fr.bbougon.ousontmesaffaires.repositories.*;
 
 import javax.inject.Inject;
@@ -8,10 +8,10 @@ import javax.inject.Inject;
 public class MongoRepositories extends Repositories {
 
     @Inject
-    private LocationMongoRepository locationMongoRepository;
+    private ContainerMongoRepository containerMongoRepository;
 
     @Override
-    protected LocationRepository getLocationRepository() {
-        return locationMongoRepository;
+    protected ContainerRepository getContainerRepository() {
+        return containerMongoRepository;
     }
 }

@@ -1,15 +1,15 @@
-package fr.bbougon.ousontmesaffaires.command.location;
+package fr.bbougon.ousontmesaffaires.command.container;
 
 import fr.bbougon.ousontmesaffaires.command.Command;
 import fr.bbougon.ousontmesaffaires.command.Nothing;
-import fr.bbougon.ousontmesaffaires.domain.location.Item;
+import fr.bbougon.ousontmesaffaires.domain.container.Item;
 import fr.bbougon.ousontmesaffaires.web.ressources.json.Features;
 
 import java.util.UUID;
 
-public class ItemAddToLocationCommand implements Command<Nothing> {
+public class ItemAddToContainerCommand implements Command<Nothing> {
 
-    public ItemAddToLocationCommand(final UUID uuid, final String payload) {
+    public ItemAddToContainerCommand(final UUID uuid, final String payload) {
         this.uuid = uuid;
         this.item = Item.create(Features.getFeaturesFromPayload(payload));
     }

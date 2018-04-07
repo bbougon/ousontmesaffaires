@@ -1,7 +1,7 @@
 package fr.bbougon.ousontmesaffaires.web.ressources.json;
 
 import com.google.gson.*;
-import fr.bbougon.ousontmesaffaires.domain.location.Feature;
+import fr.bbougon.ousontmesaffaires.domain.container.Feature;
 
 import java.util.List;
 import java.util.stream.Collectors;

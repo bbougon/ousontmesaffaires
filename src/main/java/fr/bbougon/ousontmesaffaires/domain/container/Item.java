@@ -1,4 +1,4 @@
-package fr.bbougon.ousontmesaffaires.domain.location;
+package fr.bbougon.ousontmesaffaires.domain.container;
 
 import com.google.common.collect.Sets;
 import org.apache.commons.lang3.builder.EqualsBuilder;

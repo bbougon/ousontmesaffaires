@@ -2,14 +2,14 @@ package fr.bbougon.ousontmesaffaires.infrastructure.module.transactional;
 
 import com.google.inject.Inject;
 import fr.bbougon.ousontmesaffaires.OuSontMesAffairesApplicationForTest;
-import fr.bbougon.ousontmesaffaires.command.location.LocationAddCommand;
-import fr.bbougon.ousontmesaffaires.command.location.LocationsGetCommand;
-import fr.bbougon.ousontmesaffaires.domain.location.Location;
+import fr.bbougon.ousontmesaffaires.command.container.ContainerAddCommand;
+import fr.bbougon.ousontmesaffaires.command.container.ContainersGetCommand;
+import fr.bbougon.ousontmesaffaires.domain.container.Container;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandBus;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandResponse;
 import fr.bbougon.ousontmesaffaires.infrastructure.module.mongolink.MongolinkSessionManager;
 import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGenerator;
-import fr.bbougon.ousontmesaffaires.repositories.mongo.LocationMongoRepository;
+import fr.bbougon.ousontmesaffaires.repositories.mongo.ContainerMongoRepository;
 import fr.bbougon.ousontmesaffaires.test.utils.FileUtilsForTest;
 import fr.bbougon.ousontmesaffaires.web.ressources.UriInfoBuilderForTest;
 import org.junit.After;
@@ -45,22 +45,22 @@ public class TransactionalMiddlewareTest {
     }
 
     @Test
-    public void canGetEmptyLocations() {
-        CommandResponse commandResponse = commandBus.send(new LocationsGetCommand(qrGenerator, new UriInfoBuilderForTest().forLocations()));
+    public void canGetEmptyContainers() {
+        CommandResponse commandResponse = commandBus.send(new ContainersGetCommand(qrGenerator, new UriInfoBuilderForTest().forContainers()));
 
         assertThat(commandResponse.getResponse()).isEqualTo("[]");
     }
 
     @Test
-    public void canAddALocation() {
-        LocationAddCommand locationAddCommand = new LocationAddCommand(new FileUtilsForTest("json/t-shirt.json").getContent());
+    public void canAddAContainer() {
+        ContainerAddCommand containerAddCommand = new ContainerAddCommand(new FileUtilsForTest("json/t-shirt.json").getContent());
 
-        commandBus.send(locationAddCommand);
+        commandBus.send(containerAddCommand);
 
         mongolinkSessionManager.start();
-        List<Location> locations = new LocationMongoRepository(mongolinkSessionManager).getAll();
-        assertThat(locations).isNotEmpty();
-        assertThat(locations.get(0).getItems()).contains(locationAddCommand.getLocation().getItems().get(0));
+        List<Container> containers = new ContainerMongoRepository(mongolinkSessionManager).getAll();
+        assertThat(containers).isNotEmpty();
+        assertThat(containers.get(0).getItems()).contains(containerAddCommand.getContainer().getItems().get(0));
     }
 
 }

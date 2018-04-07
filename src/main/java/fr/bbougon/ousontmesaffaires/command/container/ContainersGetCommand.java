@@ -1,4 +1,4 @@
-package fr.bbougon.ousontmesaffaires.command.location;
+package fr.bbougon.ousontmesaffaires.command.container;
 
 import fr.bbougon.ousontmesaffaires.command.Command;
 import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGenerator;
@@ -7,9 +7,9 @@ import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
 import javax.ws.rs.core.UriInfo;
 import java.util.UUID;
 
-public class LocationsGetCommand implements Command<String> {
+public class ContainersGetCommand implements Command<String> {
 
-    public LocationsGetCommand(final QRGenerator qrGenerator, final UriInfo uriInfo) {
+    public ContainersGetCommand(final QRGenerator qrGenerator, final UriInfo uriInfo) {
         this.qrGenerator = qrGenerator;
         this.uriInfo = uriInfo;
     }

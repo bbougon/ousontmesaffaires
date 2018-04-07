@@ -1,4 +1,4 @@
-package fr.bbougon.ousontmesaffaires.domain.location;
+package fr.bbougon.ousontmesaffaires.domain.container;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -7,15 +7,15 @@ import com.google.gson.*;
 import java.util.List;
 import java.util.UUID;
 
-public class Location {
+public class Container {
 
-    Location() {
+    Container() {
         id = UUID.randomUUID();
     }
 
-    public Location(final String location, final Item item) {
+    public Container(final String name, final Item item) {
         this();
-        this.location = location;
+        this.name = name;
         this.items.add(item);
     }
 
@@ -31,15 +31,15 @@ public class Location {
         items.add(item);
     }
 
-    public String getLocation() {
-        return location;
+    public String getName() {
+        return name;
     }
 
-    public static Location create(final String locationName, final Item item) {
-        return new Location(locationName, item);
+    public static Container create(final String containerName, final Item item) {
+        return new Container(containerName, item);
     }
 
-    public JsonObject toJsonObject(final String locationId, final String qrCode) {
+    public JsonObject toJsonObject(final String containerId, final String qrCode) {
         JsonArray items = new JsonArray();
         getItems().forEach(item -> {
             JsonObject itemJson = new JsonObject();
@@ -48,15 +48,15 @@ public class Location {
             itemJson.add("item", featureJson);
             items.add(itemJson);
         });
-        JsonObject locationJson = new JsonObject();
-        locationJson.addProperty("id", locationId);
-        locationJson.addProperty("location", getLocation());
-        locationJson.add("items", items);
-        locationJson.addProperty("qrcode", qrCode);
-        return locationJson;
+        JsonObject containerJson = new JsonObject();
+        containerJson.addProperty("id", containerId);
+        containerJson.addProperty("name", getName());
+        containerJson.add("items", items);
+        containerJson.addProperty("qrcode", qrCode);
+        return containerJson;
     }
 
     private final UUID id;
-    private String location;
+    private String name;
     private List<Item> items = Lists.newArrayList();
 }

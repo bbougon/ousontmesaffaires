@@ -1,6 +1,6 @@
 package fr.bbougon.ousontmesaffaires.repositories.mongo.mapping;
 
-import fr.bbougon.ousontmesaffaires.domain.location.Item;
+import fr.bbougon.ousontmesaffaires.domain.container.Item;
 import org.mongolink.domain.mapper.ComponentMap;
 
 @SuppressWarnings("UnusedDeclaration")
