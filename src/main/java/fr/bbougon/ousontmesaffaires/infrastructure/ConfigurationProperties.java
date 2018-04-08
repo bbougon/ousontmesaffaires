@@ -52,6 +52,17 @@ public class ConfigurationProperties {
         return getKeyValue(DATABASE_PASSWORD);
     }
 
+    public boolean secureServer() {
+        String serverSecured = keys.get(SERVER_SECURED);
+        if (serverSecured == null) {
+            return false;
+        }
+        if (isEnvironmentVariable(SERVER_SECURED)) {
+            serverSecured = SystemEnvironment.getEnv(serverSecured.substring(1));
+        }
+        return Boolean.parseBoolean(serverSecured);
+    }
+
     private String getKeyValue(final String key) {
         checkKeyExistence(key);
         if (isEnvironmentVariable(key)) {
@@ -78,6 +89,7 @@ public class ConfigurationProperties {
     private final Map<String, String> keys;
     private static final String LINUX_ENV_PREFIX = "$";
     private static final String SERVER_PORT = "server.port";
+    private static final String SERVER_SECURED = "server.secured";
     private static final String DATABASE_PORT = "database.port";
     private static final String DATABASE_HOST = "database.host";
     private static final String DATABASE_NAME = "database.name";

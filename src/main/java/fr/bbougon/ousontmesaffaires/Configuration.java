@@ -1,6 +1,7 @@
 package fr.bbougon.ousontmesaffaires;
 
 import fr.bbougon.ousontmesaffaires.repositories.FileRepositories;
+import io.undertow.Undertow.Builder;
 import org.mongolink.Settings;
 
 public class Configuration {
@@ -9,14 +10,19 @@ public class Configuration {
         return FileRepositories.serverConfiguration().get();
     }
 
+    @FunctionalInterface
     public interface ServerConfiguration {
-
-        int getPort();
-
+        ServerSettings getSettings();
     }
 
     public interface DataBaseConfiguration {
 
         Settings getSettings();
+    }
+
+    public interface ServerSettings {
+        Builder getBuilder();
+
+        int getPort();
     }
 }

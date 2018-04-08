@@ -13,7 +13,7 @@ public class FileRepositoriesTest {
     public void canGetServerConfiguration() {
         ServerConfiguration serverConfiguration = FileRepositories.serverConfiguration().get();
 
-        assertThat(serverConfiguration.getPort()).isEqualTo(8182);
+        assertThat(serverConfiguration.getSettings().getPort()).isEqualTo(8182);
     }
 
     @Test

@@ -25,6 +25,7 @@ public class ConfigurationPropertiesTest {
         keys.put("database.user", "$DATABASE_USER");
         keys.put("database.password", "$DATABASE_PASSWORD");
         keys.put("server.port", "$SERVER_PORT");
+        keys.put("server.secured", "$SERVER_SECURED");
     }
 
     @Test
@@ -37,6 +38,7 @@ public class ConfigurationPropertiesTest {
         assertThat(configurationProperties.serverPort()).isEqualTo(8182);
         assertThat(configurationProperties.databaseUser()).isEqualTo("user");
         assertThat(configurationProperties.databasePassword()).isEqualTo("password");
+        assertThat(configurationProperties.secureServer()).isFalse();
     }
 
     @Test
@@ -49,6 +51,7 @@ public class ConfigurationPropertiesTest {
         assertThat(configurationProperties.databaseUser()).isEqualTo(DATABASE_USER);
         assertThat(configurationProperties.databasePassword()).isEqualTo(DATABASE_PASSWORD);
         assertThat(configurationProperties.serverPort()).isEqualTo(Integer.parseInt(SERVER_PORT));
+        assertThat(configurationProperties.secureServer()).isTrue();
     }
 
     @Test

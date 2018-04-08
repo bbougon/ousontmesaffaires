@@ -11,10 +11,6 @@ import org.mongolink.Settings;
 
 public class WithEmbeddedServer extends ExternalResource {
 
-    public WithEmbeddedServer(final boolean withQrCode) {
-        this.withQrCode = withQrCode;
-    }
-
     public WithEmbeddedServer() {
     }
 
@@ -34,7 +30,17 @@ public class WithEmbeddedServer extends ExternalResource {
         FileRepositories.initialise(new FileRepositories() {
             @Override
             public FileRepository<Configuration.ServerConfiguration> getServerConfiguration() {
-                return () -> (Configuration.ServerConfiguration) () -> 17000;
+                return () -> (Configuration.ServerConfiguration) () -> new Configuration.ServerSettings() {
+                    @Override
+                    public Undertow.Builder getBuilder() {
+                        return Undertow.builder().addHttpListener(getPort(), "localhost");
+                    }
+
+                    @Override
+                    public int getPort() {
+                        return 17000;
+                    }
+                };
             }
 
             @Override
@@ -47,18 +53,10 @@ public class WithEmbeddedServer extends ExternalResource {
     private void start() {
         Configuration.ServerConfiguration configuration = Configuration.getServerConfiguration();
         server = new UndertowJaxrsServer();
-        OuSontMesAffairesApplication application;
-        if(!withQrCode) {
-            application = new OuSontMesAffairesApplicationForTest();
-        } else {
-            application = new OuSontMesAffairesApplication();
-        }
-        server.deploy(application);
-        Undertow.Builder serverConfiguration = Undertow.builder().addHttpListener(configuration.getPort(), "localhost");
+        server.deploy(new OuSontMesAffairesApplicationForTest());
+        Undertow.Builder serverConfiguration = Undertow.builder().addHttpListener(configuration.getSettings().getPort(), "localhost");
         server.start(serverConfiguration);
     }
-
-    private boolean withQrCode;
 
     private UndertowJaxrsServer server;
 }
