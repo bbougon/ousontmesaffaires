@@ -47,29 +47,6 @@ public class Container {
         return new Container(containerName, item);
     }
 
-    public JsonObject toJsonObject(final String containerId, final String qrCode) {
-        JsonObject containerJson = toJsonObject(containerId);
-        containerJson.addProperty("qrcode", qrCode);
-        return containerJson;
-    }
-
-    public JsonObject toJsonObject(final String containerId) {
-        JsonArray jsonItems = new JsonArray();
-        getItems().forEach(item -> {
-            JsonObject itemJson = new JsonObject();
-            JsonObject featureJson = new JsonObject();
-            item.getFeatures().forEach(feature -> featureJson.addProperty(feature.getType(), feature.getFeature()));
-            itemJson.add("item", featureJson);
-            jsonItems.add(itemJson);
-        });
-        JsonObject containerJson = new JsonObject();
-        containerJson.addProperty("id", containerId);
-        containerJson.addProperty("name", getName());
-        containerJson.add("items", jsonItems);
-        containerJson.addProperty("description", getDescription());
-        return containerJson;
-    }
-
     private final UUID id;
     private String name;
     private List<Item> items = Lists.newArrayList();

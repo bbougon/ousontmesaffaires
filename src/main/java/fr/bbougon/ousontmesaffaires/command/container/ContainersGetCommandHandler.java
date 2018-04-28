@@ -5,6 +5,7 @@ import com.google.gson.JsonArray;
 import fr.bbougon.ousontmesaffaires.command.CommandHandler;
 import fr.bbougon.ousontmesaffaires.command.Nothing;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
+import fr.bbougon.ousontmesaffaires.command.mappers.JsonMappers;
 import fr.bbougon.ousontmesaffaires.repositories.Repositories;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -21,8 +22,7 @@ public class ContainersGetCommandHandler implements CommandHandler<ContainersGet
     private JsonArray getJsonElements(final ContainersGetCommand containersGetCommand, final List<Container> containers) {
         JsonArray jsonArray = new JsonArray();
         containers.stream()
-                .map(container -> container.toJsonObject(
-                        containersGetCommand.getId(container.getId()), containersGetCommand.getQrCode(container.getId())))
+                .map(container -> JsonMappers.fromContainer(containersGetCommand.getId(container.getId()), containersGetCommand.getQrCode(container.getId())).map(container))
                 .forEach(jsonArray::add);
         return jsonArray;
     }
