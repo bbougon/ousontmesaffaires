@@ -10,6 +10,9 @@ public class ContainerMemoryRepository extends MemoryRepository<Container> imple
 
     @Override
     public Container findById(final UUID id) {
-        return getAll().stream().filter(entity -> id.equals(entity.getId())).findFirst().orElse(null);
+        return getAll().stream()
+                .filter(entity -> id.equals(entity.getId()))
+                .findFirst()
+                .orElse(null);
     }
 }

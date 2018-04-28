@@ -4,6 +4,7 @@ import ch.qos.logback.classic.Level;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import fr.bbougon.ousontmesaffaires.command.CommandHandlersForTest;
+import fr.bbougon.ousontmesaffaires.command.container.ContainerPatchCommandHandler;
 import fr.bbougon.ousontmesaffaires.command.container.ItemAddToContainerCommandHandler;
 import fr.bbougon.ousontmesaffaires.command.container.ContainerAddCommandHandler;
 import fr.bbougon.ousontmesaffaires.command.container.ContainerGetCommandHandler;
@@ -164,13 +165,25 @@ public class ContainerResourceTest {
         }
     }
 
+    @Test
+    public void canAddContainerDescription() {
+        Container container = Container.create("Container 1", Item.create(Lists.newArrayList(Feature.create("type", "chaussure"))));
+        Repositories.containerRepository().persist(container);
+
+        Response response = containerResource.patchContainer(new Codec().urlSafeToBase64(container.getId().toString()), "{\"description\":\"A description\"}");
+
+        assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
+        assertThat(container.getDescription()).isEqualTo("A description");
+    }
+
     private ContainerResource initialise(final Codec codec) {
         ContainerResource containerResource = new ContainerResource();
         containerResource.commandBus = new TransactionalMiddleware(new CommandHandlersForTest(Sets.newHashSet(
                 new ContainerAddCommandHandler(),
                 new ItemAddToContainerCommandHandler(),
                 new ContainerGetCommandHandler(),
-                new ContainersGetCommandHandler()
+                new ContainersGetCommandHandler(),
+                new ContainerPatchCommandHandler()
         )));
         containerResource.codec = codec;
         containerResource.qrGenerator = new QRGeneratorForTest();

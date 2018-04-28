@@ -39,6 +39,10 @@ public class Container {
         return new Container(containerName, item);
     }
 
+    public String getDescription() {
+        return description;
+    }
+
     public JsonObject toJsonObject(final String containerId, final String qrCode) {
         JsonArray items = new JsonArray();
         getItems().forEach(item -> {
@@ -56,7 +60,12 @@ public class Container {
         return containerJson;
     }
 
+    public void setDescription(final String description) {
+        this.description = description;
+    }
+
     private final UUID id;
     private String name;
     private List<Item> items = Lists.newArrayList();
+    private String description;
 }

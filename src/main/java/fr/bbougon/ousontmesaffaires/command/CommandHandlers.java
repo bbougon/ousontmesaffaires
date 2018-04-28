@@ -12,7 +12,10 @@ public class CommandHandlers {
     }
 
     public CommandHandler get(final Class<? extends Command> commandClass) {
-        return commandHandlers.stream().filter(commandHandler -> commandType(commandHandler.getClass()).equals(commandClass)).findFirst().orElseThrow(UnknownCommandException::new);
+        return commandHandlers.stream()
+                .filter(commandHandler -> commandType(commandHandler.getClass()).equals(commandClass))
+                .findFirst()
+                .orElseThrow(UnknownCommandException::new);
     }
 
     private <T> Class<T> commandType(final Class<?> commandHandlerClass) {

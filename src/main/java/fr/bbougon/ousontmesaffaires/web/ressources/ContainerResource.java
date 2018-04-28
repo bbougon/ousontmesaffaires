@@ -1,5 +1,6 @@
 package fr.bbougon.ousontmesaffaires.web.ressources;
 
+import fr.bbougon.ousontmesaffaires.command.container.ContainerPatchCommand;
 import fr.bbougon.ousontmesaffaires.command.container.ItemAddToContainerCommand;
 import fr.bbougon.ousontmesaffaires.command.container.ContainerAddCommand;
 import fr.bbougon.ousontmesaffaires.command.container.ContainerGetCommand;
@@ -9,6 +10,7 @@ import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandResponse;
 import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGenerator;
 import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
 import fr.bbougon.ousontmesaffaires.web.helpers.URIBuilder;
+import fr.bbougon.ousontmesaffaires.web.ressources.javax.ws.rs.PATCH;
 import org.apache.commons.lang3.Validate;
 
 import javax.inject.Inject;
@@ -67,6 +69,13 @@ public class ContainerResource {
     public Response getContainer(@Context final UriInfo uriInfo, @PathParam("UUID") final String containerId) {
         CommandResponse commandResponse = commandBus.send(new ContainerGetCommand(containerId, uriInfo, qrGenerator));
         return Response.status(OK).entity(commandResponse.getResponse()).build();
+    }
+
+    @PATCH
+    @Path("/{UUID}")
+    public Response patchContainer(@PathParam("UUID") final String containerId, final String patch) {
+        commandBus.send(new ContainerPatchCommand(containerId, patch));
+        return Response.status(OK).build();
     }
 
     private void checkPayload(final String payload) {

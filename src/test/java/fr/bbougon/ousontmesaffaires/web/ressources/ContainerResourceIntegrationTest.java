@@ -84,6 +84,18 @@ public class ContainerResourceIntegrationTest {
         assertThat(response.readEntity(String.class)).isEqualTo("Error has been thrown trying to access resource '/containers' (method POST): Payload cannot be empty.");
     }
 
+    @Test
+    public void canAddADescriptionToContainer() {
+        Response container = createContainer("json/pantalon.json");
+
+        Response response = ClientBuilder.newClient().target(container.getLocation())
+                .request()
+                .accept(MediaType.APPLICATION_JSON_TYPE)
+                .method("PATCH", Entity.json("{\"description\":\"A description\"}"), Response.class);
+
+        assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
+    }
+
     private Response createContainer(final String resourceFilePath) {
         String payload = new FileUtilsForTest(resourceFilePath).getContent();
 
