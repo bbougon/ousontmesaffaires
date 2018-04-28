@@ -35,33 +35,39 @@ public class Container {
         return name;
     }
 
-    public static Container create(final String containerName, final Item item) {
-        return new Container(containerName, item);
-    }
-
     public String getDescription() {
         return description;
     }
 
+    public void setDescription(final String description) {
+        this.description = description;
+    }
+
+    public static Container create(final String containerName, final Item item) {
+        return new Container(containerName, item);
+    }
+
     public JsonObject toJsonObject(final String containerId, final String qrCode) {
-        JsonArray items = new JsonArray();
+        JsonObject containerJson = toJsonObject(containerId);
+        containerJson.addProperty("qrcode", qrCode);
+        return containerJson;
+    }
+
+    public JsonObject toJsonObject(final String containerId) {
+        JsonArray jsonItems = new JsonArray();
         getItems().forEach(item -> {
             JsonObject itemJson = new JsonObject();
             JsonObject featureJson = new JsonObject();
             item.getFeatures().forEach(feature -> featureJson.addProperty(feature.getType(), feature.getFeature()));
             itemJson.add("item", featureJson);
-            items.add(itemJson);
+            jsonItems.add(itemJson);
         });
         JsonObject containerJson = new JsonObject();
         containerJson.addProperty("id", containerId);
         containerJson.addProperty("name", getName());
-        containerJson.add("items", items);
-        containerJson.addProperty("qrcode", qrCode);
+        containerJson.add("items", jsonItems);
+        containerJson.addProperty("description", getDescription());
         return containerJson;
-    }
-
-    public void setDescription(final String description) {
-        this.description = description;
     }
 
     private final UUID id;

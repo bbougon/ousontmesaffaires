@@ -9,7 +9,6 @@ import fr.bbougon.ousontmesaffaires.repositories.Repositories;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ContainersGetCommandHandler implements CommandHandler<ContainersGetCommand, String> {
 
@@ -24,7 +23,6 @@ public class ContainersGetCommandHandler implements CommandHandler<ContainersGet
         containers.stream()
                 .map(container -> container.toJsonObject(
                         containersGetCommand.getId(container.getId()), containersGetCommand.getQrCode(container.getId())))
-                .collect(Collectors.toList())
                 .forEach(jsonArray::add);
         return jsonArray;
     }

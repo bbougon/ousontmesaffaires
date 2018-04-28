@@ -43,4 +43,18 @@ public class RepositoryContainerMongoTest {
                 Feature.create("taille", "3ans")));
     }
 
+    @Test
+    public void canAddDescription() {
+        String payload = new FileUtilsForTest("json/t-shirt.json").getContent();
+        Container container = Container.create(ContainerName.getNameFromPayload(payload), Item.create(Features.getFeaturesFromPayload(payload)));
+        container.setDescription("A description");
+        ContainerMongoRepository containerMongoRepository = new ContainerMongoRepository(mongoRule.mongolinkSessionManager);
+
+        containerMongoRepository.persist(container);
+        mongoRule.cleanSession();
+
+        List<Container> containers = containerMongoRepository.getAll();
+        assertThat(containers).isNotEmpty();
+        assertThat(containers.get(0).getDescription()).isEqualTo("A description");
+    }
 }

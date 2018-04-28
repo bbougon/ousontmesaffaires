@@ -74,8 +74,8 @@ public class ContainerResource {
     @PATCH
     @Path("/{UUID}")
     public Response patchContainer(@PathParam("UUID") final String containerId, final String patch) {
-        commandBus.send(new ContainerPatchCommand(containerId, patch));
-        return Response.status(OK).build();
+        CommandResponse commandResponse = commandBus.send(new ContainerPatchCommand(containerId, patch));
+        return Response.status(OK).entity(commandResponse.getResponse()).build();
     }
 
     private void checkPayload(final String payload) {

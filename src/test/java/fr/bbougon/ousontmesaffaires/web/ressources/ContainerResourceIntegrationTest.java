@@ -94,6 +94,8 @@ public class ContainerResourceIntegrationTest {
                 .method("PATCH", Entity.json("{\"description\":\"A description\"}"), Response.class);
 
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
+        String containerId = container.getLocation().getPath().substring(container.getLocation().getPath().lastIndexOf("/") + 1);
+        assertThat(response.readEntity(String.class)).isEqualTo(new FileUtilsForTest("json/expectedJsonResultWithDescription.json").getContent().replace("ID_TO_REPLACE", containerId));
     }
 
     private Response createContainer(final String resourceFilePath) {

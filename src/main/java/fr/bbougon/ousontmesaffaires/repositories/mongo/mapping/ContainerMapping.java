@@ -10,6 +10,7 @@ public class ContainerMapping extends AggregateMap<Container> {
     public void map() {
         id().onProperty(Container::getId).natural();
         property().onProperty(Container::getName);
+        property().onProperty(Container::getDescription);
         collection().onProperty(Container::getItems);
     }
 }
