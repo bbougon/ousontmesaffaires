@@ -91,7 +91,7 @@ public class ContainerResourceIntegrationTest {
         Response response = ClientBuilder.newClient().target(container.getLocation())
                 .request()
                 .accept(MediaType.APPLICATION_JSON_TYPE)
-                .method("PATCH", Entity.json("{\"description\":\"A description\"}"), Response.class);
+                .method("PATCH", Entity.json("{\"fields\":[{\"fieldName\":\"description\",\"value\":\"A description\"}]}"), Response.class);
 
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
         String containerId = container.getLocation().getPath().substring(container.getLocation().getPath().lastIndexOf("/") + 1);

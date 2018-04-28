@@ -170,7 +170,7 @@ public class ContainerResourceTest {
         Container container = Container.create("Container 1", Item.create(Lists.newArrayList(Feature.create("type", "chaussure"))));
         Repositories.containerRepository().persist(container);
 
-        Response response = containerResource.patchContainer(new Codec().urlSafeToBase64(container.getId().toString()), "{\"description\":\"A description\"}");
+        Response response = containerResource.patchContainer(new Codec().urlSafeToBase64(container.getId().toString()), "{\"fields\":[{\"fieldName\":\"description\",\"value\":\"A description\"}]}");
 
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
         assertThat(container.getDescription()).isEqualTo("A description");
