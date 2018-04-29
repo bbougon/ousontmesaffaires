@@ -2,29 +2,21 @@ package fr.bbougon.ousontmesaffaires.command.mappers;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import fr.bbougon.ousontmesaffaires.command.container.ContainerField;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-public class ContainerJsonMapper extends AbstractJsonObjectMapper<Container> {
+import java.util.List;
+import java.util.function.Function;
 
-    ContainerJsonMapper(final String containerId, final String qrCode) {
-        this.containerId = containerId;
-        this.qrCode = qrCode;
-    }
+public class ContainerJsonObjectMapper implements JsonMapper<Container, JsonObject, ContainerField> {
 
-    ContainerJsonMapper(final String containerId) {
-        this.containerId = containerId;
+    ContainerJsonObjectMapper() {
     }
 
     @Override
-    public JsonObject map(final Container container) {
-        JsonObject containerJson = toJsonObject(container, containerId);
-        if (qrCode != null) {
-            containerJson.addProperty("qrcode", qrCode);
-        }
-        return containerJson;
-    }
-
-    private JsonObject toJsonObject(final Container container, final String containerId) {
+    public JsonObject map(final Container container, Function<Container, ContainerField> function) {
+        ContainerField containerField = function.apply(container);
         JsonArray jsonItems = new JsonArray();
         container.getItems().forEach(item -> {
             JsonObject itemJson = new JsonObject();
@@ -34,13 +26,19 @@ public class ContainerJsonMapper extends AbstractJsonObjectMapper<Container> {
             jsonItems.add(itemJson);
         });
         JsonObject containerJson = new JsonObject();
-        containerJson.addProperty("id", containerId);
+        containerJson.addProperty("id", containerField.getContainerId());
         containerJson.addProperty("name", container.getName());
         containerJson.add("items", jsonItems);
         containerJson.addProperty("description", container.getDescription());
+        if (containerField.getQrCode() != null) {
+            containerJson.addProperty("qrcode", containerField.getQrCode());
+        }
         return containerJson;
     }
 
-    private final String containerId;
-    private String qrCode;
+    @Override
+    public JsonObject map(final List<Container> objects, final Function<Container, ContainerField> function) {
+        throw new NotImplementedException();
+    }
+
 }

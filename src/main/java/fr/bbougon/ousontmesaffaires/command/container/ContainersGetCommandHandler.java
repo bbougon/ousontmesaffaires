@@ -1,11 +1,10 @@
 package fr.bbougon.ousontmesaffaires.command.container;
 
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
 import fr.bbougon.ousontmesaffaires.command.CommandHandler;
 import fr.bbougon.ousontmesaffaires.command.Nothing;
-import fr.bbougon.ousontmesaffaires.domain.container.Container;
 import fr.bbougon.ousontmesaffaires.command.mappers.JsonMappers;
+import fr.bbougon.ousontmesaffaires.domain.container.Container;
 import fr.bbougon.ousontmesaffaires.repositories.Repositories;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -16,15 +15,12 @@ public class ContainersGetCommandHandler implements CommandHandler<ContainersGet
     @Override
     public Pair<String, Object> execute(final ContainersGetCommand containersGetCommand) {
         List<Container> containers = Repositories.containerRepository().getAll();
-        return Pair.of(new GsonBuilder().create().toJson(getJsonElements(containersGetCommand, containers)), Nothing.INSTANCE);
-    }
-
-    private JsonArray getJsonElements(final ContainersGetCommand containersGetCommand, final List<Container> containers) {
-        JsonArray jsonArray = new JsonArray();
-        containers.stream()
-                .map(container -> JsonMappers.fromContainer(containersGetCommand.getId(container.getId()), containersGetCommand.getQrCode(container.getId())).map(container))
-                .forEach(jsonArray::add);
-        return jsonArray;
+        return Pair.of(new GsonBuilder()
+                        .create()
+                        .toJson(JsonMappers
+                                .fromContainers()
+                                .map(containers, (Container container) -> new ContainerField(containersGetCommand.fromUUID(container.getId()), containersGetCommand.getQrCode(container.getId())))),
+                Nothing.INSTANCE);
     }
 
 }

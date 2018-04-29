@@ -15,10 +15,10 @@ public class ContainersGetCommand implements Command<String> {
     }
 
     public String getQrCode(final UUID id) {
-        return qrGenerator.encodeToBase64(uriInfo.getAbsolutePath() + "/" + getId(id));
+        return qrGenerator.encodeToBase64(uriInfo.getAbsolutePath() + "/" + fromUUID(id));
     }
 
-    public String getId(final UUID id) {
+    public String fromUUID(final UUID id) {
         return codec.urlSafeToBase64(id.toString());
     }
 

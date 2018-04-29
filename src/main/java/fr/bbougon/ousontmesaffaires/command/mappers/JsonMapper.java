@@ -1,7 +1,11 @@
 package fr.bbougon.ousontmesaffaires.command.mappers;
 
-public interface JsonMapper<T, R> {
+import java.util.List;
+import java.util.function.Function;
 
-    R map(T object);
+public interface JsonMapper<T, R, V> {
 
+    R map(List<T> objects, Function<T, V> function);
+
+    R map(T object, Function<T, V> function);
 }
