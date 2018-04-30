@@ -23,7 +23,7 @@ public class Patch {
                 declaredField.setAccessible(true);
                 declaredField.set(object, field.getValue());
             } catch (NoSuchFieldException | IllegalAccessException e) {
-                e.printStackTrace();
+                throw new PatchException(String.format("An error occured during patch of '%s' (Exception thrown is: '%s')", supplier.get().getClass().getCanonicalName(), e.getMessage()));
             }
         });
     }
