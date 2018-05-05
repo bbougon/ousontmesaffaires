@@ -9,6 +9,7 @@ import fr.bbougon.ousontmesaffaires.infrastructure.module.mongolink.MongolinkMod
 import fr.bbougon.ousontmesaffaires.infrastructure.module.transactional.TransactionalMiddleware;
 import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGenerator;
 import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGeneratorEngine;
+import fr.bbougon.ousontmesaffaires.infrastructure.security.SecurityService;
 import fr.bbougon.ousontmesaffaires.repositories.FileRepositories;
 import fr.bbougon.ousontmesaffaires.repositories.Repositories;
 import fr.bbougon.ousontmesaffaires.repositories.mongo.MongoRepositories;
@@ -26,6 +27,7 @@ public class OuSontMesAffairesConfiguration extends AbstractModule {
         bindQRGenerator();
         bind(Repositories.class).to(MongoRepositories.class).in(Singleton.class);
         requestStaticInjection(Repositories.class);
+        requestInjection(SecurityService.class);
     }
 
     void bindQRGenerator() {

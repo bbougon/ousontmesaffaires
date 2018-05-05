@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import fr.bbougon.ousontmesaffaires.command.container.ContainerField;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
+import fr.bbougon.ousontmesaffaires.infrastructure.security.SecurityService;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class ContainerJsonObjectMapper implements JsonMapper<Container, JsonObje
             JsonObject featureJson = new JsonObject();
             item.getFeatures().forEach(feature -> featureJson.addProperty(feature.getType(), feature.getFeature()));
             itemJson.add("item", featureJson);
+            itemJson.addProperty("hash", SecurityService.sha1().encrypt(item.toString().getBytes()));
             jsonItems.add(itemJson);
         });
         JsonObject containerJson = new JsonObject();

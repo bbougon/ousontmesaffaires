@@ -46,4 +46,11 @@ public class Item {
                 .append(features)
                 .toHashCode();
     }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "features=" + features +
+                '}';
+    }
 }

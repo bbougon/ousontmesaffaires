@@ -4,23 +4,24 @@ import ch.qos.logback.classic.Level;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import fr.bbougon.ousontmesaffaires.command.CommandHandlersForTest;
-import fr.bbougon.ousontmesaffaires.command.container.ContainerPatchCommandHandler;
-import fr.bbougon.ousontmesaffaires.command.container.ItemAddToContainerCommandHandler;
 import fr.bbougon.ousontmesaffaires.command.container.ContainerAddCommandHandler;
 import fr.bbougon.ousontmesaffaires.command.container.ContainerGetCommandHandler;
+import fr.bbougon.ousontmesaffaires.command.container.ContainerPatchCommandHandler;
 import fr.bbougon.ousontmesaffaires.command.container.ContainersGetCommandHandler;
+import fr.bbougon.ousontmesaffaires.command.container.ItemAddToContainerCommandHandler;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
 import fr.bbougon.ousontmesaffaires.domain.container.Feature;
 import fr.bbougon.ousontmesaffaires.domain.container.Item;
 import fr.bbougon.ousontmesaffaires.infrastructure.module.transactional.TransactionalMiddleware;
 import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGeneratorForTest;
+import fr.bbougon.ousontmesaffaires.infrastructure.security.WithSecurityService;
 import fr.bbougon.ousontmesaffaires.repositories.Repositories;
 import fr.bbougon.ousontmesaffaires.repositories.WithMemoryRepositories;
 import fr.bbougon.ousontmesaffaires.test.utils.FileUtilsForTest;
 import fr.bbougon.ousontmesaffaires.test.utils.TestAppender;
 import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
-import fr.bbougon.ousontmesaffaires.web.ressources.json.Features;
 import fr.bbougon.ousontmesaffaires.web.ressources.json.ContainerName;
+import fr.bbougon.ousontmesaffaires.web.ressources.json.Features;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -37,6 +38,9 @@ public class ContainerResourceTest {
 
     @Rule
     public WithMemoryRepositories withMemoryRepositories = new WithMemoryRepositories();
+
+    @Rule
+    public WithSecurityService withSecurityService = new WithSecurityService();
 
     @Before
     public void before() {
@@ -101,7 +105,9 @@ public class ContainerResourceTest {
         Response response = containerResource.getContainer(new UriInfoBuilderForTest().forContainer(containerId), containerId);
 
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
-        assertThat(response.getEntity()).isEqualTo(new FileUtilsForTest("json/expectedJsonResult.json").getContent().replace("ID_TO_REPLACE", containerId));
+        assertThat(response.getEntity()).isEqualTo(new FileUtilsForTest("json/expectedJsonResult.json").getContent()
+                .replace("ID_TO_REPLACE", containerId)
+                .replace("HASH_TO_REPLACE", "4f36b7a73c4ea3216fa6f989176f76777ff1e17c"));
     }
 
     @Test
@@ -122,7 +128,9 @@ public class ContainerResourceTest {
 
         assertThat(response.getEntity()).isEqualTo(new FileUtilsForTest("json/expectedJsonsResult.json").getContent()
                 .replace("ID_TO_REPLACE_1", new Codec().urlSafeToBase64(container1.getId().toString()))
-                .replace("ID_TO_REPLACE_2", new Codec().urlSafeToBase64(container2.getId().toString())));
+                .replace("HASH_TO_REPLACE_1", "cb45c469548be4589275cd687f7d9f04680c5add")
+                .replace("ID_TO_REPLACE_2", new Codec().urlSafeToBase64(container2.getId().toString()))
+                .replace("HASH_TO_REPLACE_2", "b1957920397ff78af04c19f6361766863e03a0e2"));
     }
 
     @Test

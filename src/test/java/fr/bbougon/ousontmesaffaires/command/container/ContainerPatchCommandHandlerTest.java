@@ -6,6 +6,7 @@ import fr.bbougon.ousontmesaffaires.command.PatchException;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
 import fr.bbougon.ousontmesaffaires.domain.container.Feature;
 import fr.bbougon.ousontmesaffaires.domain.container.Item;
+import fr.bbougon.ousontmesaffaires.infrastructure.security.WithSecurityService;
 import fr.bbougon.ousontmesaffaires.repositories.Repositories;
 import fr.bbougon.ousontmesaffaires.repositories.WithMemoryRepositories;
 import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
@@ -21,6 +22,9 @@ public class ContainerPatchCommandHandlerTest {
 
     @Rule
     public WithMemoryRepositories withMemoryRepositories = new WithMemoryRepositories();
+
+    @Rule
+    public WithSecurityService withSecurityService = new WithSecurityService();
 
     @Before
     public void before() {

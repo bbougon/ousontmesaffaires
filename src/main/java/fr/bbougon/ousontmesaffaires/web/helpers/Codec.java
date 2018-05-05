@@ -22,7 +22,4 @@ public class Codec {
         return Base64.encodeBase64String(binaryData);
     }
 
-    public byte[] decodeBase64(final String dataToDecode) {
-        return Base64.decodeBase64(dataToDecode);
-    }
 }

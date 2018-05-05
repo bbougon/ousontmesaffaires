@@ -21,6 +21,10 @@ public class Feature {
         return feature;
     }
 
+    public static Feature create(final String type, final String value) {
+        return new Feature(type, value);
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
@@ -35,8 +39,12 @@ public class Feature {
         return Objects.hashCode(type, feature);
     }
 
-    public static Feature create(final String type, final String value) {
-        return new Feature(type, value);
+    @Override
+    public String toString() {
+        return "Feature{" +
+                "type='" + type + '\'' +
+                ", feature='" + feature + '\'' +
+                '}';
     }
 
     private String type;

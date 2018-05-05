@@ -1,1 +1,1 @@
-{"id":"ID_TO_REPLACE","name":"Bureau","items":[{"item":{"taille":"3ans","couleur":"blanc","type":"tshirt"}}],"qrcode":"http://localhost/containers/ID_TO_REPLACE"}
+{"id":"ID_TO_REPLACE","name":"Bureau","items":[{"item":{"taille":"3ans","couleur":"blanc","type":"tshirt"},"hash":"HASH_TO_REPLACE"}],"qrcode":"http://localhost/containers/ID_TO_REPLACE"}
