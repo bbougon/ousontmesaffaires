@@ -174,11 +174,11 @@ public class ContainerResourceTest {
     }
 
     @Test
-    public void canAddContainerDescription() {
+    public void canPatchAContainerWithDescription() {
         Container container = Container.create("Container 1", Item.create(Lists.newArrayList(Feature.create("type", "chaussure"))));
         Repositories.containerRepository().persist(container);
 
-        Response response = containerResource.patchContainer(new Codec().urlSafeToBase64(container.getId().toString()), "{\"fields\":[{\"fieldName\":\"description\",\"value\":\"A description\"}]}");
+        Response response = containerResource.patchContainer(new Codec().urlSafeToBase64(container.getId().toString()), "{\"target\":\"description\",\"id\":\"\",\"version\":1,\"data\":\"A description\"}");
 
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
         assertThat(container.getDescription()).isEqualTo("A description");

@@ -15,9 +15,7 @@ public class ContainerPatchCommandHandler implements CommandHandler<ContainerPat
         containerPatchCommand.getPatch().apply(() -> containerToMap);
         String result = new GsonBuilder()
                 .create()
-                .toJson(
-                        JsonMappers
-                                .fromContainer()
+                .toJson(JsonMappers.fromContainer()
                                 .map(containerToMap, (Container container) -> new ContainerField(containerPatchCommand.getContainerId())));
         return Pair.of(result, containerToMap);
     }

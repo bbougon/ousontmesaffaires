@@ -91,13 +91,13 @@ public class ContainerResourceIntegrationTest {
     }
 
     @Test
-    public void canAddADescriptionToContainer() {
+    public void canPatchAContainerWithDescription() {
         Response container = createContainer("json/pantalon.json");
 
         Response response = ClientBuilder.newClient().target(container.getLocation())
                 .request()
                 .accept(MediaType.APPLICATION_JSON_TYPE)
-                .method("PATCH", Entity.json("{\"fields\":[{\"fieldName\":\"description\",\"value\":\"A description\"}]}"), Response.class);
+                .method("PATCH", Entity.json("{\"target\":\"description\",\"id\":\"\",\"version\":1,\"data\":\"A description\"}"), Response.class);
 
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
         String containerId = container.getLocation().getPath().substring(container.getLocation().getPath().lastIndexOf("/") + 1);
