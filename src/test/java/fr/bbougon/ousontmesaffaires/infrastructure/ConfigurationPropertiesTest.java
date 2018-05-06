@@ -27,6 +27,7 @@ public class ConfigurationPropertiesTest {
         keys.put("server.port", "$SERVER_PORT");
         keys.put("server.secured", "$SERVER_SECURED");
         keys.put("thirdpartservice.image.secret", "$THIRDPARTSERVICE_IMAGE_SECRET");
+        keys.put("thirdpartservice.image.apikey", "$THIRDPARTSERVICE_IMAGE_APIKEY");
     }
 
     @Test
@@ -41,6 +42,7 @@ public class ConfigurationPropertiesTest {
         assertThat(configurationProperties.databasePassword()).isEqualTo("password");
         assertThat(configurationProperties.secureServer()).isFalse();
         assertThat(configurationProperties.thirdPartServiceSecret()).isEqualTo("bcde");
+        assertThat(configurationProperties.apiKey()).isEqualTo("12345");
     }
 
     @Test
@@ -55,6 +57,7 @@ public class ConfigurationPropertiesTest {
         assertThat(configurationProperties.serverPort()).isEqualTo(Integer.parseInt(SERVER_PORT));
         assertThat(configurationProperties.secureServer()).isTrue();
         assertThat(configurationProperties.thirdPartServiceSecret()).isEqualTo("abcd");
+        assertThat(configurationProperties.apiKey()).isEqualTo("12345");
     }
 
     @Test

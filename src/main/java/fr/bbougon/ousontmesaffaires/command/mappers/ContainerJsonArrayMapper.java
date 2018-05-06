@@ -14,17 +14,17 @@ public class ContainerJsonArrayMapper implements JsonMapper<Container, JsonArray
     }
 
     @Override
-    public JsonArray map(final List<Container> containers, final Function<Container, ContainerField> function) {
+    public JsonArray map(final List<Container> containers, final Function<Container, ContainerField> containerField) {
         JsonArray jsonArray = new JsonArray();
         containers
                 .stream()
-                .map(container -> new ContainerJsonObjectMapper().map(container, function))
+                .map(container -> new ContainerJsonObjectMapper().map(container, containerField.apply(container)))
                 .forEach(jsonArray::add);
         return jsonArray;
     }
 
     @Override
-    public JsonArray map(final Container object, final Function<Container, ContainerField> function) {
+    public JsonArray map(final Container object, final ContainerField containerField) {
         throw new NotImplementedException();
     }
 

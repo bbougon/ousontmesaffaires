@@ -7,5 +7,5 @@ public interface JsonMapper<T, R, V> {
 
     R map(List<T> objects, Function<T, V> function);
 
-    R map(T object, Function<T, V> function);
+    R map(T object, V function);
 }

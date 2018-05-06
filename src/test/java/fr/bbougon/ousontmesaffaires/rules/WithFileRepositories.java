@@ -37,7 +37,7 @@ public class WithFileRepositories extends ExternalResource {
 
             @Override
             protected FileRepository<Configuration.SecurityConfiguration> getSecurityConfiguration() {
-                return () -> (Configuration.SecurityConfiguration) () -> new SecuritySettings("abcd");
+                return () -> (Configuration.SecurityConfiguration) () -> new SecuritySettings("abcd", "12345");
             }
         });
     }

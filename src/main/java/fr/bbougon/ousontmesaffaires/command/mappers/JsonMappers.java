@@ -9,4 +9,8 @@ public class JsonMappers {
     public static ContainerJsonArrayMapper fromContainers() {
         return new ContainerJsonArrayMapper();
     }
+
+    public static SignatureJsonObjectMapper fromSignature() {
+        return new SignatureJsonObjectMapper();
+    }
 }

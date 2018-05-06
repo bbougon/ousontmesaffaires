@@ -43,7 +43,7 @@ public class DefaultFileRepositories extends FileRepositories {
     }
 
     private SecuritySettings getSecuritySettings() {
-        return new SecuritySettings(configurationProperties.thirdPartServiceSecret());
+        return new SecuritySettings(configurationProperties.thirdPartServiceSecret(), configurationProperties.apiKey());
     }
 
     private Settings getSettings() {

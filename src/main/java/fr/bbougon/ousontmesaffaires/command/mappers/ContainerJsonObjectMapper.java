@@ -16,8 +16,7 @@ public class ContainerJsonObjectMapper implements JsonMapper<Container, JsonObje
     }
 
     @Override
-    public JsonObject map(final Container container, Function<Container, ContainerField> function) {
-        ContainerField containerField = function.apply(container);
+    public JsonObject map(final Container container, ContainerField containerField) {
         JsonArray jsonItems = new JsonArray();
         container.getItems().forEach(item -> {
             JsonObject itemJson = new JsonObject();
@@ -39,7 +38,7 @@ public class ContainerJsonObjectMapper implements JsonMapper<Container, JsonObje
     }
 
     @Override
-    public JsonObject map(final List<Container> objects, final Function<Container, ContainerField> function) {
+    public JsonObject map(final List<Container> objects, final Function<Container, ContainerField> containerField) {
         throw new NotImplementedException();
     }
 

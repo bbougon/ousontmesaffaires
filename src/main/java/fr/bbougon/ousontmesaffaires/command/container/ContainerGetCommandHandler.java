@@ -17,7 +17,7 @@ public class ContainerGetCommandHandler implements CommandHandler<ContainerGetCo
                 .toJson(
                         JsonMappers
                                 .fromContainer()
-                                .map(containerToMap, (Container container) -> new ContainerField(containerGetCommand.getId(), containerGetCommand.getQrCode())));
+                                .map(containerToMap, new ContainerField(containerGetCommand.getId(), containerGetCommand.getQrCode())));
         return Pair.of(result, containerToMap);
     }
 

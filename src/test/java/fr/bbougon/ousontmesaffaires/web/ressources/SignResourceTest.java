@@ -31,6 +31,6 @@ public class SignResourceTest {
         Response response = signResource.sign(new FileUtilsForTest("json/dataToEncrypt.json").getContent());
 
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
-        assertThat(response.getEntity()).isEqualTo("bfd09f95f331f558cbd1320e67aa8d488770583e");
+        assertThat(response.getEntity()).isEqualTo("{\"apiKey\":\"12345\",\"signature\":\"393164ac39f0645fd4dd7dc6120adb25127b2f27\"}");
     }
 }

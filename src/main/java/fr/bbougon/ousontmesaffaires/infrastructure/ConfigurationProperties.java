@@ -67,6 +67,10 @@ public class ConfigurationProperties {
         return getKeyValue(THIRDPARTSERVICE_IMAGE_SECRET);
     }
 
+    public String apiKey() {
+        return getKeyValue(THIRDPARTSERVICE_IMAGE_APIKEY);
+    }
+
     public boolean hasCredentials() {
         return keys.get(DATABASE_USER) != null && keys.get(DATABASE_PASSWORD) != null;
     }
@@ -89,7 +93,6 @@ public class ConfigurationProperties {
         return keys.get(key).startsWith(LINUX_ENV_PREFIX);
     }
 
-
     private final Map<String, String> keys;
     private static final String LINUX_ENV_PREFIX = "$";
     private static final String SERVER_PORT = "server.port";
@@ -101,4 +104,5 @@ public class ConfigurationProperties {
     private static final String DATABASE_USER = "database.user";
     private static final String DATABASE_PASSWORD = "database.password";
     private static final String THIRDPARTSERVICE_IMAGE_SECRET = "thirdpartservice.image.secret";
+    private static final String THIRDPARTSERVICE_IMAGE_APIKEY = "thirdpartservice.image.apikey";
 }
