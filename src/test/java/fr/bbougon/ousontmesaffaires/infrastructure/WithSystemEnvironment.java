@@ -30,6 +30,7 @@ public class WithSystemEnvironment extends ExternalResource {
     static final String DATABASE_PASSWORD = "a-password";
     static final String SERVER_PORT = "6789";
     private static final String SERVER_SECURED = "true";
+    private static final String THIRDPARTSERVICE_IMAGE_SECRET = "abcd";
 
     static {
         VARIABLES.put("DATABASE_HOST", DATABASE_HOST);
@@ -39,5 +40,6 @@ public class WithSystemEnvironment extends ExternalResource {
         VARIABLES.put("DATABASE_PASSWORD", DATABASE_PASSWORD);
         VARIABLES.put("SERVER_PORT", SERVER_PORT);
         VARIABLES.put("SERVER_SECURED", SERVER_SECURED);
+        VARIABLES.put("THIRDPARTSERVICE_IMAGE_SECRET", THIRDPARTSERVICE_IMAGE_SECRET);
     }
 }

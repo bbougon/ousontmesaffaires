@@ -4,7 +4,7 @@ import javax.inject.Inject;
 
 public class SecurityService {
 
-    public static void initialise(SecurityService securityService) {
+    static void initialise(SecurityService securityService) {
         SecurityService.securityService = securityService;
     }
 

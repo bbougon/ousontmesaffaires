@@ -3,16 +3,11 @@ package fr.bbougon.ousontmesaffaires.web.ressources;
 import ch.qos.logback.classic.Level;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import fr.bbougon.ousontmesaffaires.command.CommandHandlersForTest;
-import fr.bbougon.ousontmesaffaires.command.container.ContainerAddCommandHandler;
-import fr.bbougon.ousontmesaffaires.command.container.ContainerGetCommandHandler;
-import fr.bbougon.ousontmesaffaires.command.container.ContainerPatchCommandHandler;
-import fr.bbougon.ousontmesaffaires.command.container.ContainersGetCommandHandler;
-import fr.bbougon.ousontmesaffaires.command.container.ItemAddToContainerCommandHandler;
+import fr.bbougon.ousontmesaffaires.command.WithCommandBus;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
 import fr.bbougon.ousontmesaffaires.domain.container.Feature;
 import fr.bbougon.ousontmesaffaires.domain.container.Item;
-import fr.bbougon.ousontmesaffaires.infrastructure.module.transactional.TransactionalMiddleware;
+import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandBus;
 import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGeneratorForTest;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.WithSecurityService;
 import fr.bbougon.ousontmesaffaires.repositories.Repositories;
@@ -41,6 +36,9 @@ public class ContainerResourceTest {
 
     @Rule
     public WithSecurityService withSecurityService = new WithSecurityService();
+
+    @Rule
+    public WithCommandBus withCommandBus = new WithCommandBus();
 
     @Before
     public void before() {
@@ -186,13 +184,7 @@ public class ContainerResourceTest {
 
     private ContainerResource initialise(final Codec codec) {
         ContainerResource containerResource = new ContainerResource();
-        containerResource.commandBus = new TransactionalMiddleware(new CommandHandlersForTest(Sets.newHashSet(
-                new ContainerAddCommandHandler(),
-                new ItemAddToContainerCommandHandler(),
-                new ContainerGetCommandHandler(),
-                new ContainersGetCommandHandler(),
-                new ContainerPatchCommandHandler()
-        )));
+        withCommandBus.apply((CommandBus commandBus) -> containerResource.commandBus = commandBus);
         containerResource.codec = codec;
         containerResource.qrGenerator = new QRGeneratorForTest();
         return containerResource;

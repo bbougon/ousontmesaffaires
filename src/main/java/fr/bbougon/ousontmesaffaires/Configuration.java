@@ -1,5 +1,6 @@
 package fr.bbougon.ousontmesaffaires;
 
+import fr.bbougon.ousontmesaffaires.infrastructure.security.SecuritySettings;
 import fr.bbougon.ousontmesaffaires.repositories.FileRepositories;
 import io.undertow.Undertow.Builder;
 import org.mongolink.Settings;
@@ -16,7 +17,6 @@ public class Configuration {
     }
 
     public interface DataBaseConfiguration {
-
         Settings getSettings();
     }
 
@@ -24,5 +24,10 @@ public class Configuration {
         Builder getBuilder();
 
         int getPort();
+    }
+
+    @FunctionalInterface
+    public interface SecurityConfiguration {
+        SecuritySettings securitySetting();
     }
 }

@@ -5,8 +5,12 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import fr.bbougon.ousontmesaffaires.Configuration;
+import fr.bbougon.ousontmesaffaires.Configuration.DataBaseConfiguration;
+import fr.bbougon.ousontmesaffaires.Configuration.SecurityConfiguration;
+import fr.bbougon.ousontmesaffaires.Configuration.ServerConfiguration;
 import fr.bbougon.ousontmesaffaires.Main;
 import fr.bbougon.ousontmesaffaires.infrastructure.ConfigurationProperties;
+import fr.bbougon.ousontmesaffaires.infrastructure.security.SecuritySettings;
 import io.undertow.Undertow;
 import io.undertow.Undertow.Builder;
 import org.mongolink.Settings;
@@ -24,13 +28,22 @@ public class DefaultFileRepositories extends FileRepositories {
     }
 
     @Override
-    public FileRepository<Configuration.ServerConfiguration> getServerConfiguration() {
-        return () -> (Configuration.ServerConfiguration) this::getServerSettings;
+    public FileRepository<ServerConfiguration> getServerConfiguration() {
+        return () -> (ServerConfiguration) this::getServerSettings;
     }
 
     @Override
-    protected FileRepository<Configuration.DataBaseConfiguration> getDataBaseConfiguration() {
-        return () -> (Configuration.DataBaseConfiguration) this::getSettings;
+    protected FileRepository<DataBaseConfiguration> getDataBaseConfiguration() {
+        return () -> (DataBaseConfiguration) this::getSettings;
+    }
+
+    @Override
+    protected FileRepository<SecurityConfiguration> getSecurityConfiguration() {
+        return () -> (SecurityConfiguration) this::getSecuritySettings;
+    }
+
+    private SecuritySettings getSecuritySettings() {
+        return new SecuritySettings(configurationProperties.thirdPartServiceSecret());
     }
 
     private Settings getSettings() {

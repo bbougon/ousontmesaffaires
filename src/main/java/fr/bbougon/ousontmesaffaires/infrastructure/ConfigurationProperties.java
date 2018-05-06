@@ -63,6 +63,14 @@ public class ConfigurationProperties {
         return Boolean.parseBoolean(serverSecured);
     }
 
+    public String thirdPartServiceSecret() {
+        return getKeyValue(THIRDPARTSERVICE_IMAGE_SECRET);
+    }
+
+    public boolean hasCredentials() {
+        return keys.get(DATABASE_USER) != null && keys.get(DATABASE_PASSWORD) != null;
+    }
+
     private String getKeyValue(final String key) {
         checkKeyExistence(key);
         if (isEnvironmentVariable(key)) {
@@ -81,10 +89,6 @@ public class ConfigurationProperties {
         return keys.get(key).startsWith(LINUX_ENV_PREFIX);
     }
 
-    public boolean hasCredentials() {
-        return keys.get(DATABASE_USER) != null && keys.get(DATABASE_PASSWORD) != null;
-    }
-
 
     private final Map<String, String> keys;
     private static final String LINUX_ENV_PREFIX = "$";
@@ -96,4 +100,5 @@ public class ConfigurationProperties {
     private static final Logger LOGGER = LoggerFactory.getLogger(ConfigurationProperties.class);
     private static final String DATABASE_USER = "database.user";
     private static final String DATABASE_PASSWORD = "database.password";
+    private static final String THIRDPARTSERVICE_IMAGE_SECRET = "thirdpartservice.image.secret";
 }
