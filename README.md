@@ -21,12 +21,12 @@ https://travis-ci.org/bbougon/ousontmesaffaires
 ### Running Ou Sont Mes Affaires container
 ***Run container***
 ```bash
-docker run -d --rm --name ou-sont-mes-affaires-server --mount source=ou-sont-mes-affaires-image-storage,target=/image-storage --publish 8080:8182 -w /usr/src/ousontmesaffaires/ --ip 192.168.100.10 --network=bridge-ou-sont-mes-affaires ou-sont-mes-affaires-api java -jar ousontmesaffaires-docker-jar-with-dependencies.jar
+docker run -d --rm --name ou-sont-mes-affaires-server --env-file ./.env.list --mount source=ou-sont-mes-affaires-image-storage,target=/image-storage --publish 8080:8182 -w /usr/src/ousontmesaffaires/ --ip 192.168.100.10 --network=bridge-ou-sont-mes-affaires ou-sont-mes-affaires-api java -jar ousontmesaffaires-docker-jar-with-dependencies.jar
 ```
 
 ***Run in debug mode***
 ```bash
-docker run -d --rm --name ou-sont-mes-affaires-server --mount source=ou-sont-mes-affaires-image-storage,target=/image-storage --publish 8080:8182 --publish 8787:8787 -w /usr/src/ousontmesaffaires/ --ip 192.168.100.10 --network=bridge-ou-sont-mes-affaires ou-sont-mes-affaires-api java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8787,suspend=n -jar ousontmesaffaires-docker-jar-with-dependencies.jar
+docker run -d --rm --name ou-sont-mes-affaires-server --env-file ./.env.list --mount source=ou-sont-mes-affaires-image-storage,target=/image-storage --publish 8080:8182 --publish 8787:8787 -w /usr/src/ousontmesaffaires/ --ip 192.168.100.10 --network=bridge-ou-sont-mes-affaires ou-sont-mes-affaires-api java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8787,suspend=n -jar ousontmesaffaires-docker-jar-with-dependencies.jar
 ```
 
 ### Running Ou Sont Mes Affaires angular container
