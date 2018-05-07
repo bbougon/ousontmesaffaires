@@ -5,7 +5,7 @@ import org.mongolink.domain.mapper.ComponentMap;
 
 @SuppressWarnings("UnusedDeclaration")
 public class ResizedImagesMapping extends ComponentMap<ResizedImage> {
-    
+
     @Override
     public void map() {
         property().onProperty(ResizedImage::getUrl);

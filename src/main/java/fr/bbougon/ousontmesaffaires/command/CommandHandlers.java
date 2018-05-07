@@ -15,7 +15,7 @@ public class CommandHandlers {
         return commandHandlers.stream()
                 .filter(commandHandler -> commandType(commandHandler.getClass()).equals(commandClass))
                 .findFirst()
-                .orElseThrow(UnknownCommandException::new);
+                .orElseThrow(() -> new UnknownCommandException(String.format("Command '%s' is unknown!", commandClass.getSimpleName())));
     }
 
     private <T> Class<T> commandType(final Class<?> commandHandlerClass) {
