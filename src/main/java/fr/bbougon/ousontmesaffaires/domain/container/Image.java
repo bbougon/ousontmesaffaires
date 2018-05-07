@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Image {
 
-    private Image() {
+    Image() {
     }
 
     public String getSignature() {

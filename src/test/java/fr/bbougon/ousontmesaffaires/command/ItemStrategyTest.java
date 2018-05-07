@@ -48,7 +48,7 @@ public class ItemStrategyTest {
         assertThat(images).hasSize(1);
         Image image = images.get(0);
         assertImage(image, "signature", "image url", "image secure url", 1);
-        assertResizedImage(image.getResizedImages().get(0), "url", "secure_url", "100.0", "200.0");
+        assertResizedImage(image.getResizedImages().get(0), "url", "secure_url", 200d, 100d);
     }
 
     @Test
@@ -62,7 +62,7 @@ public class ItemStrategyTest {
         List<Image> images = container.getItems().get(0).getImages();
         assertThat(images).hasSize(1);
         Image image = images.get(0);
-        assertResizedImage(image.getResizedImages().get(1), "url2", "secure_url2", "200.0", "400.0");
+        assertResizedImage(image.getResizedImages().get(1), "url2", "secure_url2", new BigDecimal("400.0").doubleValue(), new BigDecimal("200.0").doubleValue());
     }
 
     @Test
@@ -79,11 +79,11 @@ public class ItemStrategyTest {
     }
 
 
-    private void assertResizedImage(final ResizedImage resizedImage, final String expectedUrl, final String expectedSecureUrl, final String expectedWidth, final String expectedHeight) {
+    private void assertResizedImage(final ResizedImage resizedImage, final String expectedUrl, final String expectedSecureUrl, final double expectedHeight, final double expectedWidth) {
         assertThat(resizedImage.getUrl()).isEqualTo(expectedUrl);
         assertThat(resizedImage.getSecureUrl()).isEqualTo(expectedSecureUrl);
-        assertThat(resizedImage.getWidth()).isEqualTo(new BigDecimal(expectedWidth));
-        assertThat(resizedImage.getHeight()).isEqualTo(new BigDecimal(expectedHeight));
+        assertThat(resizedImage.getHeight()).isEqualTo(expectedHeight);
+        assertThat(resizedImage.getWidth()).isEqualTo(expectedWidth);
     }
 
     private void assertImage(final Image image, final String expectedSignature, final String expectedUrl, final String expectedSecureUrl, final int expectedResizedImageSize) {

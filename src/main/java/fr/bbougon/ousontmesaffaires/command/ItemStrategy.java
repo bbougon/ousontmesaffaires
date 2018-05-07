@@ -6,7 +6,6 @@ import fr.bbougon.ousontmesaffaires.domain.container.Image;
 import fr.bbougon.ousontmesaffaires.domain.container.ResizedImage;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.SecurityService;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -22,10 +21,12 @@ public class ItemStrategy implements Strategy {
         List<LinkedTreeMap> resizedImages = (List<LinkedTreeMap>) map.get("resizedImages");
         Image image = Image.create(signature, url, secure_url, resizedImages
                 .stream()
-                .map(resizedImage -> ResizedImage.create((String) resizedImage.get("url"),
-                        (String) resizedImage.get("secure_url"),
-                        new BigDecimal(Double.toString((Double) resizedImage.get("width"))),
-                        new BigDecimal(Double.toString((Double) resizedImage.get("height")))))
+                .map(resizedImage -> {
+                    final Double width = (Double) resizedImage.get("width");
+                    final Double height = (Double) resizedImage.get("height");
+                    return ResizedImage.create((String) resizedImage.get("url"),
+                            (String) resizedImage.get("secure_url"), height, width);
+                })
                 .collect(Collectors.toList()));
 
         container.getItems()

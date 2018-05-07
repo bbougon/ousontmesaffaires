@@ -1,9 +1,7 @@
 package fr.bbougon.ousontmesaffaires.domain.container;
 
-import java.math.BigDecimal;
-
 public class ResizedImage {
-    public static ResizedImage create(final String url, final String secureUrl, final BigDecimal width, final BigDecimal height) {
+    public static ResizedImage create(final String url, final String secureUrl, final double height, final double width) {
         ResizedImage resizedImage = new ResizedImage();
         resizedImage.url = url;
         resizedImage.secureUrl = secureUrl;
@@ -20,16 +18,16 @@ public class ResizedImage {
         return secureUrl;
     }
 
-    public BigDecimal getWidth() {
+    public Double getWidth() {
         return width;
     }
 
-    public BigDecimal getHeight() {
+    public Double getHeight() {
         return height;
     }
 
     private String url;
     private String secureUrl;
-    private BigDecimal width;
-    private BigDecimal height;
+    private Double width;
+    private Double height;
 }
