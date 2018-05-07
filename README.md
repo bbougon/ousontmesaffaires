@@ -1,6 +1,6 @@
 # Où sont mes affaires
 [![Build Status](https://travis-ci.org/bbougon/ousontmesaffaires.svg)](https://travis-ci.org/bbougon/ousontmesaffaires)
-
+[![codecov.io](https://codecov.io/gh/bbougon/ousontmesaffaires/coverage.svg?branch=master)](https://codecov.io/gh/bbougon/ousontmesaffaires/codecov.io?branch=master)
 
 ## CI
 https://travis-ci.org/bbougon/ousontmesaffaires
