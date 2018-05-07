@@ -1,5 +1,6 @@
 package fr.bbougon.ousontmesaffaires.domain.container;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -25,7 +26,9 @@ public class Item {
         return features;
     }
 
-    private Set<Feature> features = Sets.newHashSet();
+    public List<Image> getImages() {
+        return images;
+    }
 
     @Override
     public boolean equals(final Object o) {
@@ -53,4 +56,12 @@ public class Item {
                 "features=" + features +
                 '}';
     }
+
+    public void add(final Image image) {
+        images.add(image);
+    }
+
+    private Set<Feature> features = Sets.newHashSet();
+
+    private List<Image> images = Lists.newArrayList();
 }

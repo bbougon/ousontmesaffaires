@@ -12,14 +12,18 @@ public class Patch {
         return target;
     }
 
-    public String getData() {
+    public Object getData() {
         return data;
+    }
+
+    public String getId() {
+        return id;
     }
 
     private String target;
     private String id;
     private int version;
-    private String data;
+    private Object data;
 
 
 }

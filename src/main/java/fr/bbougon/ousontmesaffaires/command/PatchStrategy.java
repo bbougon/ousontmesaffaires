@@ -5,7 +5,8 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 public enum PatchStrategy {
-    DESCRIPTION(new DescriptionStrategy());
+    DESCRIPTION(new DescriptionStrategy()),
+    ITEM(new ItemStrategy());
 
     PatchStrategy(final Strategy strategy) {
         this.strategy = strategy;
@@ -16,7 +17,7 @@ public enum PatchStrategy {
                 .filter(patchStrategy -> patchStrategy.name().toLowerCase().equals(patch.getTarget()))
                 .findFirst();
         optionalStrategy.ifPresent(strategy -> strategy.setPatch(patch));
-        return optionalStrategy.orElseThrow(() -> new PatchException("An error occured during patch, current target 'unknown' is unknown."));
+        return optionalStrategy.orElseThrow(() -> new PatchException(String.format("An error occurred during patch, current target '%s' is unknown.", patch.getTarget())));
     }
 
     public void apply(final Supplier supplier) {

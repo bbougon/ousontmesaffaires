@@ -9,6 +9,6 @@ public class DescriptionStrategy implements Strategy {
     @Override
     public void apply(final Patch patch, final Supplier supplier) {
         Container container = (Container) supplier.get();
-        container.setDescription(patch.getData());
+        container.setDescription((String) patch.getData());
     }
 }

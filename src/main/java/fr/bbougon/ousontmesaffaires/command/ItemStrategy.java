@@ -1,0 +1,37 @@
+package fr.bbougon.ousontmesaffaires.command;
+
+import com.google.gson.internal.LinkedTreeMap;
+import fr.bbougon.ousontmesaffaires.domain.container.Container;
+import fr.bbougon.ousontmesaffaires.domain.container.Image;
+import fr.bbougon.ousontmesaffaires.domain.container.ResizedImage;
+import fr.bbougon.ousontmesaffaires.infrastructure.security.SecurityService;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+
+public class ItemStrategy implements Strategy {
+    @Override
+    public void apply(final Patch patch, final Supplier supplier) {
+        Container container = (Container) supplier.get();
+        LinkedTreeMap map = (LinkedTreeMap) patch.getData();
+        String signature = (String) map.get("signature");
+        String url = (String) map.get("url");
+        String secure_url = (String) map.get("secure_url");
+        List<LinkedTreeMap> resizedImages = (List<LinkedTreeMap>) map.get("resizedImages");
+        Image image = Image.create(signature, url, secure_url, resizedImages
+                .stream()
+                .map(resizedImage -> ResizedImage.create((String) resizedImage.get("url"),
+                        (String) resizedImage.get("secure_url"),
+                        new BigDecimal(Double.toString((Double) resizedImage.get("width"))),
+                        new BigDecimal(Double.toString((Double) resizedImage.get("height")))))
+                .collect(Collectors.toList()));
+
+        container.getItems()
+                .stream()
+                .filter(item -> SecurityService.sha1().encrypt(item.toString().getBytes()).equals(patch.getId()))
+                .findFirst()
+                .ifPresent(foundItem -> foundItem.add(image));
+    }
+}

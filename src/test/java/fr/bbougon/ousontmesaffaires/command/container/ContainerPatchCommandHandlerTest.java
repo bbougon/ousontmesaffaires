@@ -7,9 +7,11 @@ import fr.bbougon.ousontmesaffaires.command.PatchException;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
 import fr.bbougon.ousontmesaffaires.domain.container.Feature;
 import fr.bbougon.ousontmesaffaires.domain.container.Item;
+import fr.bbougon.ousontmesaffaires.infrastructure.security.Sha1Encryptor;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.WithSecurityService;
 import fr.bbougon.ousontmesaffaires.repositories.Repositories;
 import fr.bbougon.ousontmesaffaires.repositories.WithMemoryRepositories;
+import fr.bbougon.ousontmesaffaires.test.utils.FileUtilsForTest;
 import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Before;
@@ -45,13 +47,25 @@ public class ContainerPatchCommandHandlerTest {
     }
 
     @Test
+    public void canPatchItem() {
+        String itemHash = new Sha1Encryptor().encrypt(container.getItems().get(0).toString().getBytes());
+        String jsonPatch = new FileUtilsForTest("json/itemPatch.json").getContent().replace("HASH_TO_REPLACE", itemHash);
+        Patch patch = new Gson().fromJson(jsonPatch, Patch.class);
+
+        Pair<String, Object> result = new ContainerPatchCommandHandler().execute(new ContainerPatchCommand(new Codec().toBase64(container.getId().toString().getBytes()), patch));
+
+        Container container = (Container) result.getRight();
+        assertThat(container.getItems().get(0).getImages()).hasSize(1);
+    }
+
+    @Test
     public void canHandleExceptions() {
         try {
             Patch patch = new Gson().fromJson("{\"target\":\"unknown\",\"id\":\"\",\"version\":1,\"data\":\"A description\"}", Patch.class);
             new ContainerPatchCommandHandler().execute(new ContainerPatchCommand(new Codec().toBase64(container.getId().toString().getBytes()), patch));
             failBecauseExceptionWasNotThrown(PatchException.class);
         } catch (PatchException e) {
-            assertThat(e.getMessage()).contains("An error occured during patch, current target 'unknown' is unknown.");
+            assertThat(e.getMessage()).contains("An error occurred during patch, current target 'unknown' is unknown.");
         }
     }
 
