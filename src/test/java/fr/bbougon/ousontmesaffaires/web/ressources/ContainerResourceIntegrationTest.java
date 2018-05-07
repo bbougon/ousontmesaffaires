@@ -57,7 +57,7 @@ public class ContainerResourceIntegrationTest {
 
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
         String containerId = container.getLocation().getPath().substring(container.getLocation().getPath().lastIndexOf("/") + 1);
-        assertThat(response.readEntity(String.class)).isEqualTo("{\"id\":\"" + containerId + "\",\"name\":\"placard\",\"items\":[{\"item\":{\"taille\":\"3ans\",\"type\":\"pantalon\",\"couleur\":\"noir\"},\"hash\":\"089819bc695cf1d7c4f705f56451682d14e0b0a2\"}],\"qrcode\":\"http://localhost:17000/containers/" + containerId + "\"}");
+        assertThat(response.readEntity(String.class)).isEqualTo("{\"id\":\"" + containerId + "\",\"name\":\"placard\",\"items\":[{\"item\":{\"taille\":\"3ans\",\"type\":\"pantalon\",\"couleur\":\"noir\"},\"hash\":\"b17d4fa7421ae3a636c5aa823ae06f25fabfd6c6\"}],\"qrcode\":\"http://localhost:17000/containers/" + containerId + "\"}");
     }
 
     @Test
@@ -73,7 +73,7 @@ public class ContainerResourceIntegrationTest {
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
         String containerId = container.getLocation().getPath().substring(container.getLocation().getPath().lastIndexOf("/") + 1);
         assertThat(response.readEntity(String.class)).contains("{\"id\":\"" + containerId + "\",\"name\":\"placard\",\"items\":[" +
-                "{\"item\":{\"taille\":\"3ans\",\"type\":\"pantalon\",\"couleur\":\"noir\"},\"hash\":\"089819bc695cf1d7c4f705f56451682d14e0b0a2\"}]," +
+                "{\"item\":{\"taille\":\"3ans\",\"type\":\"pantalon\",\"couleur\":\"noir\"},\"hash\":\"b17d4fa7421ae3a636c5aa823ae06f25fabfd6c6\"}]," +
                 "\"qrcode\":\"http://localhost:17000/containers/" + containerId + "\"}");
     }
 

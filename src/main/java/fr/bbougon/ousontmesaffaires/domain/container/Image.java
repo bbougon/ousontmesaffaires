@@ -34,6 +34,16 @@ public class Image {
         return image;
     }
 
+    @Override
+    public String toString() {
+        return "Image{" +
+                "signature='" + signature + '\'' +
+                ", url='" + url + '\'' +
+                ", secureUrl='" + secureUrl + '\'' +
+                ", resizedImages=" + resizedImages +
+                '}';
+    }
+
     private String signature;
     private String url;
     private String secureUrl;

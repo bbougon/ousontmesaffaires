@@ -26,6 +26,16 @@ public class ResizedImage {
         return height;
     }
 
+    @Override
+    public String toString() {
+        return "ResizedImage{" +
+                "url='" + url + '\'' +
+                ", secureUrl='" + secureUrl + '\'' +
+                ", width=" + width +
+                ", height=" + height +
+                '}';
+    }
+
     private String url;
     private String secureUrl;
     private Double width;

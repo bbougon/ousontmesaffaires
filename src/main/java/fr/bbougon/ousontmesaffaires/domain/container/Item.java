@@ -1,5 +1,6 @@
 package fr.bbougon.ousontmesaffaires.domain.container;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -52,9 +53,10 @@ public class Item {
 
     @Override
     public String toString() {
-        return "Item{" +
-                "features=" + features +
-                '}';
+        return MoreObjects.toStringHelper(this)
+                .add("features", features)
+                .add("images", images)
+                .toString();
     }
 
     public void add(final Image image) {

@@ -6,7 +6,9 @@ import com.google.common.collect.Sets;
 import fr.bbougon.ousontmesaffaires.command.WithCommandBus;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
 import fr.bbougon.ousontmesaffaires.domain.container.Feature;
+import fr.bbougon.ousontmesaffaires.domain.container.Image;
 import fr.bbougon.ousontmesaffaires.domain.container.Item;
+import fr.bbougon.ousontmesaffaires.domain.container.ResizedImage;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandBus;
 import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGeneratorForTest;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.WithSecurityService;
@@ -97,6 +99,7 @@ public class ContainerResourceTest {
     public void canGetAContainer() {
         String payload = "{\"name\": \"Bureau\",\"item\": {\"type\": \"tshirt\",\"couleur\": \"blanc\",\"taille\": \"3ans\"}}";
         Container container = Container.create(ContainerName.getNameFromPayload(payload), Item.create(Features.getFeaturesFromPayload(payload)));
+        addImagesToContainer(container);
         Repositories.containerRepository().persist(container);
         String containerId = new Codec().urlSafeToBase64(container.getId().toString());
 
@@ -105,7 +108,7 @@ public class ContainerResourceTest {
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
         assertThat(response.getEntity()).isEqualTo(new FileUtilsForTest("json/expectedJsonResult.json").getContent()
                 .replace("ID_TO_REPLACE", containerId)
-                .replace("HASH_TO_REPLACE", "4f36b7a73c4ea3216fa6f989176f76777ff1e17c"));
+                .replace("HASH_TO_REPLACE", "a6876e3646d7b310d70f1c5fb5b7da275889bf2a"));
     }
 
     @Test
@@ -118,7 +121,9 @@ public class ContainerResourceTest {
     @Test
     public void canGetAllContainers() {
         Container container1 = Container.create("Container 1", Item.create(Lists.newArrayList(Feature.create("type", "chaussure"))));
+        addImagesToContainer(container1);
         Container container2 = Container.create("Container 2", Item.create(Lists.newArrayList(Feature.create("type", "pantalon"))));
+        addImagesToContainer(container2);
         Repositories.containerRepository().persist(container1);
         Repositories.containerRepository().persist(container2);
 
@@ -126,9 +131,22 @@ public class ContainerResourceTest {
 
         assertThat(response.getEntity()).isEqualTo(new FileUtilsForTest("json/expectedJsonsResult.json").getContent()
                 .replace("ID_TO_REPLACE_1", new Codec().urlSafeToBase64(container1.getId().toString()))
-                .replace("HASH_TO_REPLACE_1", "cb45c469548be4589275cd687f7d9f04680c5add")
+                .replace("HASH_TO_REPLACE_1", "4a0d392b614da2f30213c071db3fd118510c003a")
                 .replace("ID_TO_REPLACE_2", new Codec().urlSafeToBase64(container2.getId().toString()))
-                .replace("HASH_TO_REPLACE_2", "b1957920397ff78af04c19f6361766863e03a0e2"));
+                .replace("HASH_TO_REPLACE_2", "aadf6234d3d6f831b5cab3fdbf7b6674dae920f7"));
+    }
+
+    private void addImagesToContainer(final Container container) {
+        container.getItems().get(0).add(Image.create("signature", "url", "secureUrl",
+                Lists.newArrayList(
+                        ResizedImage.create("url2", "secureUrl2", 100, 200),
+                        ResizedImage.create("url3", "secureUrl3", 200, 400))
+        ));
+        container.getItems().get(0).add(Image.create("signature2", "url4", "secureUrl4",
+                Lists.newArrayList(
+                        ResizedImage.create("url5", "secureUrl5", 100, 200),
+                        ResizedImage.create("url6", "secureUrl6", 200, 400))
+        ));
     }
 
     @Test
