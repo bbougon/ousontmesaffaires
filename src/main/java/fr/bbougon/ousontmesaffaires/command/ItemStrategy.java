@@ -5,6 +5,7 @@ import fr.bbougon.ousontmesaffaires.domain.container.Container;
 import fr.bbougon.ousontmesaffaires.domain.container.image.Image;
 import fr.bbougon.ousontmesaffaires.domain.container.image.ResizedImage;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.SecurityService;
+import fr.bbougon.ousontmesaffaires.web.helpers.ItemStringFormatter;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -31,7 +32,7 @@ public class ItemStrategy implements Strategy {
 
         container.getItems()
                 .stream()
-                .filter(item -> SecurityService.sha1().encrypt(item.toString().getBytes()).equals(patch.getId()))
+                .filter(item -> SecurityService.sha1().encrypt(new ItemStringFormatter(item).format().getBytes()).equals(patch.getId()))
                 .findFirst()
                 .ifPresent(foundItem -> foundItem.add(image));
     }

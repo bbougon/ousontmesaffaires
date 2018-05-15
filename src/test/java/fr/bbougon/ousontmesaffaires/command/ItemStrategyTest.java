@@ -12,6 +12,7 @@ import fr.bbougon.ousontmesaffaires.infrastructure.security.WithSecurityService;
 import fr.bbougon.ousontmesaffaires.repositories.Repositories;
 import fr.bbougon.ousontmesaffaires.repositories.WithMemoryRepositories;
 import fr.bbougon.ousontmesaffaires.test.utils.FileUtilsForTest;
+import fr.bbougon.ousontmesaffaires.web.helpers.ItemStringFormatter;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -38,7 +39,7 @@ public class ItemStrategyTest {
 
     @Test
     public void canAddOneImage() {
-        String itemHash = new Sha1Encryptor().encrypt(container.getItems().get(0).toString().getBytes());
+        String itemHash = new Sha1Encryptor().encrypt(new ItemStringFormatter(container.getItems().get(0)).format().getBytes());
         String jsonPatch = new FileUtilsForTest("json/itemPatch.json").getContent().replace("HASH_TO_REPLACE", itemHash);
         Patch patch = new Gson().fromJson(jsonPatch, Patch.class);
 
@@ -53,7 +54,7 @@ public class ItemStrategyTest {
 
     @Test
     public void canAddTwoResizedImages() {
-        String itemHash = new Sha1Encryptor().encrypt(container.getItems().get(0).toString().getBytes());
+        String itemHash = new Sha1Encryptor().encrypt(new ItemStringFormatter(container.getItems().get(0)).format().getBytes());
         String jsonPatch = new FileUtilsForTest("json/itemPatchWithTwoResizedImages.json").getContent().replace("HASH_TO_REPLACE", itemHash);
         Patch patch = new Gson().fromJson(jsonPatch, Patch.class);
 
@@ -68,7 +69,7 @@ public class ItemStrategyTest {
     @Test
     public void addImageToExpectedItem() {
         container.add(Item.create(Lists.newArrayList(Feature.create("type2", "value2"))));
-        String itemHash = new Sha1Encryptor().encrypt(container.getItems().get(1).toString().getBytes());
+        String itemHash = new Sha1Encryptor().encrypt(new ItemStringFormatter(container.getItems().get(1)).format().getBytes());
         String jsonPatch = new FileUtilsForTest("json/itemPatch.json").getContent().replace("HASH_TO_REPLACE", itemHash);
         Patch patch = new Gson().fromJson(jsonPatch, Patch.class);
 

@@ -13,6 +13,7 @@ import fr.bbougon.ousontmesaffaires.repositories.Repositories;
 import fr.bbougon.ousontmesaffaires.repositories.WithMemoryRepositories;
 import fr.bbougon.ousontmesaffaires.test.utils.FileUtilsForTest;
 import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
+import fr.bbougon.ousontmesaffaires.web.helpers.ItemStringFormatter;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Before;
 import org.junit.Rule;
@@ -48,7 +49,7 @@ public class ContainerPatchCommandHandlerTest {
 
     @Test
     public void canPatchItem() {
-        String itemHash = new Sha1Encryptor().encrypt(container.getItems().get(0).toString().getBytes());
+        String itemHash = new Sha1Encryptor().encrypt(new ItemStringFormatter(container.getItems().get(0)).format().getBytes());
         String jsonPatch = new FileUtilsForTest("json/itemPatch.json").getContent().replace("HASH_TO_REPLACE", itemHash);
         Patch patch = new Gson().fromJson(jsonPatch, Patch.class);
 
