@@ -1,0 +1,114 @@
+{
+  "id": "d6350a41-ece8-47fd-80ed-f8fee51c55e8",
+  "name": "Bureau",
+  "items": [
+    {
+      "features": [
+        {
+          "type": "type",
+          "feature": "chaussure"
+        }
+      ],
+      "imageStore": {
+        "folder": "folder_name",
+        "images": [
+          {
+            "signature": "signature",
+            "url": "url",
+            "secureUrl": "secureUrl",
+            "resizedImages": [
+              {
+                "url": "assets/testing/url2.png",
+                "secureUrl": "assets/testing/secureUrl2.png",
+                "height": 110.0,
+                "width": 80.0
+              },
+              {
+                "url": "assets/testing/url3.png",
+                "secureUrl": "assets/testing/secureUrl3.png",
+                "height": 552.0,
+                "width": 400.0
+              },
+              {
+                "url": "assets/testing/url4.png",
+                "secureUrl": "assets/testing/secureUrl4.png",
+                "height": 1103.0,
+                "width": 800.0
+              }
+            ]
+          },
+          {
+            "signature": "signature2",
+            "url": "url5",
+            "secureUrl": "secureUrl5",
+            "resizedImages": [
+              {
+                "url": "assets/testing/url6.png",
+                "secureUrl": "assets/testing/secureUrl6.png",
+                "height": 110.0,
+                "width": 80.0
+              },
+              {
+                "url": "assets/testing/url7.png",
+                "secureUrl": "assets/testing/secureUrl7.png",
+                "height": 552.0,
+                "width": 400.0
+              },
+              {
+                "url": "assets/testing/url8.png",
+                "secureUrl": "assets/testing/secureUrl8.png",
+                "height": 1103.0,
+                "width": 800.0
+              }
+            ]
+          }
+        ]
+      },
+      "hash": "new-hash"
+    },
+    {
+      "features": [
+        {
+          "type": "type",
+          "feature": "pantalon"
+        },
+        {
+          "type": "couleur",
+          "feature": "marron"
+        }
+      ],
+      "imageStore": {
+        "folder": "folder_name_2",
+        "images": [
+          {
+            "signature": "signature_2",
+            "url": "assets/testing/url5.png",
+            "secureUrl": "assets/testing/secureUrl5.png",
+            "resizedImages": [
+              {
+                "url": "assets/testing/url6.png",
+                "secureUrl": "assets/testing/secureUrl6.png",
+                "height": 110.0,
+                "width": 80.0
+              },
+              {
+                "url": "assets/testing/url7.png",
+                "secureUrl": "assets/testing/secureUrl7.png",
+                "height": 552.0,
+                "width": 400.0
+              },
+              {
+                "url": "assets/testing/url8.png",
+                "secureUrl": "assets/testing/secureUrl8.png",
+                "height": 1103.0,
+                "width": 800.0
+              }
+            ]
+          }
+        ]
+      },
+      "hash": "new-hash_2"
+    }
+  ],
+  "qrcode": "http://localhost/containers/ID_TO_REPLACE"
+}

@@ -6,6 +6,7 @@ import fr.bbougon.ousontmesaffaires.command.container.ContainerField;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
 import fr.bbougon.ousontmesaffaires.domain.container.Item;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.SecurityService;
+import fr.bbougon.ousontmesaffaires.web.helpers.ItemStringFormatter;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.List;
@@ -24,11 +25,8 @@ public class ContainerJsonObjectMapper implements JsonMapper<Container, JsonObje
             JsonObject featureJson = new JsonObject();
             item.getFeatures().forEach(feature -> featureJson.addProperty(feature.getType(), feature.getFeature()));
             itemJson.add("item", featureJson);
-            JsonArray images = buildImages(item);
-            if(images.size() > 0) {
-                itemJson.add("images", images);
-            }
-            itemJson.addProperty("hash", SecurityService.sha1().encrypt(item.toString().getBytes()));
+            itemJson.add("imageStore", buildImages(item));
+            itemJson.addProperty("hash", SecurityService.sha1().encrypt(new ItemStringFormatter(item).format().getBytes()));
             jsonItems.add(itemJson);
         });
         JsonObject containerJson = new JsonObject();
@@ -42,7 +40,9 @@ public class ContainerJsonObjectMapper implements JsonMapper<Container, JsonObje
         return containerJson;
     }
 
-    private JsonArray buildImages(final Item item) {
+    private JsonObject buildImages(final Item item) {
+        JsonObject imageStore = new JsonObject();
+        imageStore.addProperty("folder", item.getImageStore().getFolder());
         JsonArray images = new JsonArray();
         item.getImages().forEach(image -> {
             JsonObject imageJson = new JsonObject();
@@ -61,7 +61,10 @@ public class ContainerJsonObjectMapper implements JsonMapper<Container, JsonObje
             imageJson.add("resizedImages", resizedImages);
             images.add(imageJson);
         });
-        return images;
+        if(images.size() > 0) {
+            imageStore.add("images", images);
+        }
+        return imageStore;
     }
 
     @Override

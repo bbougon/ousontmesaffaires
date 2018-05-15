@@ -1,5 +1,6 @@
 package fr.bbougon.ousontmesaffaires.domain.container;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 public class Feature {
@@ -41,10 +42,10 @@ public class Feature {
 
     @Override
     public String toString() {
-        return "Feature{" +
-                "type='" + type + '\'' +
-                ", feature='" + feature + '\'' +
-                '}';
+        return MoreObjects.toStringHelper(this)
+                .add("type", type)
+                .add("feature", feature)
+                .toString();
     }
 
     private String type;

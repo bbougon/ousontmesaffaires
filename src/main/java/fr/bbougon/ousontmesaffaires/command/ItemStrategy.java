@@ -2,8 +2,8 @@ package fr.bbougon.ousontmesaffaires.command;
 
 import com.google.gson.internal.LinkedTreeMap;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
-import fr.bbougon.ousontmesaffaires.domain.container.Image;
-import fr.bbougon.ousontmesaffaires.domain.container.ResizedImage;
+import fr.bbougon.ousontmesaffaires.domain.container.image.Image;
+import fr.bbougon.ousontmesaffaires.domain.container.image.ResizedImage;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.SecurityService;
 
 import java.util.List;
@@ -17,9 +17,9 @@ public class ItemStrategy implements Strategy {
         LinkedTreeMap map = (LinkedTreeMap) patch.getData();
         String signature = (String) map.get("signature");
         String url = (String) map.get("url");
-        String secure_url = (String) map.get("secure_url");
+        String secureUrl = (String) map.get("secure_url");
         List<LinkedTreeMap> resizedImages = (List<LinkedTreeMap>) map.get("resizedImages");
-        Image image = Image.create(signature, url, secure_url, resizedImages
+        Image image = Image.create(signature, url, secureUrl, resizedImages
                 .stream()
                 .map(resizedImage -> {
                     final Double width = (Double) resizedImage.get("width");

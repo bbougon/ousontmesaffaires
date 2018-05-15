@@ -57,7 +57,11 @@ public class ContainerResourceIntegrationTest {
 
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
         String containerId = container.getLocation().getPath().substring(container.getLocation().getPath().lastIndexOf("/") + 1);
-        assertThat(response.readEntity(String.class)).isEqualTo("{\"id\":\"" + containerId + "\",\"name\":\"placard\",\"items\":[{\"item\":{\"taille\":\"3ans\",\"type\":\"pantalon\",\"couleur\":\"noir\"},\"hash\":\"b17d4fa7421ae3a636c5aa823ae06f25fabfd6c6\"}],\"qrcode\":\"http://localhost:17000/containers/" + containerId + "\"}");
+        String payload = response.readEntity(String.class);
+        assertThat(payload).isEqualTo("{\"id\":\"" + containerId + "\",\"name\":\"placard\",\"items\":[{\"item\":{\"taille\":\"3ans\",\"type\":\"pantalon\",\"couleur\":\"noir\"}," +
+                "\"imageStore\":{\"folder\":\"" + retrieveFolder(payload) + "\"}," +
+                "\"hash\":\"" + retrieveHash(payload) + "\"}]," +
+                "\"qrcode\":\"http://localhost:17000/containers/" + containerId + "\"}");
     }
 
     @Test
@@ -72,8 +76,11 @@ public class ContainerResourceIntegrationTest {
 
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
         String containerId = container.getLocation().getPath().substring(container.getLocation().getPath().lastIndexOf("/") + 1);
-        assertThat(response.readEntity(String.class)).contains("{\"id\":\"" + containerId + "\",\"name\":\"placard\",\"items\":[" +
-                "{\"item\":{\"taille\":\"3ans\",\"type\":\"pantalon\",\"couleur\":\"noir\"},\"hash\":\"b17d4fa7421ae3a636c5aa823ae06f25fabfd6c6\"}]," +
+        String payload = response.readEntity(String.class);
+        assertThat(payload).contains("{\"id\":\"" + containerId + "\",\"name\":\"placard\",\"items\":[" +
+                "{\"item\":{\"taille\":\"3ans\",\"type\":\"pantalon\",\"couleur\":\"noir\"}," +
+                "\"imageStore\":{\"folder\":\"" + retrieveFolder(payload) + "\"}," +
+                "\"hash\":\"" + retrieveHash(payload) + "\"}]," +
                 "\"qrcode\":\"http://localhost:17000/containers/" + containerId + "\"}");
     }
 
@@ -101,7 +108,23 @@ public class ContainerResourceIntegrationTest {
 
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
         String containerId = container.getLocation().getPath().substring(container.getLocation().getPath().lastIndexOf("/") + 1);
-        assertThat(response.readEntity(String.class)).isEqualTo(new FileUtilsForTest("json/expectedJsonResultWithDescription.json").getContent().replace("ID_TO_REPLACE", containerId));
+        String payload = response.readEntity(String.class);
+        assertThat(payload).isEqualTo(new FileUtilsForTest("json/expectedJsonResultWithDescription.json").getContent()
+                .replace("ID_TO_REPLACE", containerId)
+                .replace("FOLDER_NAME", retrieveFolder(payload))
+                .replace("HASH", retrieveHash(payload)));
+    }
+
+    private String retrieveFolder(final String payload) {
+        return retrieveStringToReplace(payload, "folder", 9, 57);
+    }
+
+    private String retrieveHash(final String payload) {
+        return retrieveStringToReplace(payload, "hash", 7, 47);
+    }
+
+    private String retrieveStringToReplace(final String payload, final String stringToFind, final int step, final int secondStep) {
+        return payload.substring(payload.lastIndexOf(stringToFind) + step, payload.lastIndexOf(stringToFind) + secondStep);
     }
 
     private Response createContainer(final String resourceFilePath) {

@@ -1,13 +1,16 @@
 package fr.bbougon.ousontmesaffaires.domain.container;
 
 import com.google.common.base.MoreObjects;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import fr.bbougon.ousontmesaffaires.domain.container.image.Image;
+import fr.bbougon.ousontmesaffaires.domain.container.image.ImageStore;
+import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 public class Item {
 
@@ -20,7 +23,9 @@ public class Item {
     }
 
     public static Item create(final List<Feature> features) {
-        return new Item(features);
+        Item item = new Item(features);
+        item.initiateImageStore(new Codec().toBase64(UUID.randomUUID().toString().getBytes()));
+        return item;
     }
 
     public Set<Feature> getFeatures() {
@@ -28,7 +33,19 @@ public class Item {
     }
 
     public List<Image> getImages() {
-        return images;
+        return imageStore.getImages();
+    }
+
+    public void add(final Image image) {
+        imageStore.add(image);
+    }
+
+    public ImageStore getImageStore() {
+        return imageStore;
+    }
+
+    private void initiateImageStore(final String folderName) {
+        this.imageStore = new ImageStore(folderName);
     }
 
     @Override
@@ -41,6 +58,7 @@ public class Item {
 
         return new EqualsBuilder()
                 .append(features, item.features)
+                .append(imageStore, item.imageStore)
                 .isEquals();
     }
 
@@ -48,6 +66,7 @@ public class Item {
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
                 .append(features)
+                .append(imageStore)
                 .toHashCode();
     }
 
@@ -55,15 +74,11 @@ public class Item {
     public String toString() {
         return MoreObjects.toStringHelper(this)
                 .add("features", features)
-                .add("images", images)
+                .add("imageStore", imageStore)
                 .toString();
-    }
-
-    public void add(final Image image) {
-        images.add(image);
     }
 
     private Set<Feature> features = Sets.newHashSet();
 
-    private List<Image> images = Lists.newArrayList();
+    private ImageStore imageStore;
 }

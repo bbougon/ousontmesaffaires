@@ -1,4 +1,7 @@
-package fr.bbougon.ousontmesaffaires.domain.container;
+package fr.bbougon.ousontmesaffaires.domain.container.image;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class ResizedImage {
     public static ResizedImage create(final String url, final String secureUrl, final double height, final double width) {
@@ -24,6 +27,32 @@ public class ResizedImage {
 
     public Double getHeight() {
         return height;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ResizedImage that = (ResizedImage) o;
+
+        return new EqualsBuilder()
+                .append(url, that.url)
+                .append(secureUrl, that.secureUrl)
+                .append(width, that.width)
+                .append(height, that.height)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(url)
+                .append(secureUrl)
+                .append(width)
+                .append(height)
+                .toHashCode();
     }
 
     @Override

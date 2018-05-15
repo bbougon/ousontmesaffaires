@@ -1,6 +1,6 @@
 package fr.bbougon.ousontmesaffaires.repositories.mongo.mapping;
 
-import fr.bbougon.ousontmesaffaires.domain.container.ResizedImage;
+import fr.bbougon.ousontmesaffaires.domain.container.image.ResizedImage;
 import org.mongolink.domain.mapper.ComponentMap;
 
 @SuppressWarnings("UnusedDeclaration")

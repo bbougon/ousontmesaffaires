@@ -56,6 +56,7 @@ public class ContainerPatchCommandHandlerTest {
 
         Container container = (Container) result.getRight();
         assertThat(container.getItems().get(0).getImages()).hasSize(1);
+        assertThat(container.getItems().get(0).getImageStore().getFolder()).matches("[a-zA-Z0-9]{48}");
     }
 
     @Test

@@ -3,14 +3,18 @@ package fr.bbougon.ousontmesaffaires.web.ressources;
 import ch.qos.logback.classic.Level;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.google.gson.GsonBuilder;
 import fr.bbougon.ousontmesaffaires.command.WithCommandBus;
+import fr.bbougon.ousontmesaffaires.command.container.ContainerField;
+import fr.bbougon.ousontmesaffaires.command.mappers.JsonMappers;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
 import fr.bbougon.ousontmesaffaires.domain.container.Feature;
-import fr.bbougon.ousontmesaffaires.domain.container.Image;
+import fr.bbougon.ousontmesaffaires.domain.container.image.Image;
 import fr.bbougon.ousontmesaffaires.domain.container.Item;
-import fr.bbougon.ousontmesaffaires.domain.container.ResizedImage;
+import fr.bbougon.ousontmesaffaires.domain.container.image.ResizedImage;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandBus;
 import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGeneratorForTest;
+import fr.bbougon.ousontmesaffaires.infrastructure.security.SecurityService;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.WithSecurityService;
 import fr.bbougon.ousontmesaffaires.repositories.Repositories;
 import fr.bbougon.ousontmesaffaires.repositories.WithMemoryRepositories;
@@ -108,7 +112,10 @@ public class ContainerResourceTest {
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
         assertThat(response.getEntity()).isEqualTo(new FileUtilsForTest("json/expectedJsonResult.json").getContent()
                 .replace("ID_TO_REPLACE", containerId)
-                .replace("HASH_TO_REPLACE", "a6876e3646d7b310d70f1c5fb5b7da275889bf2a"));
+                .replace("FOLDER_NAME", container.getItems().get(0).getImageStore().getFolder())
+                .replace("HASH_TO_REPLACE", SecurityService.sha1().encrypt(new FileUtilsForTest("test/expectedSingleFormattedItem.txt")
+                        .getContent()
+                        .replace("FOLDER_NAME", container.getItems().get(0).getImageStore().getFolder()).getBytes())));
     }
 
     @Test
@@ -131,9 +138,15 @@ public class ContainerResourceTest {
 
         assertThat(response.getEntity()).isEqualTo(new FileUtilsForTest("json/expectedJsonsResult.json").getContent()
                 .replace("ID_TO_REPLACE_1", new Codec().urlSafeToBase64(container1.getId().toString()))
-                .replace("HASH_TO_REPLACE_1", "4a0d392b614da2f30213c071db3fd118510c003a")
+                .replace("FOLDER_NAME_1", container1.getItems().get(0).getImageStore().getFolder())
+                .replace("HASH_TO_REPLACE_1", SecurityService.sha1().encrypt(new FileUtilsForTest("test/expectedFormattedItem.txt")
+                        .getContent()
+                        .replace("FOLDER_NAME", container1.getItems().get(0).getImageStore().getFolder()).getBytes()))
                 .replace("ID_TO_REPLACE_2", new Codec().urlSafeToBase64(container2.getId().toString()))
-                .replace("HASH_TO_REPLACE_2", "aadf6234d3d6f831b5cab3fdbf7b6674dae920f7"));
+                .replace("FOLDER_NAME_2", container2.getItems().get(0).getImageStore().getFolder())
+                .replace("HASH_TO_REPLACE_2", SecurityService.sha1().encrypt(new FileUtilsForTest("test/expectedSecondFormattedItem.txt")
+                        .getContent()
+                        .replace("FOLDER_NAME", container2.getItems().get(0).getImageStore().getFolder()).getBytes())));
     }
 
     private void addImagesToContainer(final Container container) {
@@ -190,14 +203,16 @@ public class ContainerResourceTest {
     }
 
     @Test
-    public void canPatchAContainerWithDescription() {
+    public void canPatchAContainer() {
         Container container = Container.create("Container 1", Item.create(Lists.newArrayList(Feature.create("type", "chaussure"))));
         Repositories.containerRepository().persist(container);
 
         Response response = containerResource.patchContainer(new Codec().urlSafeToBase64(container.getId().toString()), "{\"target\":\"description\",\"id\":\"\",\"version\":1,\"data\":\"A description\"}");
 
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
-        assertThat(container.getDescription()).isEqualTo("A description");
+        assertThat(response.getEntity()).isEqualTo(new GsonBuilder()
+                .create()
+                .toJson(JsonMappers.fromContainer().map(container, new ContainerField(new Codec().urlSafeToBase64(container.getId().toString())))));
     }
 
     private ContainerResource initialise(final Codec codec) {

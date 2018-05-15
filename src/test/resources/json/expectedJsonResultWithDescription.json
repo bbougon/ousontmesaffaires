@@ -1,1 +1,1 @@
-{"id":"ID_TO_REPLACE","name":"placard","items":[{"item":{"taille":"3ans","type":"pantalon","couleur":"noir"},"hash":"b17d4fa7421ae3a636c5aa823ae06f25fabfd6c6"}],"description":"A description"}
+{"id":"ID_TO_REPLACE","name":"placard","items":[{"item":{"taille":"3ans","type":"pantalon","couleur":"noir"},"imageStore":{"folder":"FOLDER_NAME"},"hash":"HASH"}],"description":"A description"}
