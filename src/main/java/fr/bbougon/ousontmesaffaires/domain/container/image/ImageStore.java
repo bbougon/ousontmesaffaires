@@ -1,9 +1,7 @@
 package fr.bbougon.ousontmesaffaires.domain.container.image;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.List;
 
@@ -41,22 +39,6 @@ public class ImageStore {
                 .append(folder, that.folder)
                 .append(images, that.images)
                 .isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37)
-                .append(folder)
-                .append(images)
-                .toHashCode();
-    }
-
-    @Override
-    public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("folder", folder)
-                .add("images", images)
-                .toString();
     }
 
     private String folder;

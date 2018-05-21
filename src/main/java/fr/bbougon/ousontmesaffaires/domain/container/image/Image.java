@@ -1,9 +1,6 @@
 package fr.bbougon.ousontmesaffaires.domain.container.image;
 
-import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.List;
 
@@ -35,42 +32,6 @@ public class Image {
         image.secureUrl = secureUrl;
         image.resizedImages.addAll(resizedImages);
         return image;
-    }
-
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Image image = (Image) o;
-
-        return new EqualsBuilder()
-                .append(signature, image.signature)
-                .append(url, image.url)
-                .append(secureUrl, image.secureUrl)
-                .append(resizedImages, image.resizedImages)
-                .isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37)
-                .append(signature)
-                .append(url)
-                .append(secureUrl)
-                .append(resizedImages)
-                .toHashCode();
-    }
-
-    @Override
-    public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("signature", signature)
-                .add("url", url)
-                .add("secureUrl", secureUrl)
-                .add("resizedImages", resizedImages)
-                .toString();
     }
 
     private String signature;
