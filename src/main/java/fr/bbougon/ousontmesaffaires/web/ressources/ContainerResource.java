@@ -7,6 +7,7 @@ import fr.bbougon.ousontmesaffaires.command.container.ItemAddToContainerCommand;
 import fr.bbougon.ousontmesaffaires.command.container.ContainerAddCommand;
 import fr.bbougon.ousontmesaffaires.command.container.ContainerGetCommand;
 import fr.bbougon.ousontmesaffaires.command.container.ContainersGetCommand;
+import fr.bbougon.ousontmesaffaires.command.container.ItemDestinationCommand;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandBus;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandResponse;
 import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGenerator;
@@ -75,9 +76,22 @@ public class ContainerResource {
 
     @PATCH
     @Path("/{UUID}")
+    @Consumes(MediaType.APPLICATION_JSON)
     public Response patchContainer(@PathParam("UUID") final String containerId, final String patch) {
         CommandResponse commandResponse = commandBus.send(new ContainerPatchCommand(containerId, new Gson().fromJson(patch, Patch.class)));
         return Response.status(OK).entity(commandResponse.getResponse()).build();
+    }
+
+    @POST
+    @Path("/{UUID}/items/{itemHash}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response destination(@PathParam("UUID") final String containerId, @PathParam("itemHash") final String itemHash) {
+        CommandResponse commandResponse = commandBus.send(new ItemDestinationCommand(containerId, itemHash));
+        if(commandResponse.isEmpty()) {
+            return Response.status(NOT_FOUND).build();
+        }
+        URI uri = new URIBuilder().build(PATH + "/" + codec.urlSafeToBase64(commandResponse.getResponse().toString()));
+        return Response.created(uri).build();
     }
 
     private void checkPayload(final String payload) {

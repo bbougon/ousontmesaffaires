@@ -9,18 +9,20 @@ import fr.bbougon.ousontmesaffaires.command.container.ContainerField;
 import fr.bbougon.ousontmesaffaires.command.mappers.JsonMappers;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
 import fr.bbougon.ousontmesaffaires.domain.container.Feature;
-import fr.bbougon.ousontmesaffaires.domain.container.image.Image;
 import fr.bbougon.ousontmesaffaires.domain.container.Item;
+import fr.bbougon.ousontmesaffaires.domain.container.image.Image;
 import fr.bbougon.ousontmesaffaires.domain.container.image.ResizedImage;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandBus;
 import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGeneratorForTest;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.SecurityService;
+import fr.bbougon.ousontmesaffaires.infrastructure.security.Sha1Encryptor;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.WithSecurityService;
 import fr.bbougon.ousontmesaffaires.repositories.Repositories;
 import fr.bbougon.ousontmesaffaires.repositories.WithMemoryRepositories;
 import fr.bbougon.ousontmesaffaires.test.utils.FileUtilsForTest;
 import fr.bbougon.ousontmesaffaires.test.utils.TestAppender;
 import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
+import fr.bbougon.ousontmesaffaires.web.helpers.ItemStringFormatter;
 import fr.bbougon.ousontmesaffaires.web.ressources.json.ContainerName;
 import fr.bbougon.ousontmesaffaires.web.ressources.json.Features;
 import org.junit.Before;
@@ -213,6 +215,35 @@ public class ContainerResourceTest {
         assertThat(response.getEntity()).isEqualTo(new GsonBuilder()
                 .create()
                 .toJson(JsonMappers.fromContainer().map(container, new ContainerField(new Codec().urlSafeToBase64(container.getId().toString())))));
+    }
+
+    @Test
+    public void canMoveAContainerItemToANewContainer() {
+        Container container = Container.create("Container 1", Item.create(Lists.newArrayList(Feature.create("type", "chaussure"))));
+        Repositories.containerRepository().persist(container);
+        String itemHash = new Sha1Encryptor().encrypt(new ItemStringFormatter(container.getItems().get(0)).format().getBytes());
+
+        Response response = containerResource.destination(new Codec().urlSafeToBase64(container.getId().toString()), itemHash);
+
+        assertThat(response.getStatus()).isEqualTo(CREATED.getStatusCode());
+        assertThat(response.getLocation().getPath()).matches("^/containers/[a-zA-Z0-9]{48}");
+    }
+
+    @Test
+    public void returns404OnUnexistingItem() {
+        Container container = Container.create("Container 1", Item.create(Lists.newArrayList(Feature.create("type", "chaussure"))));
+        Repositories.containerRepository().persist(container);
+
+        Response response = containerResource.destination(new Codec().urlSafeToBase64(container.getId().toString()), "unexisting hash");
+
+        assertThat(response.getStatus()).isEqualTo(NOT_FOUND.getStatusCode());
+    }
+
+    @Test
+    public void returns404OnUnexistingContainer() {
+        Response response = containerResource.destination(new Codec().urlSafeToBase64(UUID.randomUUID().toString()), "unexisting hash");
+
+        assertThat(response.getStatus()).isEqualTo(NOT_FOUND.getStatusCode());
     }
 
     private ContainerResource initialise(final Codec codec) {

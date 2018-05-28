@@ -115,6 +115,26 @@ public class ContainerResourceIntegrationTest {
                 .replace("HASH", retrieveHash(payload)));
     }
 
+    @Test
+    public void canMoveAnItemToANewContainer() {
+        Response container = createContainer("json/pantalon.json");
+        Response getContainer = ClientBuilder.newClient().target(container.getLocation())
+                .request()
+                .accept(MediaType.APPLICATION_JSON_TYPE)
+                .get();
+        String itemHash = retrieveHash(getContainer.readEntity(String.class));
+
+        Response response = ClientBuilder.newClient().target(container.getLocation())
+                .path("items")
+                .path(itemHash)
+                .request()
+                .accept(MediaType.APPLICATION_JSON_TYPE)
+                .post(Entity.json("{}"), Response.class);
+
+        assertThat(response.getStatus()).isEqualTo(CREATED.getStatusCode());
+        assertThat(response.getLocation()).isNotNull();
+    }
+
     private String retrieveFolder(final String payload) {
         return retrieveStringToReplace(payload, "folder", 9, 57);
     }

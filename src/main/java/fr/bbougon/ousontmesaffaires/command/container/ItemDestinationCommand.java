@@ -5,8 +5,8 @@ import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
 
 import java.util.UUID;
 
-public class ItemNewDestinationCommand implements Command<String> {
-    public ItemNewDestinationCommand(final String containerId, final String itemHash) {
+public class ItemDestinationCommand implements Command<String> {
+    public ItemDestinationCommand(final String containerId, final String itemHash) {
         this.itemHash = itemHash;
         Codec codec = new Codec();
         containerUUID = codec.fromString(codec.fromBase64(containerId));
