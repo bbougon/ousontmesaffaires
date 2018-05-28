@@ -20,35 +20,38 @@ public class StandardExceptionMapper implements ExceptionMapper<Throwable> {
 
     @Override
     public Response toResponse(final Throwable throwable) {
-        if(throwable instanceof WebApplicationException){
+        if (throwable instanceof WebApplicationException) {
             return ((WebApplicationException) throwable).getResponse();
         }
         StringBuilder messageBuilder = new StringBuilder();
         String packageName = "fr.bbougon.ousontmesaffaires.web.ressources";
-        Lists.newArrayList(throwable.getStackTrace()).stream().filter(stackTraceElement -> stackTraceElement.getClassName().contains(packageName)).forEach(stackTraceElement -> {
-            try {
-                Class<?> aClass = Class.forName(stackTraceElement.getClassName());
-                Path path = aClass.getAnnotation(Path.class);
-                if (path != null) {
-                    if(messageBuilder.indexOf(RESOURCE_MESSAGE) == -1) {
-                        messageBuilder.append(RESOURCE_MESSAGE);
-                        messageBuilder.append("'").append(path.value()).append("'");
+        Lists.newArrayList(throwable.getStackTrace())
+                .stream()
+                .filter(stackTraceElement -> stackTraceElement.getClassName().contains(packageName))
+                .forEach((StackTraceElement stackTraceElement) -> {
+                    try {
+                        Class<?> aClass = Class.forName(stackTraceElement.getClassName());
+                        Path path = aClass.getAnnotation(Path.class);
+                        if (path != null) {
+                            if (messageBuilder.indexOf(RESOURCE_MESSAGE) == -1) {
+                                messageBuilder.append(RESOURCE_MESSAGE);
+                                messageBuilder.append("'").append(path.value()).append("'");
+                            }
+                            List<Method> methods = Lists.newArrayList(aClass.getMethods());
+                            methods.stream()
+                                    .filter(method -> method.getName().equals(stackTraceElement.getMethodName()))
+                                    .forEach(method -> Lists.newArrayList(method.getAnnotations())
+                                            .forEach(annotation -> {
+                                                HttpMethod httpMethod = annotation.annotationType().getAnnotation(HttpMethod.class);
+                                                if (httpMethod != null) {
+                                                    messageBuilder.append(" (method ").append(httpMethod.value()).append("): ");
+                                                }
+                                            }));
+                        }
+                    } catch (ClassNotFoundException e) {
+                        LoggerFactory.getLogger(StandardExceptionMapper.class).info("Error trying to retrieve informations from resource {}", e.getMessage());
                     }
-                    List<Method> methods = Lists.newArrayList(aClass.getMethods());
-                    methods.stream()
-                            .filter(method -> method.getName().equals(stackTraceElement.getMethodName()))
-                            .forEach(method -> Lists.newArrayList(method.getAnnotations())
-                                    .forEach(annotation -> {
-                                        HttpMethod httpMethod = annotation.annotationType().getAnnotation(HttpMethod.class);
-                                        if (httpMethod != null) {
-                                            messageBuilder.append(" (method ").append(httpMethod.value()).append("): ");
-                                        }
-                                    }));
-                }
-            } catch (ClassNotFoundException e) {
-                LoggerFactory.getLogger(StandardExceptionMapper.class).info("Error trying to retrieve informations from resource {}", e.getMessage());
-            }
-        });
+                });
         return Response
                 .status(INTERNAL_SERVER_ERROR)
                 .type(MediaType.APPLICATION_JSON_TYPE)

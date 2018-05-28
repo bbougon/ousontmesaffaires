@@ -2,7 +2,6 @@ package fr.bbougon.ousontmesaffaires.domain.container;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import com.google.gson.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -43,8 +42,19 @@ public class Container {
         this.description = description;
     }
 
+    public Container moveToNewContainer(final Item item) {
+        Container newContainer = create("Holdall container", item);
+        newContainer.setDescription("Container containing all items that have been extracted from other containers");
+        removeItem(item);
+        return newContainer;
+    }
+
     public static Container create(final String containerName, final Item item) {
         return new Container(containerName, item);
+    }
+
+    private void removeItem(final Item item) {
+        items.remove(item);
     }
 
     private final UUID id;
