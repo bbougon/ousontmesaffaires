@@ -223,7 +223,7 @@ public class ContainerResourceTest {
         Repositories.containerRepository().persist(container);
         String itemHash = new Sha1Encryptor().encrypt(new ItemStringFormatter(container.getItems().get(0)).format().getBytes());
 
-        Response response = containerResource.destination(new Codec().urlSafeToBase64(container.getId().toString()), itemHash);
+        Response response = containerResource.destination(new Codec().urlSafeToBase64(container.getId().toString()), itemHash, "{}");
 
         assertThat(response.getStatus()).isEqualTo(CREATED.getStatusCode());
         assertThat(response.getLocation().getPath()).matches("^/containers/[a-zA-Z0-9]{48}");
@@ -234,14 +234,14 @@ public class ContainerResourceTest {
         Container container = Container.create("Container 1", Item.create(Lists.newArrayList(Feature.create("type", "chaussure"))));
         Repositories.containerRepository().persist(container);
 
-        Response response = containerResource.destination(new Codec().urlSafeToBase64(container.getId().toString()), "unexisting hash");
+        Response response = containerResource.destination(new Codec().urlSafeToBase64(container.getId().toString()), "unexisting hash", "{}");
 
         assertThat(response.getStatus()).isEqualTo(NOT_FOUND.getStatusCode());
     }
 
     @Test
     public void returns404OnUnexistingContainer() {
-        Response response = containerResource.destination(new Codec().urlSafeToBase64(UUID.randomUUID().toString()), "unexisting hash");
+        Response response = containerResource.destination(new Codec().urlSafeToBase64(UUID.randomUUID().toString()), "unexisting hash", "{}");
 
         assertThat(response.getStatus()).isEqualTo(NOT_FOUND.getStatusCode());
     }

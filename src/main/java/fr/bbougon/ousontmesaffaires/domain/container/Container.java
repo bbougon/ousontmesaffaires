@@ -49,6 +49,11 @@ public class Container {
         return newContainer;
     }
 
+    public void moveToExistingContainer(final Container existingContainer, final Item itemToMove) {
+        existingContainer.add(itemToMove);
+        removeItem(itemToMove);
+    }
+
     public static Container create(final String containerName, final Item item) {
         return new Container(containerName, item);
     }

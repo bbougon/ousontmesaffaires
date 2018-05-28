@@ -85,10 +85,14 @@ public class ContainerResource {
     @POST
     @Path("/{UUID}/items/{itemHash}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response destination(@PathParam("UUID") final String containerId, @PathParam("itemHash") final String itemHash) {
-        CommandResponse commandResponse = commandBus.send(new ItemDestinationCommand(containerId, itemHash));
+    public Response destination(@PathParam("UUID") final String containerId, @PathParam("itemHash") final String itemHash, final String payload) {
+        ItemDestinationCommand command = new ItemDestinationCommand(containerId, itemHash, payload);
+        CommandResponse commandResponse = commandBus.send(command);
         if(commandResponse.isEmpty()) {
             return Response.status(NOT_FOUND).build();
+        }
+        if(command.targetExistingDestination()) {
+            return Response.ok(commandResponse.getResponse()).build();
         }
         URI uri = new URIBuilder().build(PATH + "/" + codec.urlSafeToBase64(commandResponse.getResponse().toString()));
         return Response.created(uri).build();
