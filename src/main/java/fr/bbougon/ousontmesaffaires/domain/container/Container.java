@@ -43,8 +43,7 @@ public class Container {
     }
 
     public Container moveToNewContainer(final Item item) {
-        Container newContainer = create("Holdall container", item);
-        newContainer.setDescription("Container containing all items that have been extracted from other containers");
+        Container newContainer = createHoldAllContainer(item);
         removeItem(item);
         return newContainer;
     }
@@ -56,6 +55,12 @@ public class Container {
 
     public static Container create(final String containerName, final Item item) {
         return new Container(containerName, item);
+    }
+
+    private Container createHoldAllContainer(final Item item) {
+        Container newContainer = create("Holdall container", item);
+        newContainer.setDescription("Container containing all items that have been extracted from other containers");
+        return newContainer;
     }
 
     private void removeItem(final Item item) {
