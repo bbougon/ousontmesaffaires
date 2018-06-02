@@ -13,7 +13,7 @@ public class ItemDestinationCommand implements Command<String> {
         Codec codec = new Codec();
         containerUUID = codec.fromString(codec.fromBase64(containerId));
         Destination destination = new Gson().fromJson(payload, Destination.class);
-        if (!Strings.isNullOrEmpty(destination.getDestination())) {
+        if (!Strings.isNullOrEmpty(destination.getDestination()) && !destination.getDestination().equals(NEW_DESTINATION)) {
             destinationContainerUUID = codec.fromString(codec.fromBase64(destination.getDestination()));
         }
     }
@@ -37,4 +37,5 @@ public class ItemDestinationCommand implements Command<String> {
     private UUID containerUUID;
     private UUID destinationContainerUUID;
     private String itemHash;
+    public static final String NEW_DESTINATION = "NEW";
 }

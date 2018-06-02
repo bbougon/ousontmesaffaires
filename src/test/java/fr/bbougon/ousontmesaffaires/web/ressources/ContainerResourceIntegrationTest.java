@@ -129,7 +129,7 @@ public class ContainerResourceIntegrationTest {
                 .path(itemHash)
                 .request()
                 .accept(MediaType.APPLICATION_JSON_TYPE)
-                .post(Entity.json("{}"), Response.class);
+                .post(Entity.json("{\"destination\":\"NEW\"}"), Response.class);
 
         assertThat(response.getStatus()).isEqualTo(CREATED.getStatusCode());
         assertThat(response.getLocation()).isNotNull();
