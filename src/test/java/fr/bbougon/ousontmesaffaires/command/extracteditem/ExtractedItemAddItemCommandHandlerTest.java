@@ -43,7 +43,8 @@ public class ExtractedItemAddItemCommandHandlerTest {
         Item item = container.getItems().get(1);
         String itemHash = new Sha1Encryptor().encrypt(new ItemStringFormatter(item).format().getBytes());
 
-        extractedItemAddItemCommandHandler.execute(new ExtractedItemAddItemCommand(new Codec().toBase64(container.getId().toString().getBytes()), itemHash));
+        extractedItemAddItemCommandHandler.execute(new ExtractedItemAddItemCommand(
+                "{\"containerId\":\"" + new Codec().urlSafeToBase64(container.getId().toString()) + "\",\"itemHash\":\"" + itemHash + "\"}"));
 
         List<ExtractedItem> extractedItems = Repositories.extractedItemRepository().getAll();
         assertThat(extractedItems).hasSize(1);
@@ -56,7 +57,7 @@ public class ExtractedItemAddItemCommandHandlerTest {
         ExtractedItemAddItemCommandHandler extractedItemAddItemCommandHandler = new ExtractedItemAddItemCommandHandler();
 
         Pair<UUID, Object> result = extractedItemAddItemCommandHandler.execute(
-                new ExtractedItemAddItemCommand(new Codec().toBase64(container.getId().toString().getBytes()), "unexistingHash"));
+                new ExtractedItemAddItemCommand("{\"containerId\":\"" + new Codec().urlSafeToBase64(container.getId().toString()) + "\",\"itemHash\":\"unknown hash\"}"));
 
         assertThat(result.getLeft()).isNull();
         assertThat(result.getRight()).isNull();

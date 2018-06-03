@@ -79,7 +79,9 @@ public class TransactionalMiddlewareTest {
         mongolinkSessionManager.start();
         new ContainerMongoRepository(mongolinkSessionManager).persist(container);
         String itemHash = new Sha1Encryptor().encrypt(new ItemStringFormatter(item).format().getBytes());
-        ExtractedItemAddItemCommand extractedItemAddItemCommand = new ExtractedItemAddItemCommand(new Codec().toBase64(container.getId().toString().getBytes()), itemHash);
+        ExtractedItemAddItemCommand extractedItemAddItemCommand = new ExtractedItemAddItemCommand(
+                "{\"containerId\":\"" + new Codec().urlSafeToBase64(container.getId().toString()) + "\",\"itemHash\":\"" + itemHash + "\"}"
+        );
 
         commandBus.send(extractedItemAddItemCommand);
 

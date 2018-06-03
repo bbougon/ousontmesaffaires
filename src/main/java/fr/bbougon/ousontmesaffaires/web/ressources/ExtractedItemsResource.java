@@ -6,15 +6,20 @@ import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandResponse;
 import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
 import fr.bbougon.ousontmesaffaires.web.helpers.URIBuilder;
 
+import javax.inject.Inject;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 import java.net.URI;
 
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 
+@Path(ExtractedItemsResource.PATH)
 public class ExtractedItemsResource {
 
-    public Response addItem(final String containerId, final String itemHash) {
-        CommandResponse commandResponse = commandBus.send(new ExtractedItemAddItemCommand(containerId, itemHash));
+    @POST
+    public Response addItem(final String payload) {
+        CommandResponse commandResponse = commandBus.send(new ExtractedItemAddItemCommand(payload));
         if(commandResponse.isEmpty()) {
             return Response.status(NOT_FOUND).build();
         }
@@ -22,6 +27,7 @@ public class ExtractedItemsResource {
         return Response.created(uri).build();
     }
 
+    @Inject
     CommandBus commandBus;
-    private static final String PATH = "/extracted-items";
+    static final String PATH = "/extracted-items";
 }

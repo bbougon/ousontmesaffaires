@@ -68,7 +68,8 @@ public class ContainerResourceIntegrationTest {
     public void canGetAllContainers() {
         Response container = createContainer("json/pantalon.json");
 
-        Response response = ClientBuilder.newClient().target("http://localhost:17000")
+        Response response = ClientBuilder.newClient()
+                .target("http://localhost:17000")
                 .path(ContainerResource.PATH)
                 .request()
                 .accept(MediaType.APPLICATION_JSON_TYPE)

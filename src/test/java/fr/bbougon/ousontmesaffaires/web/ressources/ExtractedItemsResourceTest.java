@@ -48,7 +48,7 @@ public class ExtractedItemsResourceTest {
         Repositories.containerRepository().persist(container);
         String itemHash = new Sha1Encryptor().encrypt(new ItemStringFormatter(item).format().getBytes());
 
-        Response response = resource.addItem(new Codec().urlSafeToBase64(container.getId().toString()), itemHash);
+        Response response = resource.addItem("{\"containerId\":\"" + new Codec().urlSafeToBase64(container.getId().toString()) + "\",\"itemHash\":\"" + itemHash + "\"}");
 
         assertThat(response.getStatus()).isEqualTo(CREATED.getStatusCode());
         assertThat(response.getLocation().getPath()).matches("^/extracted-items/[a-zA-Z0-9]{48}");
@@ -66,7 +66,7 @@ public class ExtractedItemsResourceTest {
         Container container = Container.create(ContainerName.getNameFromPayload(payload), item);
         Repositories.containerRepository().persist(container);
 
-        Response response = resource.addItem(new Codec().urlSafeToBase64(container.getId().toString()), "unknown Hash");
+        Response response = resource.addItem("{\"containerId\":\"" + new Codec().urlSafeToBase64(container.getId().toString()) + "\",\"itemHash\":\"unknown hash\"}");
 
         assertThat(response.getStatus()).isEqualTo(NOT_FOUND.getStatusCode());
     }
