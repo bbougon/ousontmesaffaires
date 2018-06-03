@@ -1,26 +1,56 @@
 [
   {
-    "id": "id_1",
+    "id": "extracted_item_id_1",
     "item": {
       "item": {
         "type1": "value1"
       },
       "imageStore": {
-        "folder": "folder_name_1"
+        "folder": "extracted_item_folder_name_1"
       },
-      "hash": "hash_1"
+      "hash": "extracted_item_hash_1"
+    },
+    "sourceContainer": {
+      "id": "container_id_1",
+      "name": "name",
+      "items": [
+        {
+          "item": {
+            "type1": "value1"
+          },
+          "imageStore": {
+            "folder": "container_folder_name_1"
+          },
+          "hash": "container_hash_1"
+        }
+      ]
     }
   },
   {
-    "id": "id_2",
+    "id": "extracted_item_id_2",
     "item": {
       "item": {
         "type2": "value2"
       },
       "imageStore": {
-        "folder": "folder_name_2"
+        "folder": "extracted_item_folder_name_2"
       },
-      "hash": "hash_2"
+      "hash": "extracted_item_hash_2"
+    },
+    "sourceContainer": {
+      "id": "container_id_2",
+      "name": "name",
+      "items": [
+        {
+          "item": {
+            "type1": "value1"
+          },
+          "imageStore": {
+            "folder": "container_folder_name_2"
+          },
+          "hash": "container_hash_2"
+        }
+      ]
     }
   }
 ]

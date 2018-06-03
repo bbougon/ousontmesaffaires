@@ -13,17 +13,16 @@ public class ExtractedItemJsonMapper implements JsonMapper<ExtractedItem> {
     @Override
     public JsonElement map(final List<ExtractedItem> extractedItems) {
         JsonArray extractedItemsArray = new JsonArray();
-        extractedItems.forEach(extractedItem -> {
-            JsonObject extractedItemObject = new JsonObject();
-            extractedItemObject.addProperty("id", new Codec().urlSafeToBase64(extractedItem.getId().toString()));
-            extractedItemObject.add("item", JsonMappers.fromItem().map(extractedItem.getItem()));
-            extractedItemsArray.add(extractedItemObject);
-        });
+        extractedItems.forEach(extractedItem -> extractedItemsArray.add(map(extractedItem)));
         return extractedItemsArray;
     }
 
     @Override
-    public JsonElement map(final ExtractedItem object) {
-        return null;
+    public JsonObject map(final ExtractedItem extractedItem) {
+        JsonObject extractedItemObject = new JsonObject();
+        extractedItemObject.addProperty("id", new Codec().urlSafeToBase64(extractedItem.getId().toString()));
+        extractedItemObject.add("item", JsonMappers.fromItem().map(extractedItem.getItem()));
+        extractedItemObject.add("sourceContainer", JsonMappers.fromContainer().map(extractedItem.getSourceContainer()));
+        return extractedItemObject;
     }
 }
