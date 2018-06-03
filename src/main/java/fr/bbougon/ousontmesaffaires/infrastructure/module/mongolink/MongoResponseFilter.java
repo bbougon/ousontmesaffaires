@@ -2,9 +2,10 @@ package fr.bbougon.ousontmesaffaires.infrastructure.module.mongolink;
 
 import com.google.inject.Inject;
 
-import javax.ws.rs.container.*;
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.container.ContainerResponseContext;
+import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.ext.Provider;
-import java.io.IOException;
 
 @Provider
 public class MongoResponseFilter implements ContainerResponseFilter {
@@ -15,7 +16,7 @@ public class MongoResponseFilter implements ContainerResponseFilter {
     }
 
     @Override
-    public void filter(final ContainerRequestContext requestContext, final ContainerResponseContext responseContext) throws IOException {
+    public void filter(final ContainerRequestContext requestContext, final ContainerResponseContext responseContext) {
         mongolinkSessionManager.stop();
 
     }

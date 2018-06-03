@@ -151,19 +151,6 @@ public class ContainerResourceTest {
                         .replace("FOLDER_NAME", container2.getItems().get(0).getImageStore().getFolder()).getBytes())));
     }
 
-    private void addImagesToContainer(final Container container) {
-        container.getItems().get(0).add(Image.create("signature", "url", "secureUrl",
-                Lists.newArrayList(
-                        ResizedImage.create("url2", "secureUrl2", 100, 200),
-                        ResizedImage.create("url3", "secureUrl3", 200, 400))
-        ));
-        container.getItems().get(0).add(Image.create("signature2", "url4", "secureUrl4",
-                Lists.newArrayList(
-                        ResizedImage.create("url5", "secureUrl5", 100, 200),
-                        ResizedImage.create("url6", "secureUrl6", 200, 400))
-        ));
-    }
-
     @Test
     public void checkPayloadIsNotNullWhenAddingContainer() {
         try {
@@ -218,32 +205,67 @@ public class ContainerResourceTest {
     }
 
     @Test
-    public void canMoveAContainerItemToANewContainer() {
+    public void canMoveAContainerItemToExistingContainer() {
         Container container = Container.create("Container 1", Item.create(Lists.newArrayList(Feature.create("type", "chaussure"))));
+        Container existingContainer = Container.create("Container 2", Item.create(Lists.newArrayList(Feature.create("type2", "chaussure2"))));
         Repositories.containerRepository().persist(container);
+        Repositories.containerRepository().persist(existingContainer);
         String itemHash = new Sha1Encryptor().encrypt(new ItemStringFormatter(container.getItems().get(0)).format().getBytes());
 
-        Response response = containerResource.destination(new Codec().urlSafeToBase64(container.getId().toString()), itemHash, "{}");
+        Response response = containerResource.destination(new Codec().urlSafeToBase64(container.getId().toString()), itemHash,
+                "{\"destination\":\"" + new Codec().toBase64(existingContainer.getId().toString().getBytes()) + "\"}");
 
-        assertThat(response.getStatus()).isEqualTo(CREATED.getStatusCode());
-        assertThat(response.getLocation().getPath()).matches("^/containers/[a-zA-Z0-9]{48}");
+        assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
+        assertThat(response.getEntity()).isEqualTo(new GsonBuilder()
+                .create()
+                .toJson(JsonMappers.fromContainer().map(existingContainer, new ContainerField(new Codec().urlSafeToBase64(existingContainer.getId().toString())))));
     }
 
     @Test
     public void returns404OnUnexistingItem() {
         Container container = Container.create("Container 1", Item.create(Lists.newArrayList(Feature.create("type", "chaussure"))));
+        Container existingContainer = Container.create("Container 2", Item.create(Lists.newArrayList(Feature.create("type2", "chaussure2"))));
         Repositories.containerRepository().persist(container);
+        Repositories.containerRepository().persist(existingContainer);
 
-        Response response = containerResource.destination(new Codec().urlSafeToBase64(container.getId().toString()), "unexisting hash", "{}");
+        Response response = containerResource.destination(new Codec().urlSafeToBase64(container.getId().toString()), "unexisting hash",
+                "{\"destination\":\"" + new Codec().toBase64(existingContainer.getId().toString().getBytes()) + "\"}");
 
         assertThat(response.getStatus()).isEqualTo(NOT_FOUND.getStatusCode());
     }
 
     @Test
     public void returns404OnUnexistingContainer() {
-        Response response = containerResource.destination(new Codec().urlSafeToBase64(UUID.randomUUID().toString()), "unexisting hash", "{}");
+        Container existingContainer = Container.create("Container 2", Item.create(Lists.newArrayList(Feature.create("type2", "chaussure2"))));
+        Repositories.containerRepository().persist(existingContainer);
+
+        Response response = containerResource.destination(new Codec().urlSafeToBase64(UUID.randomUUID().toString()), "unexisting hash",
+                "{\"destination\":\"" + new Codec().toBase64(existingContainer.getId().toString().getBytes()) + "\"}");
 
         assertThat(response.getStatus()).isEqualTo(NOT_FOUND.getStatusCode());
+    }
+
+    @Test
+    public void checkPayloadWhenMovingToAnotherContainer() {
+        try {
+            containerResource.destination(new Codec().urlSafeToBase64(UUID.randomUUID().toString()), "unexisting hash", "{}");
+            failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
+        } catch (Exception e) {
+            assertThat(e.getMessage()).isEqualTo("Payload cannot be empty.");
+        }
+    }
+
+    private void addImagesToContainer(final Container container) {
+        container.getItems().get(0).add(Image.create("signature", "url", "secureUrl",
+                Lists.newArrayList(
+                        ResizedImage.create("url2", "secureUrl2", 100, 200),
+                        ResizedImage.create("url3", "secureUrl3", 200, 400))
+        ));
+        container.getItems().get(0).add(Image.create("signature2", "url4", "secureUrl4",
+                Lists.newArrayList(
+                        ResizedImage.create("url5", "secureUrl5", 100, 200),
+                        ResizedImage.create("url6", "secureUrl6", 200, 400))
+        ));
     }
 
     private ContainerResource initialise(final Codec codec) {

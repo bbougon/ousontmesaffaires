@@ -6,14 +6,14 @@ import fr.bbougon.ousontmesaffaires.domain.container.Container;
 import fr.bbougon.ousontmesaffaires.repositories.Repositories;
 import org.apache.commons.lang3.tuple.Pair;
 
-public class ItemAddToContainerCommandHandler implements CommandHandler<ItemAddToContainerCommand, Nothing> {
+public class ContainerAddItemCommandHandler implements CommandHandler<ContainerAddItemCommand, Nothing> {
 
-    public Pair<Nothing, Object> execute(final ItemAddToContainerCommand itemAddToContainerCommand) {
-        Container container = Repositories.containerRepository().findById(itemAddToContainerCommand.getUuid());
+    public Pair<Nothing, Object> execute(final ContainerAddItemCommand containerAddItemCommand) {
+        Container container = Repositories.containerRepository().findById(containerAddItemCommand.getUuid());
         if(container == null) {
             return Pair.of(Nothing.INSTANCE, null);
         }
-        container.add(itemAddToContainerCommand.getItem());
+        container.add(containerAddItemCommand.getItem());
         return Pair.of(Nothing.INSTANCE, container);
     }
 

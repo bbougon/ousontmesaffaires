@@ -7,9 +7,9 @@ import fr.bbougon.ousontmesaffaires.web.ressources.json.Features;
 
 import java.util.UUID;
 
-public class ItemAddToContainerCommand implements Command<Nothing> {
+public class ContainerAddItemCommand implements Command<Nothing> {
 
-    public ItemAddToContainerCommand(final UUID uuid, final String payload) {
+    public ContainerAddItemCommand(final UUID uuid, final String payload) {
         this.uuid = uuid;
         this.item = Item.create(Features.getFeaturesFromPayload(payload));
     }

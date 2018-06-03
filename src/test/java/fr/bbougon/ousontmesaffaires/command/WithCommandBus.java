@@ -5,8 +5,9 @@ import fr.bbougon.ousontmesaffaires.command.container.ContainerAddCommandHandler
 import fr.bbougon.ousontmesaffaires.command.container.ContainerGetCommandHandler;
 import fr.bbougon.ousontmesaffaires.command.container.ContainerPatchCommandHandler;
 import fr.bbougon.ousontmesaffaires.command.container.ContainersGetCommandHandler;
-import fr.bbougon.ousontmesaffaires.command.container.ItemAddToContainerCommandHandler;
+import fr.bbougon.ousontmesaffaires.command.container.ContainerAddItemCommandHandler;
 import fr.bbougon.ousontmesaffaires.command.container.ItemDestinationCommandHandler;
+import fr.bbougon.ousontmesaffaires.command.extracteditem.ExtractedItemAddItemCommandHandler;
 import fr.bbougon.ousontmesaffaires.command.sign.SignCommandHandler;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandBus;
 import fr.bbougon.ousontmesaffaires.infrastructure.module.transactional.TransactionalMiddleware;
@@ -19,12 +20,13 @@ public class WithCommandBus extends ExternalResource {
     public void apply(final Function<CommandBus, CommandBus> function) {
         CommandBus commandBus = new TransactionalMiddleware(new CommandHandlersForTest(Sets.newHashSet(
                 new ContainerAddCommandHandler(),
-                new ItemAddToContainerCommandHandler(),
+                new ContainerAddItemCommandHandler(),
                 new ContainerGetCommandHandler(),
                 new ContainersGetCommandHandler(),
                 new ContainerPatchCommandHandler(),
                 new SignCommandHandler(),
-                new ItemDestinationCommandHandler()
+                new ItemDestinationCommandHandler(),
+                new ExtractedItemAddItemCommandHandler()
         )));
         function.apply(commandBus);
     }

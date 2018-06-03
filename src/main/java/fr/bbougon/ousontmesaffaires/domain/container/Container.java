@@ -2,24 +2,21 @@ package fr.bbougon.ousontmesaffaires.domain.container;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import fr.bbougon.ousontmesaffaires.domain.AggregateRoot;
 
 import java.util.List;
 import java.util.UUID;
 
-public class Container {
+public class Container extends AggregateRoot {
 
     Container() {
-        id = UUID.randomUUID();
+        super(UUID.randomUUID());
     }
 
     public Container(final String name, final Item item) {
         this();
         this.name = name;
         this.items.add(item);
-    }
-
-    public UUID getId() {
-        return id;
     }
 
     public ImmutableList<Item> getItems() {
@@ -42,12 +39,6 @@ public class Container {
         this.description = description;
     }
 
-    public Container moveToNewContainer(final Item item) {
-        Container newContainer = createHoldAllContainer(item);
-        removeItem(item);
-        return newContainer;
-    }
-
     public void moveToExistingContainer(final Container existingContainer, final Item itemToMove) {
         existingContainer.add(itemToMove);
         removeItem(itemToMove);
@@ -57,17 +48,10 @@ public class Container {
         return new Container(containerName, item);
     }
 
-    private Container createHoldAllContainer(final Item item) {
-        Container newContainer = create("Holdall container", item);
-        newContainer.setDescription("Container containing all items that have been extracted from other containers");
-        return newContainer;
-    }
-
-    private void removeItem(final Item item) {
+    public void removeItem(final Item item) {
         items.remove(item);
     }
 
-    private final UUID id;
     private String name;
     private List<Item> items = Lists.newArrayList();
     private String description;
