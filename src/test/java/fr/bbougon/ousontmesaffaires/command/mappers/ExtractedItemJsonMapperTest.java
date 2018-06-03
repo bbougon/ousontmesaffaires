@@ -3,7 +3,6 @@ package fr.bbougon.ousontmesaffaires.command.mappers;
 import com.google.common.collect.Lists;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
-import fr.bbougon.ousontmesaffaires.command.extracteditem.ExtractedItemField;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
 import fr.bbougon.ousontmesaffaires.domain.container.Feature;
 import fr.bbougon.ousontmesaffaires.domain.container.Item;
@@ -29,8 +28,8 @@ public class ExtractedItemJsonMapperTest {
         ExtractedItem firstExtractedItem = createExtractedItem("type1", "value1");
         ExtractedItem secondExtractedItem = createExtractedItem("type2", "value2");
 
-        JsonElement extractedItemJson = mapper.map(Lists.newArrayList(firstExtractedItem, secondExtractedItem),
-                (ExtractedItem extractedItem) -> new ExtractedItemField("an-id"));
+        JsonElement extractedItemJson = mapper.map(Lists.newArrayList(firstExtractedItem, secondExtractedItem)
+        );
 
         String expectedResult = new FileUtilsForTest("json/extractedItem.json").getContent()
                 .replace("id_1", new Codec().urlSafeToBase64(firstExtractedItem.getId().toString()))

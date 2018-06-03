@@ -60,8 +60,7 @@ public class ContainerResourceIntegrationTest {
         String payload = response.readEntity(String.class);
         assertThat(payload).isEqualTo("{\"id\":\"" + containerId + "\",\"name\":\"placard\",\"items\":[{\"item\":{\"taille\":\"3ans\",\"type\":\"pantalon\",\"couleur\":\"noir\"}," +
                 "\"imageStore\":{\"folder\":\"" + retrieveFolder(payload) + "\"}," +
-                "\"hash\":\"" + retrieveHash(payload) + "\"}]," +
-                "\"qrcode\":\"http://localhost:17000/containers/" + containerId + "\"}");
+                "\"hash\":\"" + retrieveHash(payload) + "\"}]}");
     }
 
     @Test
@@ -81,8 +80,7 @@ public class ContainerResourceIntegrationTest {
         assertThat(payload).contains("{\"id\":\"" + containerId + "\",\"name\":\"placard\",\"items\":[" +
                 "{\"item\":{\"taille\":\"3ans\",\"type\":\"pantalon\",\"couleur\":\"noir\"}," +
                 "\"imageStore\":{\"folder\":\"" + retrieveFolder(payload) + "\"}," +
-                "\"hash\":\"" + retrieveHash(payload) + "\"}]," +
-                "\"qrcode\":\"http://localhost:17000/containers/" + containerId + "\"}");
+                "\"hash\":\"" + retrieveHash(payload) + "\"}]}");
     }
 
     @Test

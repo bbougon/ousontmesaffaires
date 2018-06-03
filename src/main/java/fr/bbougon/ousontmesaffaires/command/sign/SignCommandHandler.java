@@ -6,6 +6,7 @@ import com.google.gson.JsonParser;
 import fr.bbougon.ousontmesaffaires.command.CommandHandler;
 import fr.bbougon.ousontmesaffaires.command.mappers.JsonMappers;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.SecurityService;
+import fr.bbougon.ousontmesaffaires.infrastructure.security.Signature;
 import fr.bbougon.ousontmesaffaires.repositories.FileRepositories;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -24,9 +25,10 @@ public class SignCommandHandler implements CommandHandler<SignCommand, String> {
                 .collect(Collectors.joining("&"))
                 .concat(secret);
         String signature = SecurityService.sha1().encrypt(dataToEncrypt.getBytes());
+        String apiKey = FileRepositories.securityConfiguration().get().securitySetting().apyKey();
         String result = new GsonBuilder().create()
                 .toJson(JsonMappers.fromSignature()
-                        .map(signature, FileRepositories.securityConfiguration().get().securitySetting().apyKey()));
+                        .map(new Signature(signature, apiKey)));
         return Pair.of(result, signCommand);
     }
 

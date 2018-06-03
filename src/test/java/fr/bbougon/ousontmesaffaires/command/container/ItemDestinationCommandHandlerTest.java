@@ -51,12 +51,9 @@ public class ItemDestinationCommandHandlerTest {
         assertThat(Repositories.containerRepository().getAll()).hasSize(2);
         assertThat(Repositories.containerRepository().findById(container.getId()).getItems()).isEmpty();
         assertThat(existingContainer.getItems()).hasSize(2);
-        assertThat(result.getLeft()).isEqualTo(new GsonBuilder()
-                .create()
-                .toJson(
-                        JsonMappers
-                                .fromContainer()
-                                .map(existingContainer, new ContainerField(new Codec().urlSafeToBase64(existingContainer.getId().toString())))));
+        assertThat(result.getLeft()).isEqualTo(new GsonBuilder().create()
+                .toJson(JsonMappers.fromContainer()
+                        .map(existingContainer)));
         assertThat(result.getRight()).isEqualTo(existingContainer);
     }
 

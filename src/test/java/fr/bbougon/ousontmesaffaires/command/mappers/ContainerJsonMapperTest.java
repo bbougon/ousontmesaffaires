@@ -2,7 +2,6 @@ package fr.bbougon.ousontmesaffaires.command.mappers;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import fr.bbougon.ousontmesaffaires.command.container.ContainerField;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.SecurityService;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.WithSecurityService;
@@ -21,7 +20,7 @@ public class ContainerJsonMapperTest {
     public void canMapWithHash() {
         Container container = new Gson().fromJson(new FileUtilsForTest("json/container.json").getContent(), Container.class);
 
-        JsonElement containerJson = new ContainerJsonMapper().map(container, new ContainerField("an-id"));
+        JsonElement containerJson = new ContainerJsonMapper().map(container);
 
         String hash = containerJson.getAsJsonObject()
                 .getAsJsonArray("items").get(0)

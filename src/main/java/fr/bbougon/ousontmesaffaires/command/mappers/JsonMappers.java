@@ -13,4 +13,8 @@ public class JsonMappers {
     public static ExtractedItemJsonMapper fromExtractedItem() {
         return new ExtractedItemJsonMapper();
     }
+
+    public static ItemJsonMapper fromItem() {
+        return new ItemJsonMapper();
+    }
 }

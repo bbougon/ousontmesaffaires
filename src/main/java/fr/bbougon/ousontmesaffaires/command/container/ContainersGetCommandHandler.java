@@ -19,7 +19,7 @@ public class ContainersGetCommandHandler implements CommandHandler<ContainersGet
                         .create()
                         .toJson(JsonMappers
                                 .fromContainer()
-                                .map(containers, (Container container) -> new ContainerField(containersGetCommand.fromUUID(container.getId()), containersGetCommand.getQrCode(container.getId())))),
+                                .map(containers)),
                 Nothing.INSTANCE);
     }
 

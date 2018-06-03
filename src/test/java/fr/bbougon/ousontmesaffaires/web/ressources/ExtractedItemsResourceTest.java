@@ -3,7 +3,6 @@ package fr.bbougon.ousontmesaffaires.web.ressources;
 import com.google.common.collect.Lists;
 import com.google.gson.GsonBuilder;
 import fr.bbougon.ousontmesaffaires.command.WithCommandBus;
-import fr.bbougon.ousontmesaffaires.command.extracteditem.ExtractedItemField;
 import fr.bbougon.ousontmesaffaires.command.mappers.JsonMappers;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
 import fr.bbougon.ousontmesaffaires.domain.container.Feature;
@@ -87,8 +86,8 @@ public class ExtractedItemsResourceTest {
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
         assertThat(response.getEntity()).isEqualTo(new GsonBuilder()
                 .create()
-                .toJson(JsonMappers.fromExtractedItem().map(Lists.newArrayList(extractedItem),
-                        (ExtractedItem extracted) -> new ExtractedItemField(new Codec().urlSafeToBase64(extracted.getId().toString())))));
+                .toJson(JsonMappers.fromExtractedItem().map(Lists.newArrayList(extractedItem)
+                )));
     }
 
     private ExtractedItemsResource resource;

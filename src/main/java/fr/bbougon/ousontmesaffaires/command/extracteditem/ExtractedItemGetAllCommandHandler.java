@@ -18,7 +18,7 @@ public class ExtractedItemGetAllCommandHandler implements CommandHandler<Extract
                 new GsonBuilder().create().toJson(
                         JsonMappers
                                 .fromExtractedItem()
-                                .map(extractedItems, (ExtractedItem extractedItem) -> new ExtractedItemField(extractedItemGetAllCommand.fromUuid(extractedItem.getId())))),
+                                .map(extractedItems)),
                 extractedItems);
     }
 }

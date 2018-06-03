@@ -10,7 +10,6 @@ public class ContainerPatchCommand implements Command<String> {
 
     public ContainerPatchCommand(final String containerId, final Patch patch) {
         this.patch = patch;
-        this.containerId = containerId;
         Codec codec = new Codec();
         uuid = codec.fromString(codec.fromBase64(containerId));
     }
@@ -23,11 +22,6 @@ public class ContainerPatchCommand implements Command<String> {
         return uuid;
     }
 
-    public String getContainerId() {
-        return containerId;
-    }
-
     private final Patch patch;
     private final UUID uuid;
-    private String containerId;
 }

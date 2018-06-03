@@ -5,7 +5,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.gson.GsonBuilder;
 import fr.bbougon.ousontmesaffaires.command.WithCommandBus;
-import fr.bbougon.ousontmesaffaires.command.container.ContainerField;
 import fr.bbougon.ousontmesaffaires.command.mappers.JsonMappers;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
 import fr.bbougon.ousontmesaffaires.domain.container.Feature;
@@ -201,7 +200,7 @@ public class ContainerResourceTest {
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
         assertThat(response.getEntity()).isEqualTo(new GsonBuilder()
                 .create()
-                .toJson(JsonMappers.fromContainer().map(container, new ContainerField(new Codec().urlSafeToBase64(container.getId().toString())))));
+                .toJson(JsonMappers.fromContainer().map(container)));
     }
 
     @Test
@@ -216,9 +215,8 @@ public class ContainerResourceTest {
                 "{\"destination\":\"" + new Codec().toBase64(existingContainer.getId().toString().getBytes()) + "\"}");
 
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
-        assertThat(response.getEntity()).isEqualTo(new GsonBuilder()
-                .create()
-                .toJson(JsonMappers.fromContainer().map(existingContainer, new ContainerField(new Codec().urlSafeToBase64(existingContainer.getId().toString())))));
+        assertThat(response.getEntity()).isEqualTo(new GsonBuilder().create()
+                .toJson(JsonMappers.fromContainer().map(existingContainer)));
     }
 
     @Test

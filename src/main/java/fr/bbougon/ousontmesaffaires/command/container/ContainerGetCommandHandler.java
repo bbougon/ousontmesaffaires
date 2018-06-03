@@ -12,12 +12,10 @@ public class ContainerGetCommandHandler implements CommandHandler<ContainerGetCo
     @Override
     public Pair<String, Object> execute(final ContainerGetCommand containerGetCommand) {
         Container containerToMap = Repositories.containerRepository().findById(containerGetCommand.getUUID());
-        String result = new GsonBuilder()
-                .create()
-                .toJson(
-                        JsonMappers
-                                .fromContainer()
-                                .map(containerToMap, new ContainerField(containerGetCommand.getId(), containerGetCommand.getQrCode())));
+        String result = new GsonBuilder().create().toJson(
+                JsonMappers
+                        .fromContainer()
+                        .map(containerToMap));
         return Pair.of(result, containerToMap);
     }
 
