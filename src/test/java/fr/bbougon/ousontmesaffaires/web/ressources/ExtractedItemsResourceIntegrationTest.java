@@ -14,6 +14,7 @@ import javax.ws.rs.core.Response;
 import java.net.URI;
 
 import static javax.ws.rs.core.Response.Status.CREATED;
+import static javax.ws.rs.core.Response.Status.OK;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ExtractedItemsResourceIntegrationTest {
@@ -32,22 +33,52 @@ public class ExtractedItemsResourceIntegrationTest {
 
     @Test
     public void canAddExtractedItem() {
-        String query = containerLocation.getPath().substring(containerLocation.getPath().lastIndexOf("/") + 1);
-        Response containerResponse = ClientBuilder.newClient()
-                .target(containerLocation)
-                .request()
-                .get(Response.class);
-        String itemHash = retrieveHash(containerResponse.readEntity(String.class));
+        String containerId = containerLocation.getPath().substring(containerLocation.getPath().lastIndexOf("/") + 1);
+        String itemHash = retrieveHash(getContainerResponse(containerLocation).readEntity(String.class));
 
         Response response = ClientBuilder.newClient()
                 .target("http://localhost:17000")
                 .path("extracted-items")
                 .request()
                 .accept(MediaType.APPLICATION_JSON_TYPE)
-                .post(Entity.json("{\"containerId\":\"" + query + "\",\"itemHash\":\"" + itemHash + "\"}"), Response.class);
+                .post(Entity.json("{\"containerId\":\"" + containerId + "\",\"itemHash\":\"" + itemHash + "\"}"), Response.class);
 
         assertThat(response.getStatus()).isEqualTo(CREATED.getStatusCode());
         assertThat(response.getLocation()).isNotNull();
+    }
+
+    @Test
+    public void canGetAllExtractedItems() {
+        Response firstContainer = createContainer();
+        createExtractedItem(firstContainer.getLocation().getPath().substring(firstContainer.getLocation().getPath().lastIndexOf("/") + 1),
+                retrieveHash(getContainerResponse(firstContainer.getLocation()).readEntity(String.class)));
+        Response secondContainer = createContainer();
+        createExtractedItem(secondContainer.getLocation().getPath().substring(secondContainer.getLocation().getPath().lastIndexOf("/") + 1),
+                retrieveHash(getContainerResponse(secondContainer.getLocation()).readEntity(String.class)));
+
+        Response response = ClientBuilder.newClient()
+                .target("http://localhost:17000")
+                .path("extracted-items")
+                .request()
+                .get(Response.class);
+
+        assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
+    }
+
+    private Response getContainerResponse(final URI containerLocation) {
+        return ClientBuilder.newClient()
+                .target(containerLocation)
+                .request()
+                .get(Response.class);
+    }
+
+    private void createExtractedItem(final String containerId, final String itemHash) {
+        ClientBuilder.newClient()
+                .target("http://localhost:17000")
+                .path("extracted-items")
+                .request()
+                .accept(MediaType.APPLICATION_JSON_TYPE)
+                .post(Entity.json("{\"containerId\":\"" + containerId + "\",\"itemHash\":\"" + itemHash + "\"}"), Response.class);
     }
 
     private Response createContainer() {

@@ -8,17 +8,23 @@ import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
 import fr.bbougon.ousontmesaffaires.web.helpers.URIBuilder;
 
 import javax.inject.Inject;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
 
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 
 @Path(ExtractedItemsResource.PATH)
 public class ExtractedItemsResource {
 
     @POST
+    @Consumes(APPLICATION_JSON)
     public Response addItem(final String payload) {
         CommandResponse commandResponse = commandBus.send(new ExtractedItemAddItemCommand(payload));
         if(commandResponse.isEmpty()) {
@@ -28,6 +34,8 @@ public class ExtractedItemsResource {
         return Response.created(uri).build();
     }
 
+    @GET
+    @Produces(APPLICATION_JSON)
     public Response getAll() {
         CommandResponse commandResponse = commandBus.send(new ExtractedItemGetAllCommand());
         return Response.ok(commandResponse.getResponse()).build();
