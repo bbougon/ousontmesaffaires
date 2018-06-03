@@ -1,24 +1,24 @@
 package fr.bbougon.ousontmesaffaires.command.mappers;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import fr.bbougon.ousontmesaffaires.command.container.ContainerField;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
 import fr.bbougon.ousontmesaffaires.domain.container.Item;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.SecurityService;
 import fr.bbougon.ousontmesaffaires.web.helpers.ItemStringFormatter;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.List;
 import java.util.function.Function;
 
-public class ContainerJsonObjectMapper implements JsonMapper<Container, JsonObject, ContainerField> {
+public class ContainerJsonMapper implements JsonMapper<Container, ContainerField> {
 
-    ContainerJsonObjectMapper() {
+    ContainerJsonMapper() {
     }
 
     @Override
-    public JsonObject map(final Container container, ContainerField containerField) {
+    public JsonElement map(final Container container, ContainerField containerField) {
         JsonArray jsonItems = new JsonArray();
         container.getItems().forEach(item -> {
             JsonObject itemJson = new JsonObject();
@@ -40,7 +40,7 @@ public class ContainerJsonObjectMapper implements JsonMapper<Container, JsonObje
         return containerJson;
     }
 
-    private JsonObject buildImages(final Item item) {
+    private JsonElement buildImages(final Item item) {
         JsonObject imageStore = new JsonObject();
         imageStore.addProperty("folder", item.getImageStore().getFolder());
         JsonArray images = new JsonArray();
@@ -68,8 +68,13 @@ public class ContainerJsonObjectMapper implements JsonMapper<Container, JsonObje
     }
 
     @Override
-    public JsonObject map(final List<Container> objects, final Function<Container, ContainerField> containerField) {
-        throw new NotImplementedException();
+    public JsonElement map(final List<Container> containers, final Function<Container, ContainerField> containerField) {
+        JsonArray jsonArray = new JsonArray();
+        containers
+                .stream()
+                .map(container -> map(container, containerField.apply(container)))
+                .forEach(jsonArray::add);
+        return jsonArray;
     }
 
 }

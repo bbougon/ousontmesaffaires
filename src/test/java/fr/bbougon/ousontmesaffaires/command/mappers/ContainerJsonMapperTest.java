@@ -1,7 +1,7 @@
 package fr.bbougon.ousontmesaffaires.command.mappers;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
+import com.google.gson.JsonElement;
 import fr.bbougon.ousontmesaffaires.command.container.ContainerField;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.SecurityService;
@@ -12,7 +12,7 @@ import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ContainerJsonObjectMapperTest {
+public class ContainerJsonMapperTest {
 
     @Rule
     public WithSecurityService withSecurityService = new WithSecurityService();
@@ -21,9 +21,11 @@ public class ContainerJsonObjectMapperTest {
     public void canMapWithHash() {
         Container container = new Gson().fromJson(new FileUtilsForTest("json/container.json").getContent(), Container.class);
 
-        JsonObject containerJson = new ContainerJsonObjectMapper().map(container, new ContainerField("an-id"));
+        JsonElement containerJson = new ContainerJsonMapper().map(container, new ContainerField("an-id"));
 
-        String hash = containerJson.getAsJsonArray("items").get(0).getAsJsonObject().get("hash").getAsString();
+        String hash = containerJson.getAsJsonObject()
+                .getAsJsonArray("items").get(0)
+                .getAsJsonObject().get("hash").getAsString();
         assertThat(hash).isEqualTo(SecurityService.sha1().encrypt(EXPECTED_ENCRYPTION.getBytes()));
     }
 

@@ -1,6 +1,7 @@
 package fr.bbougon.ousontmesaffaires.web.ressources;
 
 import fr.bbougon.ousontmesaffaires.command.extracteditem.ExtractedItemAddItemCommand;
+import fr.bbougon.ousontmesaffaires.command.extracteditem.ExtractedItemGetAllCommand;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandBus;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandResponse;
 import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
@@ -25,6 +26,11 @@ public class ExtractedItemsResource {
         }
         URI uri = new URIBuilder().build(PATH + "/" + new Codec().urlSafeToBase64(commandResponse.getResponse().toString()));
         return Response.created(uri).build();
+    }
+
+    public Response getAll() {
+        CommandResponse commandResponse = commandBus.send(new ExtractedItemGetAllCommand());
+        return Response.ok(commandResponse.getResponse()).build();
     }
 
     @Inject

@@ -2,15 +2,15 @@ package fr.bbougon.ousontmesaffaires.command.mappers;
 
 public class JsonMappers {
 
-    public static ContainerJsonObjectMapper fromContainer() {
-        return new ContainerJsonObjectMapper();
+    public static ContainerJsonMapper fromContainer() {
+        return new ContainerJsonMapper();
     }
 
-    public static ContainerJsonArrayMapper fromContainers() {
-        return new ContainerJsonArrayMapper();
+    public static SignatureJsonMapper fromSignature() {
+        return new SignatureJsonMapper();
     }
 
-    public static SignatureJsonObjectMapper fromSignature() {
-        return new SignatureJsonObjectMapper();
+    public static ExtractedItemJsonMapper fromExtractedItem() {
+        return new ExtractedItemJsonMapper();
     }
 }

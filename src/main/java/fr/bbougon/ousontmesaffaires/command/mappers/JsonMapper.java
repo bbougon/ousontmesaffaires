@@ -1,11 +1,13 @@
 package fr.bbougon.ousontmesaffaires.command.mappers;
 
+import com.google.gson.JsonElement;
+
 import java.util.List;
 import java.util.function.Function;
 
-public interface JsonMapper<T, R, V> {
+public interface JsonMapper<T, V> {
 
-    R map(List<T> objects, Function<T, V> function);
+    JsonElement map(List<T> objects, Function<T, V> function);
 
-    R map(T object, V function);
+    JsonElement map(T object, V function);
 }

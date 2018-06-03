@@ -1,0 +1,26 @@
+[
+  {
+    "id": "id_1",
+    "item": {
+      "item": {
+        "type1": "value1"
+      },
+      "imageStore": {
+        "folder": "folder_name_1"
+      },
+      "hash": "hash_1"
+    }
+  },
+  {
+    "id": "id_2",
+    "item": {
+      "item": {
+        "type2": "value2"
+      },
+      "imageStore": {
+        "folder": "folder_name_2"
+      },
+      "hash": "hash_2"
+    }
+  }
+]

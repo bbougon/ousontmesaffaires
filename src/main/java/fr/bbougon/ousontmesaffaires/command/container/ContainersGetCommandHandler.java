@@ -18,7 +18,7 @@ public class ContainersGetCommandHandler implements CommandHandler<ContainersGet
         return Pair.of(new GsonBuilder()
                         .create()
                         .toJson(JsonMappers
-                                .fromContainers()
+                                .fromContainer()
                                 .map(containers, (Container container) -> new ContainerField(containersGetCommand.fromUUID(container.getId()), containersGetCommand.getQrCode(container.getId())))),
                 Nothing.INSTANCE);
     }
