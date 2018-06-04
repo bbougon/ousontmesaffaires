@@ -65,6 +65,20 @@ public class ExtractedItemsResourceIntegrationTest {
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
     }
 
+    @Test
+    public void canGetExtractedItem() {
+        Response container = createContainer();
+        Response response = createExtractedItem(container.getLocation().getPath().substring(container.getLocation().getPath().lastIndexOf("/") + 1),
+                retrieveHash(getContainerResponse(container.getLocation()).readEntity(String.class)));
+
+        Response extractedItem = ClientBuilder.newClient()
+                .target(response.getLocation())
+                .request()
+                .get(Response.class);
+
+        assertThat(extractedItem.getStatus()).isEqualTo(OK.getStatusCode());
+    }
+
     private Response getContainerResponse(final URI containerLocation) {
         return ClientBuilder.newClient()
                 .target(containerLocation)
@@ -72,8 +86,8 @@ public class ExtractedItemsResourceIntegrationTest {
                 .get(Response.class);
     }
 
-    private void createExtractedItem(final String containerId, final String itemHash) {
-        ClientBuilder.newClient()
+    private Response createExtractedItem(final String containerId, final String itemHash) {
+        return ClientBuilder.newClient()
                 .target("http://localhost:17000")
                 .path("extracted-items")
                 .request()

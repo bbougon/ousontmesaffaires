@@ -13,7 +13,7 @@ public class Container extends AggregateRoot {
         super(UUID.randomUUID());
     }
 
-    public Container(final String name, final Item item) {
+    private Container(final String name, final Item item) {
         this();
         this.name = name;
         this.items.add(item);

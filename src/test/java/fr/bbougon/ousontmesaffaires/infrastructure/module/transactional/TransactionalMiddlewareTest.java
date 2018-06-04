@@ -69,7 +69,7 @@ public class TransactionalMiddlewareTest {
         mongolinkSessionManager.start();
         List<Container> containers = new ContainerMongoRepository(mongolinkSessionManager).getAll();
         assertThat(containers).isNotEmpty();
-        assertThat(containers.get(0).getItems()).contains(containerAddCommand.getContainer().getItems().get(0));
+        assertThat(containers.get(0).getItems()).hasSize(1);
     }
 
     @Test

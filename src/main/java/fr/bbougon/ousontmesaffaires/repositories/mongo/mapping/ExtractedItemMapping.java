@@ -8,7 +8,7 @@ public class ExtractedItemMapping extends AggregateMap<ExtractedItem> {
 
     @Override
     public void map() {
-        id().onProperty(ExtractedItem::getId);
+        id().onProperty(ExtractedItem::getId).natural();
         property().onProperty(ExtractedItem::getItem);
         property().onProperty(ExtractedItem::getSourceContainer);
     }

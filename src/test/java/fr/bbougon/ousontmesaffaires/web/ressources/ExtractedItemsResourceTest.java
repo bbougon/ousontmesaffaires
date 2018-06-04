@@ -23,6 +23,8 @@ import org.junit.Test;
 
 import javax.ws.rs.core.Response;
 
+import java.util.UUID;
+
 import static javax.ws.rs.core.Response.Status.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -76,18 +78,43 @@ public class ExtractedItemsResourceTest {
 
     @Test
     public void canGetAllExtractedItems() {
-        ExtractedItem extractedItem = ExtractedItem.create(
-                Item.create(Lists.newArrayList(Feature.create("type", "value"))),
-                Container.create("name", Item.create(Lists.newArrayList(Feature.create("type1", "value1")))));
-        Repositories.extractedItemRepository().persist(extractedItem);
+        ExtractedItem extractedItem = createAndPersist();
+        ExtractedItem extractedItem2 = createAndPersist();
 
         Response response = resource.getAll();
 
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
         assertThat(response.getEntity()).isEqualTo(new GsonBuilder()
                 .create()
-                .toJson(JsonMappers.fromExtractedItem().map(Lists.newArrayList(extractedItem)
+                .toJson(JsonMappers.fromExtractedItem().map(Lists.newArrayList(extractedItem, extractedItem2)
                 )));
+    }
+
+    @Test
+    public void canGetExtractedItem() {
+        ExtractedItem extractedItem = createAndPersist();
+
+        Response response = resource.get(new Codec().urlSafeToBase64(extractedItem.getId().toString()));
+
+        assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
+        assertThat(response.getEntity()).isEqualTo(new GsonBuilder()
+                .create()
+                .toJson(JsonMappers.fromExtractedItem().map(extractedItem)));
+    }
+
+    @Test
+    public void returns404OnNotFoundExtractedItem() {
+        Response response = resource.get(new Codec().urlSafeToBase64(UUID.randomUUID().toString()));
+
+        assertThat(response.getStatus()).isEqualTo(NOT_FOUND.getStatusCode());
+    }
+
+    private ExtractedItem createAndPersist() {
+        ExtractedItem extractedItem = ExtractedItem.create(
+                Item.create(Lists.newArrayList(Feature.create("type", "value"))),
+                Container.create("name", Item.create(Lists.newArrayList(Feature.create("type1", "value1")))));
+        Repositories.extractedItemRepository().persist(extractedItem);
+        return extractedItem;
     }
 
     private ExtractedItemsResource resource;

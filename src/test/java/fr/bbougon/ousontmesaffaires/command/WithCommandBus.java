@@ -9,6 +9,7 @@ import fr.bbougon.ousontmesaffaires.command.container.ContainerAddItemCommandHan
 import fr.bbougon.ousontmesaffaires.command.container.ItemDestinationCommandHandler;
 import fr.bbougon.ousontmesaffaires.command.extracteditem.ExtractedItemAddItemCommandHandler;
 import fr.bbougon.ousontmesaffaires.command.extracteditem.ExtractedItemGetAllCommandHandler;
+import fr.bbougon.ousontmesaffaires.command.extracteditem.ExtractedItemGetCommandHandler;
 import fr.bbougon.ousontmesaffaires.command.sign.SignCommandHandler;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandBus;
 import fr.bbougon.ousontmesaffaires.infrastructure.module.transactional.TransactionalMiddleware;
@@ -28,7 +29,8 @@ public class WithCommandBus extends ExternalResource {
                 new SignCommandHandler(),
                 new ItemDestinationCommandHandler(),
                 new ExtractedItemAddItemCommandHandler(),
-                new ExtractedItemGetAllCommandHandler()
+                new ExtractedItemGetAllCommandHandler(),
+                new ExtractedItemGetCommandHandler()
         )));
         function.apply(commandBus);
     }
