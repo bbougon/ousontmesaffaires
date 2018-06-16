@@ -78,7 +78,7 @@ public class TransactionalMiddlewareTest {
         Container container = Container.create("Name", item);
         mongolinkSessionManager.start();
         new ContainerMongoRepository(mongolinkSessionManager).persist(container);
-        String itemHash = new Sha1Encryptor().encrypt(new ItemStringFormatter(item).format().getBytes());
+        String itemHash = new Sha1Encryptor().cypher(new ItemStringFormatter(item).format().getBytes());
         ExtractedItemAddItemCommand extractedItemAddItemCommand = new ExtractedItemAddItemCommand(
                 "{\"containerId\":\"" + new Codec().urlSafeToBase64(container.getId().toString()) + "\",\"itemHash\":\"" + itemHash + "\"}"
         );

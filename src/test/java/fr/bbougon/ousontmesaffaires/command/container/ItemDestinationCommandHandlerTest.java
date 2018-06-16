@@ -38,7 +38,7 @@ public class ItemDestinationCommandHandlerTest {
     @Test
     public void canMoveAContainerToAnExistingDestination() {
         ItemDestinationCommandHandler itemDestinationCommandHandler = new ItemDestinationCommandHandler();
-        String itemHash = new Sha1Encryptor().encrypt(new ItemStringFormatter(container.getItems().get(0)).format().getBytes());
+        String itemHash = new Sha1Encryptor().cypher(new ItemStringFormatter(container.getItems().get(0)).format().getBytes());
         Container existingContainer = Container.create("Existing container", Item.create(Lists.newArrayList(Feature.create("existing Item", "existing value"))));
         Repositories.containerRepository().persist(existingContainer);
         String containerId = new Codec().toBase64(this.container.getId().toString().getBytes());

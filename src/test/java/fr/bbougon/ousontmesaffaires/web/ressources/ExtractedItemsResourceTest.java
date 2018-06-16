@@ -51,7 +51,7 @@ public class ExtractedItemsResourceTest {
         Item item = Item.create(Features.getFeaturesFromPayload(payload));
         Container container = Container.create(ContainerName.getNameFromPayload(payload), item);
         Repositories.containerRepository().persist(container);
-        String itemHash = new Sha1Encryptor().encrypt(new ItemStringFormatter(item).format().getBytes());
+        String itemHash = new Sha1Encryptor().cypher(new ItemStringFormatter(item).format().getBytes());
 
         Response response = resource.addItem("{\"containerId\":\"" + new Codec().urlSafeToBase64(container.getId().toString()) + "\",\"itemHash\":\"" + itemHash + "\"}");
 

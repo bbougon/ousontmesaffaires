@@ -25,7 +25,7 @@ public class ContainerJsonMapperTest {
         String hash = containerJson.getAsJsonObject()
                 .getAsJsonArray("items").get(0)
                 .getAsJsonObject().get("hash").getAsString();
-        assertThat(hash).isEqualTo(SecurityService.sha1().encrypt(EXPECTED_ENCRYPTION.getBytes()));
+        assertThat(hash).isEqualTo(SecurityService.sha1().cypher(EXPECTED_ENCRYPTION.getBytes()));
     }
 
     private static final String EXPECTED_ENCRYPTION = "type;chaussure|folder_name|" +

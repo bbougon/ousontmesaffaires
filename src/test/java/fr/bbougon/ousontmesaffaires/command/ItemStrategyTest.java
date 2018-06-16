@@ -39,7 +39,7 @@ public class ItemStrategyTest {
 
     @Test
     public void canAddOneImage() {
-        String itemHash = new Sha1Encryptor().encrypt(new ItemStringFormatter(container.getItems().get(0)).format().getBytes());
+        String itemHash = new Sha1Encryptor().cypher(new ItemStringFormatter(container.getItems().get(0)).format().getBytes());
         String jsonPatch = new FileUtilsForTest("json/itemPatch.json").getContent().replace("HASH_TO_REPLACE", itemHash);
         Patch patch = new Gson().fromJson(jsonPatch, Patch.class);
 
@@ -54,7 +54,7 @@ public class ItemStrategyTest {
 
     @Test
     public void canAddTwoResizedImages() {
-        String itemHash = new Sha1Encryptor().encrypt(new ItemStringFormatter(container.getItems().get(0)).format().getBytes());
+        String itemHash = new Sha1Encryptor().cypher(new ItemStringFormatter(container.getItems().get(0)).format().getBytes());
         String jsonPatch = new FileUtilsForTest("json/itemPatchWithTwoResizedImages.json").getContent().replace("HASH_TO_REPLACE", itemHash);
         Patch patch = new Gson().fromJson(jsonPatch, Patch.class);
 
@@ -69,7 +69,7 @@ public class ItemStrategyTest {
     @Test
     public void addImageToExpectedItem() {
         container.add(Item.create(Lists.newArrayList(Feature.create("type2", "value2"))));
-        String itemHash = new Sha1Encryptor().encrypt(new ItemStringFormatter(container.getItems().get(1)).format().getBytes());
+        String itemHash = new Sha1Encryptor().cypher(new ItemStringFormatter(container.getItems().get(1)).format().getBytes());
         String jsonPatch = new FileUtilsForTest("json/itemPatch.json").getContent().replace("HASH_TO_REPLACE", itemHash);
         Patch patch = new Gson().fromJson(jsonPatch, Patch.class);
 

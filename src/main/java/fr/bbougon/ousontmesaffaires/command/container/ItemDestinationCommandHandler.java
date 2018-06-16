@@ -22,7 +22,7 @@ public class ItemDestinationCommandHandler implements CommandHandler<ItemDestina
         }
         Optional<Item> itemToMove = container.getItems()
                 .stream()
-                .filter(item -> SecurityService.sha1().encrypt(new ItemStringFormatter(item).format().getBytes()).equals(itemDestinationCommand.getItemHash()))
+                .filter(item -> SecurityService.sha1().cypher(new ItemStringFormatter(item).format().getBytes()).equals(itemDestinationCommand.getItemHash()))
                 .findFirst();
         if (itemToMove.isPresent()) {
             Container existingContainer = Repositories.containerRepository().findById(itemDestinationCommand.getDestinationContainerUUID());

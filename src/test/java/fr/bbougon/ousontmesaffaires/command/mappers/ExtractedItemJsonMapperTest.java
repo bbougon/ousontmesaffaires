@@ -37,16 +37,16 @@ public class ExtractedItemJsonMapperTest {
         String expectedResult = new FileUtilsForTest("json/extractedItem.json").getContent()
                 .replace("extracted_item_id_1", codec.urlSafeToBase64(firstExtractedItem.getId().toString()))
                 .replace("extracted_item_folder_name_1", firstExtractedItem.getItem().getImageStore().getFolder())
-                .replace("extracted_item_hash_1", SecurityService.sha1().encrypt(new ItemStringFormatter(firstExtractedItem.getItem()).format().getBytes()))
+                .replace("extracted_item_hash_1", SecurityService.sha1().cypher(new ItemStringFormatter(firstExtractedItem.getItem()).format().getBytes()))
                 .replace("container_id_1", codec.urlSafeToBase64(firstContainer.getId().toString()))
                 .replace("container_folder_name_1", firstContainer.getItems().get(0).getImageStore().getFolder())
-                .replace("container_hash_1", SecurityService.sha1().encrypt(new ItemStringFormatter(firstContainer.getItems().get(0)).format().getBytes()))
+                .replace("container_hash_1", SecurityService.sha1().cypher(new ItemStringFormatter(firstContainer.getItems().get(0)).format().getBytes()))
                 .replace("extracted_item_id_2", codec.urlSafeToBase64(secondExtractedItem.getId().toString()))
                 .replace("extracted_item_folder_name_2", secondExtractedItem.getItem().getImageStore().getFolder())
-                .replace("extracted_item_hash_2", SecurityService.sha1().encrypt(new ItemStringFormatter(secondExtractedItem.getItem()).format().getBytes()))
+                .replace("extracted_item_hash_2", SecurityService.sha1().cypher(new ItemStringFormatter(secondExtractedItem.getItem()).format().getBytes()))
                 .replace("container_id_2", codec.urlSafeToBase64(seconContainer.getId().toString()))
                 .replace("container_folder_name_2", seconContainer.getItems().get(0).getImageStore().getFolder())
-                .replace("container_hash_2", SecurityService.sha1().encrypt(new ItemStringFormatter(seconContainer.getItems().get(0)).format().getBytes()));
+                .replace("container_hash_2", SecurityService.sha1().cypher(new ItemStringFormatter(seconContainer.getItems().get(0)).format().getBytes()));
         assertThat(new GsonBuilder().setPrettyPrinting()
                 .create()
                 .toJson(extractedItemJson)).isEqualTo(expectedResult);

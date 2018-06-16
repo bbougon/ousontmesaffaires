@@ -41,7 +41,7 @@ public class ExtractedItemAddItemCommandHandlerTest {
     public void canExtractItemFromContainer() {
         ExtractedItemAddItemCommandHandler extractedItemAddItemCommandHandler = new ExtractedItemAddItemCommandHandler();
         Item item = container.getItems().get(1);
-        String itemHash = new Sha1Encryptor().encrypt(new ItemStringFormatter(item).format().getBytes());
+        String itemHash = new Sha1Encryptor().cypher(new ItemStringFormatter(item).format().getBytes());
 
         extractedItemAddItemCommandHandler.execute(new ExtractedItemAddItemCommand(
                 "{\"containerId\":\"" + new Codec().urlSafeToBase64(container.getId().toString()) + "\",\"itemHash\":\"" + itemHash + "\"}"));

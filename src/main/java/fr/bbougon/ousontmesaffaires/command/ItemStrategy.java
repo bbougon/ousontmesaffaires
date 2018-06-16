@@ -32,7 +32,7 @@ public class ItemStrategy implements Strategy {
 
         container.getItems()
                 .stream()
-                .filter(item -> SecurityService.sha1().encrypt(new ItemStringFormatter(item).format().getBytes()).equals(patch.getId()))
+                .filter(item -> SecurityService.sha1().cypher(new ItemStringFormatter(item).format().getBytes()).equals(patch.getId()))
                 .findFirst()
                 .ifPresent(foundItem -> foundItem.add(image));
     }

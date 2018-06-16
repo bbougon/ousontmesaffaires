@@ -114,7 +114,7 @@ public class ContainerResourceTest {
         assertThat(response.getEntity()).isEqualTo(new FileUtilsForTest("json/expectedJsonResult.json").getContent()
                 .replace("ID_TO_REPLACE", containerId)
                 .replace("FOLDER_NAME", container.getItems().get(0).getImageStore().getFolder())
-                .replace("HASH_TO_REPLACE", SecurityService.sha1().encrypt(new FileUtilsForTest("test/expectedSingleFormattedItem.txt")
+                .replace("HASH_TO_REPLACE", SecurityService.sha1().cypher(new FileUtilsForTest("test/expectedSingleFormattedItem.txt")
                         .getContent()
                         .replace("FOLDER_NAME", container.getItems().get(0).getImageStore().getFolder()).getBytes())));
     }
@@ -140,12 +140,12 @@ public class ContainerResourceTest {
         assertThat(response.getEntity()).isEqualTo(new FileUtilsForTest("json/expectedJsonsResult.json").getContent()
                 .replace("ID_TO_REPLACE_1", new Codec().urlSafeToBase64(container1.getId().toString()))
                 .replace("FOLDER_NAME_1", container1.getItems().get(0).getImageStore().getFolder())
-                .replace("HASH_TO_REPLACE_1", SecurityService.sha1().encrypt(new FileUtilsForTest("test/expectedFormattedItem.txt")
+                .replace("HASH_TO_REPLACE_1", SecurityService.sha1().cypher(new FileUtilsForTest("test/expectedFormattedItem.txt")
                         .getContent()
                         .replace("FOLDER_NAME", container1.getItems().get(0).getImageStore().getFolder()).getBytes()))
                 .replace("ID_TO_REPLACE_2", new Codec().urlSafeToBase64(container2.getId().toString()))
                 .replace("FOLDER_NAME_2", container2.getItems().get(0).getImageStore().getFolder())
-                .replace("HASH_TO_REPLACE_2", SecurityService.sha1().encrypt(new FileUtilsForTest("test/expectedSecondFormattedItem.txt")
+                .replace("HASH_TO_REPLACE_2", SecurityService.sha1().cypher(new FileUtilsForTest("test/expectedSecondFormattedItem.txt")
                         .getContent()
                         .replace("FOLDER_NAME", container2.getItems().get(0).getImageStore().getFolder()).getBytes())));
     }
@@ -209,7 +209,7 @@ public class ContainerResourceTest {
         Container existingContainer = Container.create("Container 2", Item.create(Lists.newArrayList(Feature.create("type2", "chaussure2"))));
         Repositories.containerRepository().persist(container);
         Repositories.containerRepository().persist(existingContainer);
-        String itemHash = new Sha1Encryptor().encrypt(new ItemStringFormatter(container.getItems().get(0)).format().getBytes());
+        String itemHash = new Sha1Encryptor().cypher(new ItemStringFormatter(container.getItems().get(0)).format().getBytes());
 
         Response response = containerResource.destination(new Codec().urlSafeToBase64(container.getId().toString()), itemHash,
                 "{\"destination\":\"" + new Codec().toBase64(existingContainer.getId().toString().getBytes()) + "\"}");
