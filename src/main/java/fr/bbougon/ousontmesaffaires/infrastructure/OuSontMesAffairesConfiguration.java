@@ -13,9 +13,8 @@ import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGeneratorEngine;
 import fr.bbougon.ousontmesaffaires.repositories.FileRepositories;
 import fr.bbougon.ousontmesaffaires.repositories.Repositories;
 import fr.bbougon.ousontmesaffaires.repositories.mongo.MongoRepositories;
-import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
-
-import java.lang.reflect.Modifier;
+import io.github.classgraph.ClassGraph;
+import io.github.classgraph.ScanResult;
 
 public class OuSontMesAffairesConfiguration extends AbstractModule {
 
@@ -41,11 +40,13 @@ public class OuSontMesAffairesConfiguration extends AbstractModule {
 
     private static void scanPackageAndBind(Class<CommandHandler> type, Multibinder<CommandHandler> multibinder) {
         String packageName = "fr.bbougon.ousontmesaffaires.command";
-        new FastClasspathScanner(packageName, type.getPackage().getName())
-                .matchClassesImplementing(type, foundType -> {
-                    if (!Modifier.isAbstract(foundType.getModifiers()) && foundType.getCanonicalName().startsWith(packageName)) {
-                        multibinder.addBinding().to(foundType);
-                    }
-                }).scan();
+        try (ScanResult scanResult = new ClassGraph()
+                .whitelistPackages(packageName)
+                .scan()) {
+            scanResult.getClassesImplementing(type.getCanonicalName())
+                    .stream()
+                    .map(classInfo -> classInfo.loadClass(type))
+                    .forEach(classInfo -> multibinder.addBinding().to(classInfo));
+        }
     }
 }

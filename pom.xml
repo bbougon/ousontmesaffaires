@@ -97,8 +97,8 @@
             <version>${zxing.version}</version>
         </dependency>
         <dependency>
-            <groupId>io.github.lukehutch</groupId>
-            <artifactId>fast-classpath-scanner</artifactId>
+            <groupId>io.github.classgraph</groupId>
+            <artifactId>classgraph</artifactId>
             <version>LATEST</version>
         </dependency>
 

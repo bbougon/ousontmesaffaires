@@ -1,16 +1,18 @@
 package fr.bbougon.ousontmesaffaires;
 
-import com.google.common.collect.Sets;
-import com.google.inject.*;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Stage;
 import fr.bbougon.ousontmesaffaires.infrastructure.OuSontMesAffairesConfiguration;
-import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
+import io.github.classgraph.ClassGraph;
+import io.github.classgraph.ClassInfo;
+import io.github.classgraph.ScanResult;
 import org.jboss.resteasy.plugins.interceptors.CorsFilter;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.ext.Provider;
-import java.lang.reflect.Modifier;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -43,13 +45,15 @@ public class OuSontMesAffairesApplication extends Application {
     }
 
     private Set<Class<?>> scanPackages(final String resourcesPackageName, final Class<?> annotation) {
-        Set<Class<?>> result = Sets.newHashSet();
-        new FastClasspathScanner(resourcesPackageName).matchClassesWithAnnotation(annotation, processor -> {
-            if(!Modifier.isAbstract(processor.getModifiers()) && processor.getCanonicalName().startsWith(resourcesPackageName)) {
-                result.add(processor);
-            }
-        }).scan();
-        return result;
+        try (ScanResult scanResult = new ClassGraph()
+                .whitelistPackages(resourcesPackageName)
+                .enableAllInfo()
+                .scan()) {
+            return scanResult.getClassesWithAnnotation(annotation.getCanonicalName())
+                    .stream()
+                    .map(ClassInfo::loadClass)
+                    .collect(Collectors.toSet());
+        }
     }
 
     final Injector injector;
