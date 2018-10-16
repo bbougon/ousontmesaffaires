@@ -70,8 +70,8 @@ public class ContainerResource {
     @GET
     @Path("/{UUID}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getContainer(@Context final UriInfo uriInfo, @PathParam("UUID") final String containerId) {
-        CommandResponse commandResponse = commandBus.send(new ContainerGetCommand(containerId, uriInfo, qrGenerator));
+    public Response getContainer(@PathParam("UUID") final String containerId) {
+        CommandResponse commandResponse = commandBus.send(new ContainerGetCommand(containerId));
         return Response.status(OK).entity(commandResponse.getResponse()).build();
     }
 

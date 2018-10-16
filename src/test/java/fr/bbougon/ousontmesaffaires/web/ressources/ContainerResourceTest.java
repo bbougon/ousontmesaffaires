@@ -96,7 +96,7 @@ public class ContainerResourceTest {
         Repositories.containerRepository().persist(container);
         String containerId = new Codec().urlSafeToBase64(container.getId().toString());
 
-        Response response = containerResource.getContainer(new UriInfoBuilderForTest().forContainer(containerId), containerId);
+        Response response = containerResource.getContainer(containerId);
 
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
         assertThat(response.getEntity()).isEqualTo(new FileUtilsForTest("json/expectedJsonResult.json").getContent()
