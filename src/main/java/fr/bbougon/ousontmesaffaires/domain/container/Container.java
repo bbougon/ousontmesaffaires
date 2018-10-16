@@ -13,10 +13,10 @@ public class Container extends AggregateRoot {
         super(UUID.randomUUID());
     }
 
-    private Container(final String name, final Item item) {
+    private Container(final String containerName, final List<Item> items) {
         this();
-        this.name = name;
-        this.items.add(item);
+        this.name = containerName;
+        this.items.addAll(items);
     }
 
     public ImmutableList<Item> getItems() {
@@ -44,8 +44,8 @@ public class Container extends AggregateRoot {
         removeItem(itemToMove);
     }
 
-    public static Container create(final String containerName, final Item item) {
-        return new Container(containerName, item);
+    public static Container create(final String containerName, final List<Item> items) {
+        return new Container(containerName, items);
     }
 
     public void removeItem(final Item item) {

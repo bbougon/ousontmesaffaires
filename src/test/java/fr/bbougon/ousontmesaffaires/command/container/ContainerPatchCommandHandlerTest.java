@@ -5,7 +5,6 @@ import com.google.gson.Gson;
 import fr.bbougon.ousontmesaffaires.command.Patch;
 import fr.bbougon.ousontmesaffaires.command.PatchException;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
-import fr.bbougon.ousontmesaffaires.domain.container.Feature;
 import fr.bbougon.ousontmesaffaires.domain.container.Item;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.Sha1Encryptor;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.WithSecurityService;
@@ -32,8 +31,7 @@ public class ContainerPatchCommandHandlerTest {
 
     @Before
     public void before() {
-        container = Container.create("Container name",
-                Item.create(Lists.newArrayList(Feature.create("type", "value"))));
+        container = Container.create("Container name", Lists.newArrayList(Item.create(" an item")));
         Repositories.containerRepository().persist(container);
     }
 

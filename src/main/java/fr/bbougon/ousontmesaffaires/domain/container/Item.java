@@ -16,12 +16,12 @@ public class Item {
     Item() {
     }
 
-    private Item(final List<Feature> features) {
-        this.features.addAll(features);
+    private Item(final String item) {
+        this.item = item;
     }
 
-    public static Item create(final List<Feature> features) {
-        Item item = new Item(features);
+    public static Item create(final String name) {
+        Item item = new Item(name);
         item.initiateImageStore(new Codec().toBase64(UUID.randomUUID().toString().getBytes()));
         return item;
     }
@@ -46,6 +46,10 @@ public class Item {
         this.imageStore = new ImageStore(folderName);
     }
 
+    public String getItem() {
+        return item;
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
@@ -55,7 +59,7 @@ public class Item {
         Item item = (Item) o;
 
         return new EqualsBuilder()
-                .append(features, item.features)
+                .append(this.item, item.item)
                 .append(imageStore, item.imageStore)
                 .isEquals();
     }
@@ -63,4 +67,5 @@ public class Item {
     private Set<Feature> features = Sets.newHashSet();
 
     private ImageStore imageStore;
+    private String item;
 }

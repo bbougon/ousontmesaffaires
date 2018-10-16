@@ -7,7 +7,6 @@ import fr.bbougon.ousontmesaffaires.command.container.ContainerAddCommand;
 import fr.bbougon.ousontmesaffaires.command.container.ContainersGetCommand;
 import fr.bbougon.ousontmesaffaires.command.extracteditem.ExtractedItemAddItemCommand;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
-import fr.bbougon.ousontmesaffaires.domain.container.Feature;
 import fr.bbougon.ousontmesaffaires.domain.container.Item;
 import fr.bbougon.ousontmesaffaires.domain.extracteditem.ExtractedItem;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandBus;
@@ -74,8 +73,8 @@ public class TransactionalMiddlewareTest {
 
     @Test
     public void canAddExtractedItem() {
-        Item item = Item.create(Lists.newArrayList(Feature.create("type", "value")));
-        Container container = Container.create("Name", item);
+        Item item = Item.create("value");
+        Container container = Container.create("Name", Lists.newArrayList(item));
         mongolinkSessionManager.start();
         new ContainerMongoRepository(mongolinkSessionManager).persist(container);
         String itemHash = new Sha1Encryptor().cypher(new ItemStringFormatter(item).format().getBytes());

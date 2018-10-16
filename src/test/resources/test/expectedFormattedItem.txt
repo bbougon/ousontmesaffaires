@@ -1,1 +1,1 @@
-type;chaussure|FOLDER_NAME|signature;url;secureUrl;url2;secureUrl2;100.0;200.0;url3;secureUrl3;200.0;400.0|signature2;url4;secureUrl4;url5;secureUrl5;100.0;200.0;url6;secureUrl6;200.0;400.0
+chaussure|FOLDER_NAME|signature;url;secureUrl;url2;secureUrl2;100.0;200.0;url3;secureUrl3;200.0;400.0|signature2;url4;secureUrl4;url5;secureUrl5;100.0;200.0;url6;secureUrl6;200.0;400.0

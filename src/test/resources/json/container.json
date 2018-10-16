@@ -3,12 +3,7 @@
   "name": "Bureau",
   "items": [
     {
-      "features": [
-        {
-          "type": "type",
-          "feature": "chaussure"
-        }
-      ],
+      "item": "chaussure",
       "imageStore": {
         "folder": "folder_name",
         "images": [
@@ -67,16 +62,7 @@
       "hash": "new-hash"
     },
     {
-      "features": [
-        {
-          "type": "type",
-          "feature": "pantalon"
-        },
-        {
-          "type": "couleur",
-          "feature": "marron"
-        }
-      ],
+      "item": "pantalon marron",
       "imageStore": {
         "folder": "folder_name_2",
         "images": [

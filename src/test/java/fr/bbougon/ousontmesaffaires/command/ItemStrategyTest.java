@@ -3,9 +3,8 @@ package fr.bbougon.ousontmesaffaires.command;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
-import fr.bbougon.ousontmesaffaires.domain.container.Feature;
-import fr.bbougon.ousontmesaffaires.domain.container.image.Image;
 import fr.bbougon.ousontmesaffaires.domain.container.Item;
+import fr.bbougon.ousontmesaffaires.domain.container.image.Image;
 import fr.bbougon.ousontmesaffaires.domain.container.image.ResizedImage;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.Sha1Encryptor;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.WithSecurityService;
@@ -32,8 +31,7 @@ public class ItemStrategyTest {
 
     @Before
     public void before() {
-        container = Container.create("Container name",
-                Item.create(Lists.newArrayList(Feature.create("type", "value"))));
+        container = Container.create("Container name", Lists.newArrayList(Item.create("an item")));
         Repositories.containerRepository().persist(container);
     }
 
@@ -68,7 +66,7 @@ public class ItemStrategyTest {
 
     @Test
     public void addImageToExpectedItem() {
-        container.add(Item.create(Lists.newArrayList(Feature.create("type2", "value2"))));
+        container.add(Item.create("value2"));
         String itemHash = new Sha1Encryptor().cypher(new ItemStringFormatter(container.getItems().get(1)).format().getBytes());
         String jsonPatch = new FileUtilsForTest("json/itemPatch.json").getContent().replace("HASH_TO_REPLACE", itemHash);
         Patch patch = new Gson().fromJson(jsonPatch, Patch.class);

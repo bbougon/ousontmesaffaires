@@ -1,8 +1,6 @@
 {
   "name": "Cave",
-  "item": {
-    "type": "tshirt",
-    "couleur": "blanc",
-    "taille": "3ans"
-  }
+  "items": [
+    {"item": "tshirt blanc 3ans"}
+  ]
 }

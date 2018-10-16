@@ -5,7 +5,6 @@ import com.google.gson.GsonBuilder;
 import fr.bbougon.ousontmesaffaires.command.WithCommandBus;
 import fr.bbougon.ousontmesaffaires.command.mappers.JsonMappers;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
-import fr.bbougon.ousontmesaffaires.domain.container.Feature;
 import fr.bbougon.ousontmesaffaires.domain.container.Item;
 import fr.bbougon.ousontmesaffaires.domain.extracteditem.ExtractedItem;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandBus;
@@ -15,14 +14,11 @@ import fr.bbougon.ousontmesaffaires.repositories.Repositories;
 import fr.bbougon.ousontmesaffaires.repositories.WithMemoryRepositories;
 import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
 import fr.bbougon.ousontmesaffaires.web.helpers.ItemStringFormatter;
-import fr.bbougon.ousontmesaffaires.web.ressources.json.ContainerName;
-import fr.bbougon.ousontmesaffaires.web.ressources.json.Features;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
 import javax.ws.rs.core.Response;
-
 import java.util.UUID;
 
 import static javax.ws.rs.core.Response.Status.*;
@@ -47,9 +43,8 @@ public class ExtractedItemsResourceTest {
 
     @Test
     public void canAddExtractedItem() {
-        String payload = "{\"name\":\"Cave\",\"item\":{\"type\":\"pantalon\"}}";
-        Item item = Item.create(Features.getFeaturesFromPayload(payload));
-        Container container = Container.create(ContainerName.getNameFromPayload(payload), item);
+        Item item = Item.create("pantalon");
+        Container container = Container.create("Cave", Lists.newArrayList(item));
         Repositories.containerRepository().persist(container);
         String itemHash = new Sha1Encryptor().cypher(new ItemStringFormatter(item).format().getBytes());
 
@@ -66,9 +61,8 @@ public class ExtractedItemsResourceTest {
 
     @Test
     public void returns404IfUnknownItem() {
-        String payload = "{\"name\":\"Cave\",\"item\":{\"type\":\"pantalon\"}}";
-        Item item = Item.create(Features.getFeaturesFromPayload(payload));
-        Container container = Container.create(ContainerName.getNameFromPayload(payload), item);
+        Item item = Item.create("pantalon");
+        Container container = Container.create("Cave", Lists.newArrayList(item));
         Repositories.containerRepository().persist(container);
 
         Response response = resource.addItem("{\"containerId\":\"" + new Codec().urlSafeToBase64(container.getId().toString()) + "\",\"itemHash\":\"unknown hash\"}");
@@ -111,8 +105,8 @@ public class ExtractedItemsResourceTest {
 
     private ExtractedItem createAndPersist() {
         ExtractedItem extractedItem = ExtractedItem.create(
-                Item.create(Lists.newArrayList(Feature.create("type", "value"))),
-                Container.create("name", Item.create(Lists.newArrayList(Feature.create("type1", "value1")))));
+                Item.create("value"),
+                Container.create("name", Lists.newArrayList(Item.create("value1"))));
         Repositories.extractedItemRepository().persist(extractedItem);
         return extractedItem;
     }

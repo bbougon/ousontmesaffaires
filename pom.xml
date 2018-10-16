@@ -195,6 +195,7 @@
                     <mainClass>fr.bbougon.ousontmesaffaires.Main</mainClass>
                 </configuration>
             </plugin>
+
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
             </plugin>

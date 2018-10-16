@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
-import fr.bbougon.ousontmesaffaires.domain.container.Feature;
 import fr.bbougon.ousontmesaffaires.domain.container.Item;
 import fr.bbougon.ousontmesaffaires.domain.extracteditem.ExtractedItem;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.SecurityService;
@@ -25,10 +24,10 @@ public class ExtractedItemJsonMapperTest {
     @Test
     public void canMapExtractedItems() {
         ExtractedItemJsonMapper mapper = new ExtractedItemJsonMapper();
-        Container firstContainer = Container.create("name", Item.create(Lists.newArrayList(Feature.create("type1", "value1"))));
-        ExtractedItem firstExtractedItem = createExtractedItem("type1", "value1", firstContainer);
-        Container seconContainer = Container.create("name", Item.create(Lists.newArrayList(Feature.create("type1", "value1"))));
-        ExtractedItem secondExtractedItem = createExtractedItem("type2", "value2", seconContainer);
+        Container firstContainer = Container.create("name", Lists.newArrayList(Item.create("value1")));
+        ExtractedItem firstExtractedItem = createExtractedItem("value1", firstContainer);
+        Container seconContainer = Container.create("name", Lists.newArrayList(Item.create("value1")));
+        ExtractedItem secondExtractedItem = createExtractedItem("value2", seconContainer);
 
         JsonElement extractedItemJson = mapper.map(Lists.newArrayList(firstExtractedItem, secondExtractedItem)
         );
@@ -52,9 +51,7 @@ public class ExtractedItemJsonMapperTest {
                 .toJson(extractedItemJson)).isEqualTo(expectedResult);
     }
 
-    private ExtractedItem createExtractedItem(final String type, final String value, final Container container) {
-        return ExtractedItem.create(
-                Item.create(Lists.newArrayList(Feature.create(type, value))),
-                container);
+    private ExtractedItem createExtractedItem(final String value, final Container container) {
+        return ExtractedItem.create(Item.create(value), container);
     }
 }

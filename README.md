@@ -46,6 +46,6 @@ docker run -d --rm --name ou-sont-mes-affaires-angular --publish 4200:80 --ip 19
 
 `docker logs ou-sont-mes-affaires-server`
 
-
+`docker container rm CONTAINER_NAME`
 
 `./runDocker.sh`

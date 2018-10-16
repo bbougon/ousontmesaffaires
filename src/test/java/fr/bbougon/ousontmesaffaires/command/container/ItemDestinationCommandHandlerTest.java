@@ -5,7 +5,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import fr.bbougon.ousontmesaffaires.command.mappers.JsonMappers;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
-import fr.bbougon.ousontmesaffaires.domain.container.Feature;
 import fr.bbougon.ousontmesaffaires.domain.container.Item;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.Sha1Encryptor;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.WithSecurityService;
@@ -30,8 +29,7 @@ public class ItemDestinationCommandHandlerTest {
 
     @Before
     public void before() {
-        container = Container.create("Container name",
-                Item.create(Lists.newArrayList(Feature.create("type", "value"))));
+        container = Container.create("Container name", Lists.newArrayList(Item.create(" an item")));
         Repositories.containerRepository().persist(container);
     }
 
@@ -39,7 +37,7 @@ public class ItemDestinationCommandHandlerTest {
     public void canMoveAContainerToAnExistingDestination() {
         ItemDestinationCommandHandler itemDestinationCommandHandler = new ItemDestinationCommandHandler();
         String itemHash = new Sha1Encryptor().cypher(new ItemStringFormatter(container.getItems().get(0)).format().getBytes());
-        Container existingContainer = Container.create("Existing container", Item.create(Lists.newArrayList(Feature.create("existing Item", "existing value"))));
+        Container existingContainer = Container.create("Existing container", Lists.newArrayList(Item.create("existing Item")));
         Repositories.containerRepository().persist(existingContainer);
         String containerId = new Codec().toBase64(this.container.getId().toString().getBytes());
 
@@ -60,7 +58,7 @@ public class ItemDestinationCommandHandlerTest {
     @Test
     public void handleUnexistingItem() {
         ItemDestinationCommandHandler itemDestinationCommandHandler = new ItemDestinationCommandHandler();
-        Container existingContainer = Container.create("Existing container", Item.create(Lists.newArrayList(Feature.create("existing Item", "existing value"))));
+        Container existingContainer = Container.create("Existing container", Lists.newArrayList(Item.create("existing Item")));
         Repositories.containerRepository().persist(existingContainer);
         String containerId = new Codec().toBase64(container.getId().toString().getBytes());
 

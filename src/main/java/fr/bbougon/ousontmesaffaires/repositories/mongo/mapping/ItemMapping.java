@@ -10,5 +10,6 @@ public class ItemMapping extends ComponentMap<Item> {
     public void map() {
         collection().onProperty(Item::getFeatures);
         property().onProperty(Item::getImageStore);
+        property().onProperty(Item::getItem);
     }
 }

@@ -50,7 +50,7 @@ public class ItemJsonMapper implements JsonMapper<Item> {
         JsonObject itemJson = new JsonObject();
         JsonObject featureJson = new JsonObject();
         item.getFeatures().forEach(feature -> featureJson.addProperty(feature.getType(), feature.getFeature()));
-        itemJson.add("item", featureJson);
+        itemJson.addProperty("item", item.getItem());
         itemJson.add("imageStore", buildImages(item));
         itemJson.addProperty("hash", SecurityService.sha1().cypher(new ItemStringFormatter(item).format().getBytes()));
         return itemJson;

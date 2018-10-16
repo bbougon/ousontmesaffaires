@@ -2,9 +2,7 @@
   {
     "id": "extracted_item_id_1",
     "item": {
-      "item": {
-        "type1": "value1"
-      },
+      "item": "value1",
       "imageStore": {
         "folder": "extracted_item_folder_name_1"
       },
@@ -15,9 +13,7 @@
       "name": "name",
       "items": [
         {
-          "item": {
-            "type1": "value1"
-          },
+          "item": "value1",
           "imageStore": {
             "folder": "container_folder_name_1"
           },
@@ -29,9 +25,7 @@
   {
     "id": "extracted_item_id_2",
     "item": {
-      "item": {
-        "type2": "value2"
-      },
+      "item": "value2",
       "imageStore": {
         "folder": "extracted_item_folder_name_2"
       },
@@ -42,9 +36,7 @@
       "name": "name",
       "items": [
         {
-          "item": {
-            "type1": "value1"
-          },
+          "item": "value1",
           "imageStore": {
             "folder": "container_folder_name_2"
           },

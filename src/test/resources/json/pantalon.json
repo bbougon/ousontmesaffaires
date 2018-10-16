@@ -1,8 +1,6 @@
 {
   "name": "placard",
-  "item": {
-    "type": "pantalon",
-    "couleur": "noir",
-    "taille": "3ans"
-  }
+  "items": [
+    {"item": "pantalon noir 3ans"}
+  ]
 }

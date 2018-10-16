@@ -58,7 +58,7 @@ public class ContainerResourceIntegrationTest {
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
         String containerId = container.getLocation().getPath().substring(container.getLocation().getPath().lastIndexOf("/") + 1);
         String payload = response.readEntity(String.class);
-        assertThat(payload).isEqualTo("{\"id\":\"" + containerId + "\",\"name\":\"placard\",\"items\":[{\"item\":{\"taille\":\"3ans\",\"type\":\"pantalon\",\"couleur\":\"noir\"}," +
+        assertThat(payload).isEqualTo("{\"id\":\"" + containerId + "\",\"name\":\"placard\",\"items\":[{\"item\":\"pantalon noir 3ans\"," +
                 "\"imageStore\":{\"folder\":\"" + retrieveFolder(payload) + "\"}," +
                 "\"hash\":\"" + retrieveHash(payload) + "\"}]}");
     }
@@ -78,7 +78,7 @@ public class ContainerResourceIntegrationTest {
         String containerId = container.getLocation().getPath().substring(container.getLocation().getPath().lastIndexOf("/") + 1);
         String payload = response.readEntity(String.class);
         assertThat(payload).contains("{\"id\":\"" + containerId + "\",\"name\":\"placard\",\"items\":[" +
-                "{\"item\":{\"taille\":\"3ans\",\"type\":\"pantalon\",\"couleur\":\"noir\"}," +
+                "{\"item\":\"pantalon noir 3ans\"," +
                 "\"imageStore\":{\"folder\":\"" + retrieveFolder(payload) + "\"}," +
                 "\"hash\":\"" + retrieveHash(payload) + "\"}]}");
     }

@@ -11,11 +11,9 @@ public class ItemStringFormatter {
     }
 
     public String format() {
-        String features = item.getFeatures().stream()
-                .map(feature -> String.format("%s;%s", feature.getType(), feature.getFeature()))
-                .collect(Collectors.joining(";"));
-        String folder = item.getImageStore().getFolder();
-        String images = item.getImages().stream()
+        String item = this.item.getItem();
+        String folder = this.item.getImageStore().getFolder();
+        String images = this.item.getImages().stream()
                 .map(image -> {
                     String resizedImages = image.getResizedImages().stream()
                             .map(resizedImage -> String.format("%s;%s;%s;%s", resizedImage.getUrl(), resizedImage.getSecureUrl(), resizedImage.getHeight(), resizedImage.getWidth()))
@@ -24,7 +22,7 @@ public class ItemStringFormatter {
                 })
                 .collect(Collectors.joining("|"));
 
-        return String.format("%s|%s|%s", features, folder, images);
+        return String.format("%s|%s|%s", item, folder, images);
     }
 
     private final Item item;

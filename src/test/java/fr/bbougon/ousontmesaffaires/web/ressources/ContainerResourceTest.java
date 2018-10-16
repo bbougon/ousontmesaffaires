@@ -2,12 +2,10 @@ package fr.bbougon.ousontmesaffaires.web.ressources;
 
 import ch.qos.logback.classic.Level;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.google.gson.GsonBuilder;
 import fr.bbougon.ousontmesaffaires.command.WithCommandBus;
 import fr.bbougon.ousontmesaffaires.command.mappers.JsonMappers;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
-import fr.bbougon.ousontmesaffaires.domain.container.Feature;
 import fr.bbougon.ousontmesaffaires.domain.container.Item;
 import fr.bbougon.ousontmesaffaires.domain.container.image.Image;
 import fr.bbougon.ousontmesaffaires.domain.container.image.ResizedImage;
@@ -22,8 +20,6 @@ import fr.bbougon.ousontmesaffaires.test.utils.FileUtilsForTest;
 import fr.bbougon.ousontmesaffaires.test.utils.TestAppender;
 import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
 import fr.bbougon.ousontmesaffaires.web.helpers.ItemStringFormatter;
-import fr.bbougon.ousontmesaffaires.web.ressources.json.ContainerName;
-import fr.bbougon.ousontmesaffaires.web.ressources.json.Features;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -62,10 +58,7 @@ public class ContainerResourceTest {
         assertThat(containers).isNotNull();
         assertThat(containers.get(0).getName()).isEqualTo("Cave");
         assertThat(containers.get(0).getItems()).isNotEmpty();
-        assertThat(containers.get(0).getItems().get(0).getFeatures()).containsAll(Sets.newHashSet(
-                Feature.create("type", "tshirt"),
-                Feature.create("couleur", "blanc"),
-                Feature.create("taille", "3ans")));
+        assertThat(containers.get(0).getItems().get(0).getItem()).isEqualTo("tshirt blanc 3ans");
     }
 
     @Test
@@ -85,8 +78,7 @@ public class ContainerResourceTest {
 
     @Test
     public void canAddAnItemToAContainer() {
-        String payload = "{\"name\":\"Cave\",\"item\":{\"type\":\"pantalon\"}}";
-        Container container = Container.create(ContainerName.getNameFromPayload(payload), Item.create(Features.getFeaturesFromPayload(payload)));
+        Container container = Container.create("Cave", Lists.newArrayList(Item.create("pantalon")));
         Repositories.containerRepository().persist(container);
 
         Response response = containerResource.addItem(new Codec().urlSafeToBase64(container.getId().toString()), new FileUtilsForTest("json/pantalon.json").getContent());
@@ -94,16 +86,12 @@ public class ContainerResourceTest {
         assertThat(response.getStatus()).isEqualTo(NO_CONTENT.getStatusCode());
         List<Container> containers = Repositories.containerRepository().getAll();
         assertThat(containers.get(0).getItems()).hasSize(2);
-        assertThat(containers.get(0).getItems().get(1).getFeatures()).containsAll(Sets.newHashSet(
-                Feature.create("type", "pantalon"),
-                Feature.create("couleur", "noir"),
-                Feature.create("taille", "3ans")));
+        assertThat(containers.get(0).getItems().get(1).getItem()).isEqualTo("pantalon noir 3ans");
     }
 
     @Test
     public void canGetAContainer() {
-        String payload = "{\"name\": \"Bureau\",\"item\": {\"type\": \"tshirt\",\"couleur\": \"blanc\",\"taille\": \"3ans\"}}";
-        Container container = Container.create(ContainerName.getNameFromPayload(payload), Item.create(Features.getFeaturesFromPayload(payload)));
+        Container container = Container.create("Bureau", Lists.newArrayList(Item.create("tshirt blanc taille 3 ans")));
         addImagesToContainer(container);
         Repositories.containerRepository().persist(container);
         String containerId = new Codec().urlSafeToBase64(container.getId().toString());
@@ -128,9 +116,9 @@ public class ContainerResourceTest {
 
     @Test
     public void canGetAllContainers() {
-        Container container1 = Container.create("Container 1", Item.create(Lists.newArrayList(Feature.create("type", "chaussure"))));
+        Container container1 = Container.create("Container 1", Lists.newArrayList(Item.create("chaussure")));
         addImagesToContainer(container1);
-        Container container2 = Container.create("Container 2", Item.create(Lists.newArrayList(Feature.create("type", "pantalon"))));
+        Container container2 = Container.create("Container 2", Lists.newArrayList(Item.create("pantalon")));
         addImagesToContainer(container2);
         Repositories.containerRepository().persist(container1);
         Repositories.containerRepository().persist(container2);
@@ -192,7 +180,7 @@ public class ContainerResourceTest {
 
     @Test
     public void canPatchAContainer() {
-        Container container = Container.create("Container 1", Item.create(Lists.newArrayList(Feature.create("type", "chaussure"))));
+        Container container = Container.create("Container 1", Lists.newArrayList(Item.create("chaussure")));
         Repositories.containerRepository().persist(container);
 
         Response response = containerResource.patchContainer(new Codec().urlSafeToBase64(container.getId().toString()), "{\"target\":\"description\",\"id\":\"\",\"version\":1,\"data\":\"A description\"}");
@@ -205,8 +193,8 @@ public class ContainerResourceTest {
 
     @Test
     public void canMoveAContainerItemToExistingContainer() {
-        Container container = Container.create("Container 1", Item.create(Lists.newArrayList(Feature.create("type", "chaussure"))));
-        Container existingContainer = Container.create("Container 2", Item.create(Lists.newArrayList(Feature.create("type2", "chaussure2"))));
+        Container container = Container.create("Container 1", Lists.newArrayList(Item.create("chaussure")));
+        Container existingContainer = Container.create("Container 2", Lists.newArrayList(Item.create("chaussure2")));
         Repositories.containerRepository().persist(container);
         Repositories.containerRepository().persist(existingContainer);
         String itemHash = new Sha1Encryptor().cypher(new ItemStringFormatter(container.getItems().get(0)).format().getBytes());
@@ -221,8 +209,8 @@ public class ContainerResourceTest {
 
     @Test
     public void returns404OnUnexistingItem() {
-        Container container = Container.create("Container 1", Item.create(Lists.newArrayList(Feature.create("type", "chaussure"))));
-        Container existingContainer = Container.create("Container 2", Item.create(Lists.newArrayList(Feature.create("type2", "chaussure2"))));
+        Container container = Container.create("Container 1", Lists.newArrayList(Item.create("chaussure")));
+        Container existingContainer = Container.create("Container 2", Lists.newArrayList(Item.create("chaussure2")));
         Repositories.containerRepository().persist(container);
         Repositories.containerRepository().persist(existingContainer);
 
@@ -234,7 +222,7 @@ public class ContainerResourceTest {
 
     @Test
     public void returns404OnUnexistingContainer() {
-        Container existingContainer = Container.create("Container 2", Item.create(Lists.newArrayList(Feature.create("type2", "chaussure2"))));
+        Container existingContainer = Container.create("Container 2", Lists.newArrayList(Item.create("chaussure2")));
         Repositories.containerRepository().persist(existingContainer);
 
         Response response = containerResource.destination(new Codec().urlSafeToBase64(UUID.randomUUID().toString()), "unexisting hash",

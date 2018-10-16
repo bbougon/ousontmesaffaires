@@ -1,9 +1,11 @@
 package fr.bbougon.ousontmesaffaires.command.container;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import fr.bbougon.ousontmesaffaires.command.Command;
 import fr.bbougon.ousontmesaffaires.command.Nothing;
 import fr.bbougon.ousontmesaffaires.domain.container.Item;
-import fr.bbougon.ousontmesaffaires.web.ressources.json.Features;
 
 import java.util.UUID;
 
@@ -11,7 +13,10 @@ public class ContainerAddItemCommand implements Command<Nothing> {
 
     public ContainerAddItemCommand(final UUID uuid, final String payload) {
         this.uuid = uuid;
-        this.item = Item.create(Features.getFeaturesFromPayload(payload));
+        JsonObject container = new JsonParser().parse(payload).getAsJsonObject();
+        JsonArray jsonArray = container.get("items").getAsJsonArray();
+        String item = jsonArray.get(0).getAsJsonObject().get("item").getAsString();
+        this.item = Item.create(item);
     }
 
     UUID getUuid() {
