@@ -17,7 +17,7 @@ public class ItemDestinationCommandHandler implements CommandHandler<ItemDestina
 
     @Override
     public Pair<String, NextEvent> execute(final ItemDestinationCommand itemDestinationCommand) {
-        Container container = Repositories.containerRepository().findById(itemDestinationCommand.getContainerUUID());
+        Container container = Repositories.containerRepository().get(itemDestinationCommand.getContainerUUID()).orElse(null);
         if (container == null) {
             return Pair.of(null, null);
         }
@@ -26,7 +26,7 @@ public class ItemDestinationCommandHandler implements CommandHandler<ItemDestina
                 .filter(item -> item.getItemHash().equals(itemDestinationCommand.getItemHash()))
                 .findFirst();
         if (itemToMove.isPresent()) {
-            Container existingContainer = Repositories.containerRepository().findById(itemDestinationCommand.getDestinationContainerUUID());
+            Container existingContainer = Repositories.containerRepository().get(itemDestinationCommand.getDestinationContainerUUID()).get();
             MovedItem movedItem = container.moveToExistingContainer(existingContainer, itemToMove.get());
             return Pair.of(new GsonBuilder().create()
                             .toJson(JsonMappers.fromContainer()

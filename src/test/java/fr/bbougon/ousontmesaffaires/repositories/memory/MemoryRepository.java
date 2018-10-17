@@ -5,16 +5,16 @@ import fr.bbougon.ousontmesaffaires.domain.AggregateRoot;
 import fr.bbougon.ousontmesaffaires.repositories.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public abstract class MemoryRepository<T extends AggregateRoot> implements Repository<T> {
 
     @Override
-    public T findById(final UUID id) {
+    public Optional<T> get(final UUID id) {
         return getAll().stream()
                 .filter(entity -> id.equals(entity.getId()))
-                .findFirst()
-                .orElse(null);
+                .findFirst();
     }
 
     private List<T> entities = Lists.newArrayList();

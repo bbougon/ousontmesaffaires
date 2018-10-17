@@ -2,6 +2,7 @@ package fr.bbougon.ousontmesaffaires.web.ressources;
 
 import com.google.common.collect.Lists;
 import fr.bbougon.ousontmesaffaires.command.WithCommandBus;
+import fr.bbougon.ousontmesaffaires.domain.BusinessError;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
 import fr.bbougon.ousontmesaffaires.domain.container.Item;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandBus;
@@ -18,7 +19,6 @@ import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.UUID;
 
-import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 import static javax.ws.rs.core.Response.Status.NO_CONTENT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
@@ -72,11 +72,9 @@ public class ContainerAddItemResourceTest {
         }
     }
 
-    @Test
-    public void return404IfContainerNotFound() {
-        Response response = containerResource.addItem(new Codec().urlSafeToBase64(UUID.randomUUID().toString()), new FileUtilsForTest("json/pantalon.json").getContent());
-
-        assertThat(response.getStatus()).isEqualTo(NOT_FOUND.getStatusCode());
+    @Test(expected = BusinessError.class)
+    public void throwsBusinessErrorIfContainerNotFound() {
+        containerResource.addItem(new Codec().urlSafeToBase64(UUID.randomUUID().toString()), new FileUtilsForTest("json/pantalon.json").getContent());
     }
 
     private ContainerAddItemResource initialise(final Codec codec) {

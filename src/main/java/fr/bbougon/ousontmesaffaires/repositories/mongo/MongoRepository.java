@@ -5,6 +5,7 @@ import fr.bbougon.ousontmesaffaires.repositories.Repository;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class MongoRepository<T> implements Repository<T> {
@@ -24,8 +25,8 @@ public class MongoRepository<T> implements Repository<T> {
     }
 
     @Override
-    public T findById(final UUID id) {
-        return mongolinkSessionManager.getSession().get(id, persistentType());
+    public Optional<T> get(final UUID id) {
+        return Optional.of(mongolinkSessionManager.getSession().get(id, persistentType()));
     }
 
     private Class<T> persistentType() {

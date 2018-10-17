@@ -3,7 +3,6 @@ package fr.bbougon.ousontmesaffaires.command.container;
 import com.google.gson.GsonBuilder;
 import fr.bbougon.ousontmesaffaires.command.CommandHandler;
 import fr.bbougon.ousontmesaffaires.command.NextEvent;
-import fr.bbougon.ousontmesaffaires.command.Nothing;
 import fr.bbougon.ousontmesaffaires.command.mappers.JsonMappers;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
 import fr.bbougon.ousontmesaffaires.domain.container.PatchedContainer;
@@ -14,7 +13,7 @@ public class ContainerPatchCommandHandler implements CommandHandler<ContainerPat
 
     @Override
     public Pair<String, NextEvent> execute(final ContainerPatchCommand containerPatchCommand) {
-        Container containerToMap = Repositories.containerRepository().findById(containerPatchCommand.getUUID());
+        Container containerToMap = Repositories.containerRepository().get(containerPatchCommand.getUUID()).get();
         containerPatchCommand.getPatch().apply(() -> containerToMap);
         String result = new GsonBuilder()
                 .create()

@@ -18,7 +18,7 @@ public class ExtractedItemAddItemCommandHandler implements CommandHandler<Extrac
 
     @Override
     public Pair<UUID, NextEvent> execute(final ExtractedItemAddItemCommand extractedItemAddItemCommand) {
-        Container container = Repositories.containerRepository().findById(extractedItemAddItemCommand.getContainerId());
+        Container container = Repositories.containerRepository().get(extractedItemAddItemCommand.getContainerId()).get();
         Optional<Item> optionalItem = container.getItems().stream()
                 .filter(item -> SecurityService.sha1().cypher(new ItemStringFormatter(item).format().getBytes()).equals(extractedItemAddItemCommand.getItemHash()))
                 .findFirst();

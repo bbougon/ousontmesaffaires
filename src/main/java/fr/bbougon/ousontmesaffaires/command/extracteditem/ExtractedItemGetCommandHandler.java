@@ -13,7 +13,8 @@ public class ExtractedItemGetCommandHandler implements CommandHandler<ExtractedI
 
     @Override
     public Pair<String, NextEvent> execute(final ExtractedItemGetCommand extractedItemGetCommand) {
-        ExtractedItem extractedItem = Repositories.extractedItemRepository().findById(extractedItemGetCommand.getExtractedItemUUID());
+        ExtractedItem extractedItem = Repositories.extractedItemRepository().get(extractedItemGetCommand.getExtractedItemUUID())
+                .orElse(null);
         if (extractedItem == null) {
             return Pair.of(null, null);
         }

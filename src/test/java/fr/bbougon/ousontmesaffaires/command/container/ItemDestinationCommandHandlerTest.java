@@ -48,7 +48,7 @@ public class ItemDestinationCommandHandlerTest {
         Pair<String, NextEvent> result = itemDestinationCommandHandler.execute(new ItemDestinationCommand(containerId, itemHash, new Gson().fromJson(payload, Destination.class)));
 
         assertThat(Repositories.containerRepository().getAll()).hasSize(2);
-        assertThat(Repositories.containerRepository().findById(container.getId()).getItems()).isEmpty();
+        assertThat(Repositories.containerRepository().get(container.getId()).get().getItems()).isEmpty();
         assertThat(existingContainer.getItems()).hasSize(2);
         assertThat(result.getLeft()).isEqualTo(new GsonBuilder().create()
                 .toJson(JsonMappers.fromContainer()

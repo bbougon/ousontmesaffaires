@@ -1,6 +1,7 @@
 package fr.bbougon.ousontmesaffaires.repositories;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface Repository<T> {
@@ -9,5 +10,5 @@ public interface Repository<T> {
 
     List<T> getAll();
 
-    T findById(UUID id);
+    Optional<T> get(UUID id);
 }
