@@ -69,7 +69,7 @@ public class ContainerResourceIntegrationTest {
 
         Response response = ClientBuilder.newClient()
                 .target("http://localhost:17000")
-                .path(ContainerResource.PATH)
+                .path("/containers")
                 .request()
                 .accept(MediaType.APPLICATION_JSON_TYPE)
                 .get();
