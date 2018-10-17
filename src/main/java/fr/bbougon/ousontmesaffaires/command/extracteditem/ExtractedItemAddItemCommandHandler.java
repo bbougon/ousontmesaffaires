@@ -1,6 +1,8 @@
 package fr.bbougon.ousontmesaffaires.command.extracteditem;
 
 import fr.bbougon.ousontmesaffaires.command.CommandHandler;
+import fr.bbougon.ousontmesaffaires.command.NextEvent;
+import fr.bbougon.ousontmesaffaires.command.Nothing;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
 import fr.bbougon.ousontmesaffaires.domain.container.Item;
 import fr.bbougon.ousontmesaffaires.domain.extracteditem.ExtractedItem;
@@ -15,7 +17,7 @@ import java.util.UUID;
 public class ExtractedItemAddItemCommandHandler implements CommandHandler<ExtractedItemAddItemCommand, UUID> {
 
     @Override
-    public Pair<UUID, Object> execute(final ExtractedItemAddItemCommand extractedItemAddItemCommand) {
+    public Pair<UUID, NextEvent> execute(final ExtractedItemAddItemCommand extractedItemAddItemCommand) {
         Container container = Repositories.containerRepository().findById(extractedItemAddItemCommand.getContainerId());
         Optional<Item> optionalItem = container.getItems().stream()
                 .filter(item -> SecurityService.sha1().cypher(new ItemStringFormatter(item).format().getBytes()).equals(extractedItemAddItemCommand.getItemHash()))
@@ -25,8 +27,8 @@ public class ExtractedItemAddItemCommandHandler implements CommandHandler<Extrac
             ExtractedItem extractedItem = ExtractedItem.create(item, container);
             Repositories.extractedItemRepository().persist(extractedItem);
             container.removeItem(item);
-            return Pair.of(extractedItem.getId(), extractedItem);
+            return Pair.of(extractedItem.getId(), Nothing.INSTANCE);
         }
-        return Pair.of(null, null);
+        return Pair.of(null, Nothing.INSTANCE);
     }
 }

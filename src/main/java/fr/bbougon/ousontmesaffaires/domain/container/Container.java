@@ -39,9 +39,10 @@ public class Container extends AggregateRoot {
         this.description = description;
     }
 
-    public void moveToExistingContainer(final Container existingContainer, final Item itemToMove) {
+    public MovedItem moveToExistingContainer(final Container existingContainer, final Item itemToMove) {
         existingContainer.add(itemToMove);
         removeItem(itemToMove);
+        return new MovedItem(itemToMove.getItemHash());
     }
 
     public static Container create(final String containerName, final List<Item> items) {

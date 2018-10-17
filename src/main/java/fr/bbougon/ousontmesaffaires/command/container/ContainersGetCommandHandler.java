@@ -2,6 +2,7 @@ package fr.bbougon.ousontmesaffaires.command.container;
 
 import com.google.gson.GsonBuilder;
 import fr.bbougon.ousontmesaffaires.command.CommandHandler;
+import fr.bbougon.ousontmesaffaires.command.NextEvent;
 import fr.bbougon.ousontmesaffaires.command.Nothing;
 import fr.bbougon.ousontmesaffaires.command.mappers.JsonMappers;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
@@ -13,7 +14,7 @@ import java.util.List;
 public class ContainersGetCommandHandler implements CommandHandler<ContainersGetCommand, String> {
 
     @Override
-    public Pair<String, Object> execute(final ContainersGetCommand containersGetCommand) {
+    public Pair<String, NextEvent> execute(final ContainersGetCommand containersGetCommand) {
         List<Container> containers = Repositories.containerRepository().getAll();
         return Pair.of(new GsonBuilder()
                         .create()

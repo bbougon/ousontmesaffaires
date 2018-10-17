@@ -2,10 +2,12 @@ package fr.bbougon.ousontmesaffaires.command.container;
 
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
+import fr.bbougon.ousontmesaffaires.command.NextEvent;
 import fr.bbougon.ousontmesaffaires.command.Patch;
 import fr.bbougon.ousontmesaffaires.command.PatchException;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
 import fr.bbougon.ousontmesaffaires.domain.container.Item;
+import fr.bbougon.ousontmesaffaires.domain.container.PatchedContainer;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.Sha1Encryptor;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.WithSecurityService;
 import fr.bbougon.ousontmesaffaires.repositories.Repositories;
@@ -39,9 +41,9 @@ public class ContainerPatchCommandHandlerTest {
     public void canPatchDescription() {
         Patch patch = new Gson().fromJson("{\"target\":\"description\",\"id\":\"\",\"version\":1,\"data\":\"A description\"}", Patch.class);
 
-        Pair<String, Object> result = new ContainerPatchCommandHandler().execute(new ContainerPatchCommand(new Codec().toBase64(container.getId().toString().getBytes()), patch));
+        Pair<String, NextEvent> result = new ContainerPatchCommandHandler().execute(new ContainerPatchCommand(new Codec().toBase64(container.getId().toString().getBytes()), patch));
 
-        Container container = (Container) result.getRight();
+        PatchedContainer container = (PatchedContainer) result.getRight();
         assertThat(container.getDescription()).isEqualTo("A description");
     }
 
@@ -51,9 +53,9 @@ public class ContainerPatchCommandHandlerTest {
         String jsonPatch = new FileUtilsForTest("json/itemPatch.json").getContent().replace("HASH_TO_REPLACE", itemHash);
         Patch patch = new Gson().fromJson(jsonPatch, Patch.class);
 
-        Pair<String, Object> result = new ContainerPatchCommandHandler().execute(new ContainerPatchCommand(new Codec().toBase64(container.getId().toString().getBytes()), patch));
+        Pair<String, NextEvent> result = new ContainerPatchCommandHandler().execute(new ContainerPatchCommand(new Codec().toBase64(container.getId().toString().getBytes()), patch));
 
-        Container container = (Container) result.getRight();
+        PatchedContainer container = (PatchedContainer) result.getRight();
         assertThat(container.getItems().get(0).getImages()).hasSize(1);
         assertThat(container.getItems().get(0).getImageStore().getFolder()).matches("[a-zA-Z0-9]{48}");
     }

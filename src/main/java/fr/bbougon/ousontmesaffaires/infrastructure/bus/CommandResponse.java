@@ -14,7 +14,9 @@ public class CommandResponse<TResponse> {
     }
 
     public boolean isEmpty() {
-        return response.getLeft() == null && response.getRight() == null || (response.getLeft().equals(Nothing.INSTANCE) && response.getRight() == null);
+        return response.getLeft() == null && response.getRight() == null
+                || response.getLeft() == null && response.getRight() == Nothing.INSTANCE
+                || (response.getLeft().equals(Nothing.INSTANCE) && response.getRight() == Nothing.INSTANCE);
     }
 
     private final Pair<TResponse, Object> response;

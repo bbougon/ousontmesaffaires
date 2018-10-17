@@ -3,7 +3,9 @@ package fr.bbougon.ousontmesaffaires.domain.container;
 import com.google.common.collect.Sets;
 import fr.bbougon.ousontmesaffaires.domain.container.image.Image;
 import fr.bbougon.ousontmesaffaires.domain.container.image.ImageStore;
+import fr.bbougon.ousontmesaffaires.infrastructure.security.SecurityService;
 import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
+import fr.bbougon.ousontmesaffaires.web.helpers.ItemStringFormatter;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
 import java.util.List;
@@ -62,6 +64,10 @@ public class Item {
                 .append(this.item, item.item)
                 .append(imageStore, item.imageStore)
                 .isEquals();
+    }
+
+    public String getItemHash() {
+        return SecurityService.sha1().cypher(new ItemStringFormatter(this).format().getBytes());
     }
 
     private Set<Feature> features = Sets.newHashSet();
