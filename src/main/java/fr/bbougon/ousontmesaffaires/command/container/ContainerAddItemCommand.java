@@ -5,7 +5,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import fr.bbougon.ousontmesaffaires.command.Command;
 import fr.bbougon.ousontmesaffaires.command.Nothing;
-import fr.bbougon.ousontmesaffaires.domain.container.Item;
 
 import java.util.UUID;
 
@@ -15,18 +14,17 @@ public class ContainerAddItemCommand implements Command<Nothing> {
         this.uuid = uuid;
         JsonObject container = new JsonParser().parse(payload).getAsJsonObject();
         JsonArray jsonArray = container.get("items").getAsJsonArray();
-        String item = jsonArray.get(0).getAsJsonObject().get("item").getAsString();
-        this.item = Item.create(item);
+        this.item = jsonArray.get(0).getAsJsonObject().get("item").getAsString();
     }
 
     UUID getUuid() {
         return uuid;
     }
 
-    public Item getItem() {
+    public String getItem() {
         return item;
     }
 
     private final UUID uuid;
-    private final Item item;
+    private final String item;
 }

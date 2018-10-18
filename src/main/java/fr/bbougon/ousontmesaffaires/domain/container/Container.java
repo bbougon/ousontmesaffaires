@@ -53,6 +53,12 @@ public class Container extends AggregateRoot {
         items.remove(item);
     }
 
+    public ContainerItemAdded add(final String item) {
+        Item itemAdded = Item.create(item);
+        items.add(itemAdded);
+        return new ContainerItemAdded(itemAdded.getItemHash());
+    }
+
     private String name;
     private List<Item> items = Lists.newArrayList();
     private String description;

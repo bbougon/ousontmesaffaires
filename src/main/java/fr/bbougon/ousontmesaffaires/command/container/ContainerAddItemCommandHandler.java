@@ -14,8 +14,8 @@ public class ContainerAddItemCommandHandler implements CommandHandler<ContainerA
     public Pair<Nothing, NextEvent> execute(final ContainerAddItemCommand containerAddItemCommand) {
         Container container = Repositories.containerRepository().get(containerAddItemCommand.getUuid())
                 .orElseThrow(() -> new BusinessError("UNEXISTING_CONTAINER"));
-        container.add(containerAddItemCommand.getItem());
-        return Pair.of(Nothing.INSTANCE, new ContainerItemAdded(container.getItems().get(container.getItems().size() - 1).getItemHash()));
+        ContainerItemAdded containerItemAdded = container.add(containerAddItemCommand.getItem());
+        return Pair.of(Nothing.INSTANCE, containerItemAdded);
     }
 
 }
