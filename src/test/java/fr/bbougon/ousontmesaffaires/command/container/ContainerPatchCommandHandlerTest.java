@@ -1,10 +1,9 @@
 package fr.bbougon.ousontmesaffaires.command.container;
 
 import com.google.common.collect.Lists;
-import com.google.gson.Gson;
+import fr.bbougon.ousontmesaffaires.domain.patch.Description;
 import fr.bbougon.ousontmesaffaires.command.NextEvent;
-import fr.bbougon.ousontmesaffaires.command.Patch;
-import fr.bbougon.ousontmesaffaires.command.PatchException;
+import fr.bbougon.ousontmesaffaires.domain.patch.PatchException;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
 import fr.bbougon.ousontmesaffaires.domain.container.Item;
 import fr.bbougon.ousontmesaffaires.domain.container.PatchedContainer;
@@ -39,32 +38,32 @@ public class ContainerPatchCommandHandlerTest {
 
     @Test
     public void canPatchDescription() {
-        Patch patch = new Gson().fromJson("{\"target\":\"description\",\"id\":\"\",\"version\":1,\"data\":\"A description\"}", Patch.class);
+        String json = "{\"target\":\"item.description\",\"id\":\"\",\"version\":1,\"data\":\"A description\"}";
 
-        Pair<String, NextEvent> result = new ContainerPatchCommandHandler().execute(new ContainerPatchCommand(new Codec().toBase64(container.getId().toString().getBytes()), patch));
+        Pair<String, NextEvent> result = new ContainerPatchCommandHandler().execute(new ContainerPatchCommand(new Codec().toBase64(container.getId().toString().getBytes()), json));
 
-        PatchedContainer container = (PatchedContainer) result.getRight();
-        assertThat(container.getDescription()).isEqualTo("A description");
+        PatchedContainer<Description> container = (PatchedContainer<Description>) result.getRight();
+        assertThat(container.getPatchedData().getDescription()).isEqualTo("A description");
     }
 
     @Test
     public void canPatchItem() {
         String itemHash = new Sha1Encryptor().cypher(new ItemStringFormatter(container.getItems().get(0)).format().getBytes());
-        String jsonPatch = new FileUtilsForTest("json/itemPatch.json").getContent().replace("HASH_TO_REPLACE", itemHash);
-        Patch patch = new Gson().fromJson(jsonPatch, Patch.class);
+        String jsonPatch = new FileUtilsForTest("json/itemImagePatch.json").getContent().replace("HASH_TO_REPLACE", itemHash);
 
-        Pair<String, NextEvent> result = new ContainerPatchCommandHandler().execute(new ContainerPatchCommand(new Codec().toBase64(container.getId().toString().getBytes()), patch));
+        Pair<String, NextEvent> result = new ContainerPatchCommandHandler().execute(new ContainerPatchCommand(new Codec().toBase64(container.getId().toString().getBytes()), jsonPatch));
 
-        PatchedContainer container = (PatchedContainer) result.getRight();
-        assertThat(container.getItems().get(0).getImages()).hasSize(1);
-        assertThat(container.getItems().get(0).getImageStore().getFolder()).matches("[a-zA-Z0-9]{48}");
+        PatchedContainer<Item> container = (PatchedContainer<Item>) result.getRight();
+        assertThat(container.getPatchedData().getItem()).isEqualTo(" an item");
+        assertThat(container.getPatchedData().getImages()).hasSize(1);
+        assertThat(container.getPatchedData().getImageStore().getFolder()).matches("[a-zA-Z0-9]{48}");
     }
 
     @Test
     public void canHandleExceptions() {
         try {
-            Patch patch = new Gson().fromJson("{\"target\":\"unknown\",\"id\":\"\",\"version\":1,\"data\":\"A description\"}", Patch.class);
-            new ContainerPatchCommandHandler().execute(new ContainerPatchCommand(new Codec().toBase64(container.getId().toString().getBytes()), patch));
+            String json = "{\"target\":\"unknown\",\"id\":\"\",\"version\":1,\"data\":\"A description\"}";
+            new ContainerPatchCommandHandler().execute(new ContainerPatchCommand(new Codec().toBase64(container.getId().toString().getBytes()), json));
             failBecauseExceptionWasNotThrown(PatchException.class);
         } catch (PatchException e) {
             assertThat(e.getMessage()).contains("An error occurred during patch, current target 'unknown' is unknown.");

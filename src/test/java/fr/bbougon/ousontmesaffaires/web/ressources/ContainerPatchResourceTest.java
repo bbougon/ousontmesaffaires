@@ -33,7 +33,7 @@ public class ContainerPatchResourceTest {
 
     @Before
     public void before() {
-        containerResource = initialise(new Codec());
+        containerResource = initialise();
     }
 
     @Test
@@ -41,7 +41,7 @@ public class ContainerPatchResourceTest {
         Container container = Container.create("Container 1", Lists.newArrayList(Item.create("chaussure")));
         Repositories.containerRepository().persist(container);
 
-        Response response = containerResource.patchContainer(new Codec().urlSafeToBase64(container.getId().toString()), "{\"target\":\"description\",\"id\":\"\",\"version\":1,\"data\":\"A description\"}");
+        Response response = containerResource.patchContainer(new Codec().urlSafeToBase64(container.getId().toString()), "{\"target\":\"item.description\",\"id\":\"\",\"version\":1,\"data\":\"A description\"}");
 
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
         assertThat(response.getEntity()).isEqualTo(new GsonBuilder()
@@ -49,7 +49,7 @@ public class ContainerPatchResourceTest {
                 .toJson(JsonMappers.fromContainer().map(container)));
     }
 
-    private ContainerPatchResource initialise(final Codec codec) {
+    private ContainerPatchResource initialise() {
         ContainerPatchResource containerPatchResource = new ContainerPatchResource();
         withCommandBus.apply((CommandBus commandBus) -> containerPatchResource.commandBus = commandBus);
         return containerPatchResource;

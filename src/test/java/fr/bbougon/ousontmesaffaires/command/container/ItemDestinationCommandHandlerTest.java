@@ -3,6 +3,7 @@ package fr.bbougon.ousontmesaffaires.command.container;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import fr.bbougon.ousontmesaffaires.command.Destination;
 import fr.bbougon.ousontmesaffaires.command.NextEvent;
 import fr.bbougon.ousontmesaffaires.command.Nothing;
 import fr.bbougon.ousontmesaffaires.command.mappers.JsonMappers;

@@ -2,13 +2,16 @@ package fr.bbougon.ousontmesaffaires.domain.container;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import fr.bbougon.ousontmesaffaires.domain.patch.Description;
 import fr.bbougon.ousontmesaffaires.domain.AggregateRoot;
+import fr.bbougon.ousontmesaffaires.domain.container.image.Image;
 
 import java.util.List;
 import java.util.UUID;
 
 public class Container extends AggregateRoot {
 
+    @SuppressWarnings("UnusedDeclaration")
     Container() {
         super(UUID.randomUUID());
     }
@@ -57,6 +60,31 @@ public class Container extends AggregateRoot {
         Item itemAdded = Item.create(item);
         items.add(itemAdded);
         return new ContainerItemAdded(itemAdded.getItemHash());
+    }
+
+    public PatchedContainer<Item> patchImage(final Image image, final String itemHash) {
+        Item patchedItem = items.stream()
+                .filter(item -> item.getItemHash().equals(itemHash))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("ERRROR"));
+        patchedItem.add(image);
+        return new PatchedContainer<Item>() {
+
+            @Override
+            public Item getPatchedData() {
+                return patchedItem;
+            }
+        };
+    }
+
+    public PatchedContainer<Description> updateDescription(final String description) {
+        setDescription(description);
+        return new PatchedContainer<Description>() {
+            @Override
+            public Description getPatchedData() {
+                return new Description(Container.this);
+            }
+        };
     }
 
     private String name;

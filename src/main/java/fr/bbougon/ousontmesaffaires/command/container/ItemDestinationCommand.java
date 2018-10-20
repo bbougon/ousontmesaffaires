@@ -1,6 +1,7 @@
 package fr.bbougon.ousontmesaffaires.command.container;
 
 import fr.bbougon.ousontmesaffaires.command.Command;
+import fr.bbougon.ousontmesaffaires.command.Destination;
 import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
 
 import java.util.UUID;

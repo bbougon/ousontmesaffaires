@@ -52,6 +52,10 @@ public class Item {
         return item;
     }
 
+    public String getItemHash() {
+        return SecurityService.sha1().cypher(new ItemStringFormatter(this).format().getBytes());
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
@@ -66,12 +70,7 @@ public class Item {
                 .isEquals();
     }
 
-    public String getItemHash() {
-        return SecurityService.sha1().cypher(new ItemStringFormatter(this).format().getBytes());
-    }
-
     private Set<Feature> features = Sets.newHashSet();
-
     private ImageStore imageStore;
     private String item;
 }

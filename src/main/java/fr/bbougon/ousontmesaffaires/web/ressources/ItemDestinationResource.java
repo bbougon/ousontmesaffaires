@@ -1,7 +1,7 @@
 package fr.bbougon.ousontmesaffaires.web.ressources;
 
 import com.google.gson.Gson;
-import fr.bbougon.ousontmesaffaires.command.container.Destination;
+import fr.bbougon.ousontmesaffaires.command.Destination;
 import fr.bbougon.ousontmesaffaires.command.container.ItemDestinationCommand;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandBus;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandResponse;
