@@ -1,1 +1,1 @@
-{"id":"ID_TO_REPLACE","name":"placard","items":[{"item":"pantalon noir 3ans","imageStore":{"folder":"FOLDER_NAME"},"hash":"HASH"}],"description":"A description"}
+{"id":"ID_TO_REPLACE","name":"placard","description":"A description","items":[{"item":"pantalon noir 3ans","imageStore":{"folder":"FOLDER_NAME","images":[]},"itemHash":"HASH","features":[]}]}

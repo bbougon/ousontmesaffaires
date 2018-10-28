@@ -111,7 +111,7 @@ public class ContainerResourceIntegrationTest {
         assertThat(payload).isEqualTo(new FileUtilsForTest("json/expectedJsonResultWithDescription.json").getContent()
                 .replace("ID_TO_REPLACE", containerId)
                 .replace("FOLDER_NAME", retrieveFolder(payload))
-                .replace("HASH", retrieveHash2(payload)));
+                .replace("HASH", retrieveHash(payload)));
     }
 
     @Test

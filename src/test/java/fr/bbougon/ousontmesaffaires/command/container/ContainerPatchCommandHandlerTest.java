@@ -2,11 +2,11 @@ package fr.bbougon.ousontmesaffaires.command.container;
 
 import com.google.common.collect.Lists;
 import fr.bbougon.ousontmesaffaires.command.NextEvent;
+import fr.bbougon.ousontmesaffaires.container.FoundContainer;
 import fr.bbougon.ousontmesaffaires.domain.BusinessError;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
 import fr.bbougon.ousontmesaffaires.domain.container.Item;
 import fr.bbougon.ousontmesaffaires.domain.container.PatchedContainer;
-import fr.bbougon.ousontmesaffaires.domain.patch.Description;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.Sha1Encryptor;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.WithSecurityService;
 import fr.bbougon.ousontmesaffaires.repositories.Repositories;
@@ -42,10 +42,10 @@ public class ContainerPatchCommandHandlerTest {
     public void canPatchDescription() {
         String json = "{\"target\":\"item.description\",\"id\":\"\",\"version\":1,\"data\":\"A description\"}";
 
-        Pair<String, NextEvent> result = new ContainerPatchCommandHandler().execute(new ContainerPatchCommand(new Codec().toBase64(container.getId().toString().getBytes()), json));
+        Pair<FoundContainer, NextEvent> result = new ContainerPatchCommandHandler().execute(new ContainerPatchCommand(new Codec().toBase64(container.getId().toString().getBytes()), json));
 
-        PatchedContainer<Description> container = (PatchedContainer<Description>) result.getRight();
-        assertThat(container.getPatchedData().getDescription()).isEqualTo("A description");
+        FoundContainer container = result.getLeft();
+        assertThat(container.description).isEqualTo("A description");
     }
 
     @Test
@@ -53,12 +53,12 @@ public class ContainerPatchCommandHandlerTest {
         String itemHash = new Sha1Encryptor().cypher(new ItemStringFormatter(container.getItems().get(0)).format().getBytes());
         String jsonPatch = new FileUtilsForTest("json/itemImagePatch.json").getContent().replace("HASH_TO_REPLACE", itemHash);
 
-        Pair<String, NextEvent> result = new ContainerPatchCommandHandler().execute(new ContainerPatchCommand(new Codec().toBase64(container.getId().toString().getBytes()), jsonPatch));
+        Pair<FoundContainer, NextEvent> result = new ContainerPatchCommandHandler().execute(new ContainerPatchCommand(new Codec().toBase64(container.getId().toString().getBytes()), jsonPatch));
 
-        PatchedContainer<Item> container = (PatchedContainer<Item>) result.getRight();
-        assertThat(container.getPatchedData().getItem()).isEqualTo(" an item");
-        assertThat(container.getPatchedData().getImages()).hasSize(1);
-        assertThat(container.getPatchedData().getImageStore().getFolder()).matches("[a-zA-Z0-9]{48}");
+        FoundContainer container = result.getLeft();
+        assertThat(container.items.get(0).item).isEqualTo(" an item");
+        assertThat(container.items.get(0).imageStore.images).hasSize(1);
+        assertThat(container.items.get(0).imageStore.folder).matches("[a-zA-Z0-9]{48}");
     }
 
     @Test

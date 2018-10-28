@@ -81,7 +81,7 @@ public class FoundContainer {
         }
 
         @JsonIgnoreProperties(ignoreUnknown = true)
-        private class ImageStore {
+        public class ImageStore {
             ImageStore(final String folder, final List<fr.bbougon.ousontmesaffaires.domain.container.image.Image> images) {
                 this.folder = folder;
                 this.images = images.stream()
