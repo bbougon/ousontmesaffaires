@@ -6,10 +6,6 @@ public class JsonMappers {
         return new ContainerJsonMapper();
     }
 
-    public static SignatureJsonMapper fromSignature() {
-        return new SignatureJsonMapper();
-    }
-
     public static ExtractedItemJsonMapper fromExtractedItem() {
         return new ExtractedItemJsonMapper();
     }

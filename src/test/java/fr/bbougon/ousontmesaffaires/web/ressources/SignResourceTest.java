@@ -1,5 +1,6 @@
 package fr.bbougon.ousontmesaffaires.web.ressources;
 
+import com.google.gson.Gson;
 import fr.bbougon.ousontmesaffaires.command.WithCommandBus;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.WithSecurityService;
 import fr.bbougon.ousontmesaffaires.rules.WithFileRepositories;
@@ -31,6 +32,6 @@ public class SignResourceTest {
         Response response = signResource.sign(new FileUtilsForTest("json/dataToEncrypt.json").getContent());
 
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
-        assertThat(response.getEntity()).isEqualTo("{\"apiKey\":\"12345\",\"signature\":\"393164ac39f0645fd4dd7dc6120adb25127b2f27\"}");
+        assertThat(new Gson().toJson(response.getEntity())).isEqualTo("{\"signature\":\"393164ac39f0645fd4dd7dc6120adb25127b2f27\",\"apiKey\":\"12345\"}");
     }
 }
