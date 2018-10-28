@@ -7,6 +7,7 @@ import fr.bbougon.ousontmesaffaires.command.Destination;
 import fr.bbougon.ousontmesaffaires.command.NextEvent;
 import fr.bbougon.ousontmesaffaires.command.Nothing;
 import fr.bbougon.ousontmesaffaires.command.mappers.JsonMappers;
+import fr.bbougon.ousontmesaffaires.domain.BusinessError;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
 import fr.bbougon.ousontmesaffaires.domain.container.Item;
 import fr.bbougon.ousontmesaffaires.domain.container.MovedItem;
@@ -21,7 +22,10 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.util.UUID;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 
 public class ItemDestinationCommandHandlerTest {
 
@@ -72,6 +76,31 @@ public class ItemDestinationCommandHandlerTest {
 
         assertThat(result.getLeft()).isNullOrEmpty();
         assertThat(result.getRight()).isEqualTo(Nothing.INSTANCE);
+    }
+
+    @Test
+    public void throwsBusinessErrorIfContainerDoesNotExist() {
+        try {
+            String base64UUID = new Codec().toBase64(UUID.randomUUID().toString().getBytes());
+            new ItemDestinationCommandHandler().execute(new ItemDestinationCommand(base64UUID, "abcdef", new Destination(base64UUID)));
+            failBecauseExceptionWasNotThrown(BusinessError.class);
+        } catch (BusinessError e) {
+            assertThat(e.getCode()).isEqualTo("UNEXISTING_CONTAINER");
+        }
+    }
+
+    @Test
+    public void throwsBusinessErrorIfDestinationContainerDoesNotExist() {
+        try {
+            Container existingContainer = Container.create("Existing container", Lists.newArrayList(Item.create("existing Item")));
+            Repositories.containerRepository().persist(existingContainer);
+            String containerId = new Codec().toBase64(container.getId().toString().getBytes());
+            String base64UUID = new Codec().toBase64(UUID.randomUUID().toString().getBytes());
+            new ItemDestinationCommandHandler().execute(new ItemDestinationCommand(containerId, "abcdef", new Destination(base64UUID)));
+            failBecauseExceptionWasNotThrown(BusinessError.class);
+        } catch (BusinessError e) {
+            assertThat(e.getCode()).isEqualTo("UNEXISTING_DESTINATION_CONTAINER");
+        }
     }
 
     private Container container;

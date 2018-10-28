@@ -72,17 +72,6 @@ public class ItemDestinationResourceTest {
     }
 
     @Test
-    public void returns404OnUnexistingContainer() {
-        Container existingContainer = Container.create("Container 2", Lists.newArrayList(Item.create("chaussure2")));
-        Repositories.containerRepository().persist(existingContainer);
-
-        Response response = containerResource.destination(new Codec().urlSafeToBase64(UUID.randomUUID().toString()), "unexisting hash",
-                "{\"destination\":\"" + new Codec().toBase64(existingContainer.getId().toString().getBytes()) + "\"}");
-
-        assertThat(response.getStatus()).isEqualTo(NOT_FOUND.getStatusCode());
-    }
-
-    @Test
     public void checkPayloadWhenMovingToAnotherContainer() {
         try {
             containerResource.destination(new Codec().urlSafeToBase64(UUID.randomUUID().toString()), "unexisting hash", "{}");

@@ -1,11 +1,9 @@
 package fr.bbougon.ousontmesaffaires.web.mappers;
 
 import com.google.common.collect.Lists;
-import fr.bbougon.ousontmesaffaires.domain.BusinessError;
 import fr.bbougon.ousontmesaffaires.web.mappers.exceptions.StackTraceElementWithHttpMethodAnnotationWrapper;
 import fr.bbougon.ousontmesaffaires.web.mappers.exceptions.StackTraceElementWithPathWrapper;
 
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
@@ -20,21 +18,10 @@ public class StandardExceptionMapper implements ExceptionMapper<Throwable> {
 
     @Override
     public Response toResponse(final Throwable throwable) {
-        if (throwable instanceof WebApplicationException) {
-            return ((WebApplicationException) throwable).getResponse();
-        }
-        if(throwable instanceof BusinessError) {
-            return Response
-                    .status(INTERNAL_SERVER_ERROR)
-                    .type(MediaType.APPLICATION_JSON_TYPE)
-                    .entity(throwable.getMessage())
-                    .build();
-        }
-        String packageName = "fr.bbougon.ousontmesaffaires.web.ressources";
         List<String> message = Lists.newArrayList();
         Lists.newArrayList(throwable.getStackTrace())
                 .stream()
-                .filter(stackTraceElement -> stackTraceElement.getClassName().contains(packageName))
+                .filter(stackTraceElement -> stackTraceElement.getClassName().contains(PACKAGE_NAME))
                 .map(StackTraceElementWithPathWrapper::new)
                 .map(StackTraceElementWithHttpMethodAnnotationWrapper::new)
                 .forEach(element -> {
@@ -48,5 +35,6 @@ public class StandardExceptionMapper implements ExceptionMapper<Throwable> {
                 .build();
     }
 
+    private static final String PACKAGE_NAME = "fr.bbougon.ousontmesaffaires.web.ressources";
     private static final String RESOURCE_MESSAGE = "Error has been thrown trying to access resource ";
 }

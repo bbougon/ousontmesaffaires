@@ -15,6 +15,6 @@ public class Patches {
         if (target.equals("item.image")) {
             return new ImagePatch(id, data);
         }
-        throw new PatchException(String.format("An error occurred during patch, current target '%s' is unknown.", target));
+        throw new PatchException("UNKNOWN_PATCH", target);
     }
 }

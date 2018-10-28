@@ -26,7 +26,7 @@ public class MongoRepository<T> implements Repository<T> {
 
     @Override
     public Optional<T> get(final UUID id) {
-        return Optional.of(mongolinkSessionManager.getSession().get(id, persistentType()));
+        return Optional.ofNullable(mongolinkSessionManager.getSession().get(id, persistentType()));
     }
 
     private Class<T> persistentType() {

@@ -1,12 +1,12 @@
 package fr.bbougon.ousontmesaffaires.command.container;
 
 import com.google.common.collect.Lists;
-import fr.bbougon.ousontmesaffaires.domain.patch.Description;
 import fr.bbougon.ousontmesaffaires.command.NextEvent;
-import fr.bbougon.ousontmesaffaires.domain.patch.PatchException;
+import fr.bbougon.ousontmesaffaires.domain.BusinessError;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
 import fr.bbougon.ousontmesaffaires.domain.container.Item;
 import fr.bbougon.ousontmesaffaires.domain.container.PatchedContainer;
+import fr.bbougon.ousontmesaffaires.domain.patch.Description;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.Sha1Encryptor;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.WithSecurityService;
 import fr.bbougon.ousontmesaffaires.repositories.Repositories;
@@ -18,6 +18,8 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
@@ -60,13 +62,24 @@ public class ContainerPatchCommandHandlerTest {
     }
 
     @Test
+    public void throwsBusinessErrorIfContainerNotFound() {
+        try {
+            String json = "{\"target\":\"unknown\",\"id\":\"\",\"version\":1,\"data\":\"A description\"}";
+            new ContainerPatchCommandHandler().execute(new ContainerPatchCommand(new Codec().toBase64(UUID.randomUUID().toString().getBytes()), json));
+            failBecauseExceptionWasNotThrown(BusinessError.class);
+        } catch (BusinessError e) {
+            assertThat(e.getCode()).isEqualTo("UNEXISTING_CONTAINER");
+        }
+    }
+
+    @Test
     public void canHandleExceptions() {
         try {
             String json = "{\"target\":\"unknown\",\"id\":\"\",\"version\":1,\"data\":\"A description\"}";
             new ContainerPatchCommandHandler().execute(new ContainerPatchCommand(new Codec().toBase64(container.getId().toString().getBytes()), json));
-            failBecauseExceptionWasNotThrown(PatchException.class);
-        } catch (PatchException e) {
-            assertThat(e.getMessage()).contains("An error occurred during patch, current target 'unknown' is unknown.");
+            failBecauseExceptionWasNotThrown(BusinessError.class);
+        } catch (BusinessError e) {
+            assertThat(e.getMessage()).isEqualTo("UNKNOWN_PATCH");
         }
     }
 
