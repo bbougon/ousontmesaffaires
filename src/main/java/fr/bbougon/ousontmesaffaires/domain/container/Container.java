@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import fr.bbougon.ousontmesaffaires.command.container.ItemDestinationCommand;
 import fr.bbougon.ousontmesaffaires.domain.AggregateRoot;
+import fr.bbougon.ousontmesaffaires.domain.BusinessError;
 import fr.bbougon.ousontmesaffaires.domain.container.image.Image;
 import fr.bbougon.ousontmesaffaires.domain.patch.Description;
 
@@ -68,7 +69,7 @@ public class Container extends AggregateRoot {
         Item patchedItem = items.stream()
                 .filter(item -> item.getItemHash().equals(itemHash))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("ERRROR"));
+                .orElseThrow(() -> new BusinessError("UNKNOWN_ITEM_TO_PATCH", name));
         patchedItem.add(image);
         return new PatchedContainer<Item>() {
 

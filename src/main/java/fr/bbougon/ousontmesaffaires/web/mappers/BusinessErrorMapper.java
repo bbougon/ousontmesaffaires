@@ -22,6 +22,7 @@ public class BusinessErrorMapper implements ExceptionMapper<BusinessError> {
         errors.put("UNEXISTING_CONTAINER", new BusinessErrorTranslation(NOT_FOUND, "The container you are requesting does not exist"));
         errors.put("UNEXISTING_DESTINATION_CONTAINER", new BusinessErrorTranslation(NOT_FOUND, "The destination container you are requesting does not exist"));
         errors.put("UNKNOWN_PATCH", new BusinessErrorTranslation(NOT_FOUND, "An error occurred during patch, current target '%s' is unknown."));
+        errors.put("UNKNOWN_ITEM_TO_PATCH", new BusinessErrorTranslation(NOT_FOUND, "The item you are trying to patch on container '%s' is unknown."));
     }
 
     @Override
