@@ -1,9 +1,8 @@
 package fr.bbougon.ousontmesaffaires.web.ressources;
 
 import com.google.common.collect.Lists;
-import com.google.gson.GsonBuilder;
+import com.google.gson.Gson;
 import fr.bbougon.ousontmesaffaires.command.WithCommandBus;
-import fr.bbougon.ousontmesaffaires.command.mappers.JsonMappers;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
 import fr.bbougon.ousontmesaffaires.domain.container.Item;
 import fr.bbougon.ousontmesaffaires.domain.extracteditem.ExtractedItem;
@@ -78,10 +77,12 @@ public class ExtractedItemsResourceTest {
         Response response = resource.getAll();
 
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
-        assertThat(response.getEntity()).isEqualTo(new GsonBuilder()
-                .create()
-                .toJson(JsonMappers.fromExtractedItem().map(Lists.newArrayList(extractedItem, extractedItem2)
-                )));
+        assertThat(new Gson().toJson(response.getEntity())).isEqualTo("[{\"id\":\"" + new Codec().urlSafeToBase64(extractedItem.getId().toString()) + "\",\"item\":{\"item\":\"value\"," +
+                "\"imageStore\":{\"folder\":\"" + extractedItem.getItem().getImageStore().getFolder() + "\",\"images\":[]},\"itemHash\":\"" + extractedItem.getItem().getItemHash() + "\",\"features\":[]}," +
+                "\"sourceContainerId\":\"" + new Codec().urlSafeToBase64(extractedItem.getSourceContainer().getId().toString()) + "\",\"sourceContainerName\":\"name\"}" +
+                ",{\"id\":\"" + new Codec().urlSafeToBase64(extractedItem2.getId().toString()) + "\",\"item\":{\"item\":\"value\"," +
+                "\"imageStore\":{\"folder\":\"" + extractedItem2.getItem().getImageStore().getFolder() + "\",\"images\":[]},\"itemHash\":\"" + extractedItem2.getItem().getItemHash() + "\",\"features\":[]}," +
+                "\"sourceContainerId\":\"" + new Codec().urlSafeToBase64(extractedItem2.getSourceContainer().getId().toString()) + "\",\"sourceContainerName\":\"name\"}]");
     }
 
     @Test
@@ -91,9 +92,10 @@ public class ExtractedItemsResourceTest {
         Response response = resource.get(new Codec().urlSafeToBase64(extractedItem.getId().toString()));
 
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
-        assertThat(response.getEntity()).isEqualTo(new GsonBuilder()
-                .create()
-                .toJson(JsonMappers.fromExtractedItem().map(extractedItem)));
+        assertThat(new Gson().toJson(response.getEntity())).isEqualTo("{\"id\":\"" + new Codec().urlSafeToBase64(extractedItem.getId().toString()) + "\"," +
+                "\"item\":{\"item\":\"value\",\"imageStore\":{\"folder\":\"" + extractedItem.getItem().getImageStore().getFolder() + "\",\"images\":[]}," +
+                "\"itemHash\":\"" + extractedItem.getItem().getItemHash() + "\",\"features\":[]}," +
+                "\"sourceContainerId\":\"" + new Codec().urlSafeToBase64(extractedItem.getSourceContainer().getId().toString()) + "\",\"sourceContainerName\":\"name\"}");
     }
 
     @Test
