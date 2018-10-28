@@ -18,7 +18,6 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import javax.ws.rs.core.Response;
-import java.util.UUID;
 
 import static javax.ws.rs.core.Response.Status.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -96,13 +95,6 @@ public class ExtractedItemsResourceTest {
                 "\"item\":{\"item\":\"value\",\"imageStore\":{\"folder\":\"" + extractedItem.getItem().getImageStore().getFolder() + "\",\"images\":[]}," +
                 "\"itemHash\":\"" + extractedItem.getItem().getItemHash() + "\",\"features\":[]}," +
                 "\"sourceContainerId\":\"" + new Codec().urlSafeToBase64(extractedItem.getSourceContainer().getId().toString()) + "\",\"sourceContainerName\":\"name\"}");
-    }
-
-    @Test
-    public void returns404OnNotFoundExtractedItem() {
-        Response response = resource.get(new Codec().urlSafeToBase64(UUID.randomUUID().toString()));
-
-        assertThat(response.getStatus()).isEqualTo(NOT_FOUND.getStatusCode());
     }
 
     private ExtractedItem createAndPersist() {

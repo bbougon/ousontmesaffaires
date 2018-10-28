@@ -4,6 +4,7 @@ import fr.bbougon.ousontmesaffaires.command.CommandHandler;
 import fr.bbougon.ousontmesaffaires.command.NextEvent;
 import fr.bbougon.ousontmesaffaires.command.Nothing;
 import fr.bbougon.ousontmesaffaires.container.FoundExtractedItem;
+import fr.bbougon.ousontmesaffaires.domain.BusinessError;
 import fr.bbougon.ousontmesaffaires.domain.extracteditem.ExtractedItem;
 import fr.bbougon.ousontmesaffaires.repositories.Repositories;
 import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
@@ -14,10 +15,7 @@ public class ExtractedItemGetCommandHandler implements CommandHandler<ExtractedI
     @Override
     public Pair<FoundExtractedItem, NextEvent> execute(final ExtractedItemGetCommand extractedItemGetCommand) {
         ExtractedItem extractedItem = Repositories.extractedItemRepository().get(extractedItemGetCommand.getExtractedItemUUID())
-                .orElse(null);
-        if (extractedItem == null) {
-            return Pair.of(null, null);
-        }
+                .orElseThrow(() -> new BusinessError("UNKNOWN_EXTRACTED_ITEM"));
         FoundExtractedItem foundExtractedItem = new FoundExtractedItem(new Codec().urlSafeToBase64(extractedItem.getId().toString()), extractedItem.getItem(),
                 new Codec().urlSafeToBase64(extractedItem.getSourceContainer().getId().toString()), extractedItem.getSourceContainer().getName());
         return Pair.of(foundExtractedItem, Nothing.INSTANCE);

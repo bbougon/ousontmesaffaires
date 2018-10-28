@@ -3,6 +3,7 @@ package fr.bbougon.ousontmesaffaires.web.ressources;
 import fr.bbougon.ousontmesaffaires.WithEmbeddedServer;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.WithSecurityService;
 import fr.bbougon.ousontmesaffaires.test.utils.FileUtilsForTest;
+import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -12,8 +13,10 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
+import java.util.UUID;
 
 import static javax.ws.rs.core.Response.Status.CREATED;
+import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 import static javax.ws.rs.core.Response.Status.OK;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -77,6 +80,20 @@ public class ExtractedItemsResourceIntegrationTest {
                 .get(Response.class);
 
         assertThat(extractedItem.getStatus()).isEqualTo(OK.getStatusCode());
+    }
+
+
+
+    @Test
+    public void returns404OnNotFoundExtractedItem() {
+        Response response = ClientBuilder.newClient()
+                .target("http://localhost:17000")
+                .path("extracted-items")
+                .path(new Codec().urlSafeToBase64(UUID.randomUUID().toString()))
+                .request()
+                .get(Response.class);
+
+        assertThat(response.getStatus()).isEqualTo(NOT_FOUND.getStatusCode());
     }
 
     private Response getContainerResponse(final URI containerLocation) {

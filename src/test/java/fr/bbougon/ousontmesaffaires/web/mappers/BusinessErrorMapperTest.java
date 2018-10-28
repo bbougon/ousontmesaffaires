@@ -18,8 +18,8 @@ public class BusinessErrorMapperTest {
     @Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {"UNEXISTING_CONTAINER", null, Response.Status.NOT_FOUND, "The container you are requesting does not exist"},
-                {"UNEXISTING_DESTINATION_CONTAINER", null, Response.Status.NOT_FOUND, "The destination container you are requesting does not exist"},
+                {"UNEXISTING_CONTAINER", null, Response.Status.NOT_FOUND, "The container you are requesting does not exist."},
+                {"UNEXISTING_DESTINATION_CONTAINER", null, Response.Status.NOT_FOUND, "The destination container you are requesting does not exist."},
                 {"UNKNOWN_PATCH", "unknown", Response.Status.NOT_FOUND, "An error occurred during patch, current target 'unknown' is unknown."},
                 {"UNKNOWN_ITEM_TO_PATCH", "big container", Response.Status.NOT_FOUND, "The item you are trying to patch on container 'big container' is unknown."}
         });
