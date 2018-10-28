@@ -1,12 +1,12 @@
 package fr.bbougon.ousontmesaffaires.web.ressources;
 
 import com.google.common.collect.Lists;
-import com.google.gson.GsonBuilder;
+import com.google.gson.Gson;
 import fr.bbougon.ousontmesaffaires.command.WithCommandBus;
-import fr.bbougon.ousontmesaffaires.command.mappers.JsonMappers;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
 import fr.bbougon.ousontmesaffaires.domain.container.Item;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandBus;
+import fr.bbougon.ousontmesaffaires.infrastructure.security.SecurityService;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.Sha1Encryptor;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.WithSecurityService;
 import fr.bbougon.ousontmesaffaires.repositories.Repositories;
@@ -54,8 +54,11 @@ public class ItemDestinationResourceTest {
                 "{\"destination\":\"" + new Codec().toBase64(existingContainer.getId().toString().getBytes()) + "\"}");
 
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
-        assertThat(response.getEntity()).isEqualTo(new GsonBuilder().create()
-                .toJson(JsonMappers.fromContainer().map(existingContainer)));
+        assertThat(new Gson().toJson(response.getEntity())).isEqualTo("{\"id\":\"" + new Codec().urlSafeToBase64(existingContainer.getId().toString()) + "\",\"name\":\"Container 2\"," +
+                "\"items\":[{\"item\":\"chaussure2\",\"imageStore\":{\"folder\":\"" + existingContainer.getItems().get(0).getImageStore().getFolder() + "\",\"images\":[]}," +
+                "\"itemHash\":\"" + SecurityService.sha1().cypher(new ItemStringFormatter(existingContainer.getItems().get(0)).format().getBytes()) + "\",\"features\":[]}," +
+                "{\"item\":\"chaussure\",\"imageStore\":{\"folder\":\"" + existingContainer.getItems().get(1).getImageStore().getFolder() + "\",\"images\":[]}," +
+                "\"itemHash\":\"" + SecurityService.sha1().cypher(new ItemStringFormatter(existingContainer.getItems().get(1)).format().getBytes()) + "\",\"features\":[]}]}");
     }
 
     @Test

@@ -2,15 +2,15 @@ package fr.bbougon.ousontmesaffaires.command.container;
 
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import fr.bbougon.ousontmesaffaires.command.Destination;
 import fr.bbougon.ousontmesaffaires.command.NextEvent;
 import fr.bbougon.ousontmesaffaires.command.Nothing;
-import fr.bbougon.ousontmesaffaires.command.mappers.JsonMappers;
+import fr.bbougon.ousontmesaffaires.container.FoundContainer;
 import fr.bbougon.ousontmesaffaires.domain.BusinessError;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
 import fr.bbougon.ousontmesaffaires.domain.container.Item;
 import fr.bbougon.ousontmesaffaires.domain.container.MovedItem;
+import fr.bbougon.ousontmesaffaires.infrastructure.security.SecurityService;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.Sha1Encryptor;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.WithSecurityService;
 import fr.bbougon.ousontmesaffaires.repositories.Repositories;
@@ -50,14 +50,16 @@ public class ItemDestinationCommandHandlerTest {
         String containerId = new Codec().toBase64(container.getId().toString().getBytes());
 
         final String payload = "{\"destination\":\"" + new Codec().toBase64(existingContainer.getId().toString().getBytes()) + "\"}";
-        Pair<String, NextEvent> result = itemDestinationCommandHandler.execute(new ItemDestinationCommand(containerId, itemHash, new Gson().fromJson(payload, Destination.class)));
+        Pair<FoundContainer, NextEvent> result = itemDestinationCommandHandler.execute(new ItemDestinationCommand(containerId, itemHash, new Gson().fromJson(payload, Destination.class)));
 
         assertThat(Repositories.containerRepository().getAll()).hasSize(2);
         assertThat(Repositories.containerRepository().get(container.getId()).get().getItems()).isEmpty();
         assertThat(existingContainer.getItems()).hasSize(2);
-        assertThat(result.getLeft()).isEqualTo(new GsonBuilder().create()
-                .toJson(JsonMappers.fromContainer()
-                        .map(existingContainer)));
+        assertThat(new Gson().toJson(result.getLeft())).isEqualTo("{\"id\":\"" + new Codec().urlSafeToBase64(existingContainer.getId().toString()) + "\",\"name\":\"Existing container\"," +
+                "\"items\":[{\"item\":\"existing Item\",\"imageStore\":{\"folder\":\"" + existingContainer.getItems().get(0).getImageStore().getFolder() + "\",\"images\":[]}," +
+                "\"itemHash\":\"" + SecurityService.sha1().cypher(new ItemStringFormatter(existingContainer.getItems().get(0)).format().getBytes()) + "\",\"features\":[]}," +
+                "{\"item\":\"an item\",\"imageStore\":{\"folder\":\"" + existingContainer.getItems().get(1).getImageStore().getFolder() + "\",\"images\":[]}," +
+                "\"itemHash\":\"" + SecurityService.sha1().cypher(new ItemStringFormatter(existingContainer.getItems().get(1)).format().getBytes()) + "\",\"features\":[]}]}");
         MovedItem movedItem = (MovedItem) result.getRight();
         assertThat(movedItem.getItemHash()).isEqualTo(itemHash);
     }
@@ -70,11 +72,11 @@ public class ItemDestinationCommandHandlerTest {
         String containerId = new Codec().toBase64(container.getId().toString().getBytes());
 
         final String payload = "{\"destination\":\"" + new Codec().toBase64(existingContainer.getId().toString().getBytes()) + "\"}";
-        Pair<String, NextEvent> result = itemDestinationCommandHandler.execute(
+        Pair<FoundContainer, NextEvent> result = itemDestinationCommandHandler.execute(
                 new ItemDestinationCommand(containerId, "unexistingHash",
                         new Gson().fromJson(payload, Destination.class)));
 
-        assertThat(result.getLeft()).isNullOrEmpty();
+        assertThat(result.getLeft()).isNull();
         assertThat(result.getRight()).isEqualTo(Nothing.INSTANCE);
     }
 

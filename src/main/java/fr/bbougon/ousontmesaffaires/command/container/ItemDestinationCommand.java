@@ -2,11 +2,12 @@ package fr.bbougon.ousontmesaffaires.command.container;
 
 import fr.bbougon.ousontmesaffaires.command.Command;
 import fr.bbougon.ousontmesaffaires.command.Destination;
+import fr.bbougon.ousontmesaffaires.container.FoundContainer;
 import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
 
 import java.util.UUID;
 
-public class ItemDestinationCommand implements Command<String> {
+public class ItemDestinationCommand implements Command<FoundContainer> {
     public ItemDestinationCommand(final String containerId, final String itemHash, final Destination destination) {
         this.itemHash = itemHash;
         Codec codec = new Codec();
