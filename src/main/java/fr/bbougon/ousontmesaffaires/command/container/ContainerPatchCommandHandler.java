@@ -1,10 +1,8 @@
 package fr.bbougon.ousontmesaffaires.command.container;
 
-import com.google.gson.GsonBuilder;
 import fr.bbougon.ousontmesaffaires.command.CommandHandler;
 import fr.bbougon.ousontmesaffaires.command.NextEvent;
-import fr.bbougon.ousontmesaffaires.command.mappers.JsonMappers;
-import fr.bbougon.ousontmesaffaires.command.mappers.PatchMapper;
+import fr.bbougon.ousontmesaffaires.command.patch.PatchMapper;
 import fr.bbougon.ousontmesaffaires.container.FoundContainer;
 import fr.bbougon.ousontmesaffaires.domain.BusinessError;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;

@@ -1,4 +1,4 @@
-package fr.bbougon.ousontmesaffaires.command.mappers;
+package fr.bbougon.ousontmesaffaires.command.patch;
 
 import fr.bbougon.ousontmesaffaires.domain.patch.DescriptionPatch;
 import fr.bbougon.ousontmesaffaires.domain.patch.ImagePatch;

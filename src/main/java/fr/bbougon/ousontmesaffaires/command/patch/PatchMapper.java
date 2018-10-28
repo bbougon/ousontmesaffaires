@@ -1,4 +1,4 @@
-package fr.bbougon.ousontmesaffaires.command.mappers;
+package fr.bbougon.ousontmesaffaires.command.patch;
 
 import com.google.gson.Gson;
 import fr.bbougon.ousontmesaffaires.domain.patch.Patch;

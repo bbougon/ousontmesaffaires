@@ -1,10 +1,8 @@
 package fr.bbougon.ousontmesaffaires.command.extracteditem;
 
-import com.google.gson.GsonBuilder;
 import fr.bbougon.ousontmesaffaires.command.CommandHandler;
 import fr.bbougon.ousontmesaffaires.command.NextEvent;
 import fr.bbougon.ousontmesaffaires.command.Nothing;
-import fr.bbougon.ousontmesaffaires.command.mappers.JsonMappers;
 import fr.bbougon.ousontmesaffaires.container.FoundExtractedItem;
 import fr.bbougon.ousontmesaffaires.domain.extracteditem.ExtractedItem;
 import fr.bbougon.ousontmesaffaires.repositories.Repositories;
