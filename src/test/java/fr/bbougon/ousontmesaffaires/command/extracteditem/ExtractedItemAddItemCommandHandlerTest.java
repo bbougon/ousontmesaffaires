@@ -33,7 +33,7 @@ public class ExtractedItemAddItemCommandHandlerTest {
     @Before
     public void before() {
         container = Container.create("Container name", Lists.newArrayList(Item.create("value")));
-        container.add(Item.create("value2"));
+        container.addItem(Item.create("value2"));
         Repositories.containerRepository().persist(container);
     }
 

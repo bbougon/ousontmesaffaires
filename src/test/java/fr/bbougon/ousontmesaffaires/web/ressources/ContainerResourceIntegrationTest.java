@@ -59,8 +59,8 @@ public class ContainerResourceIntegrationTest {
         String containerId = container.getLocation().getPath().substring(container.getLocation().getPath().lastIndexOf("/") + 1);
         String payload = response.readEntity(String.class);
         assertThat(payload).isEqualTo("{\"id\":\"" + containerId + "\",\"name\":\"placard\",\"items\":[{\"item\":\"pantalon noir 3ans\"," +
-                "\"imageStore\":{\"folder\":\"" + retrieveFolder(payload) + "\"}," +
-                "\"hash\":\"" + retrieveHash(payload) + "\"}]}");
+                "\"imageStore\":{\"folder\":\"" + retrieveFolder(payload) + "\",\"images\":[]}," +
+                "\"itemHash\":\"" + retrieveHash(payload) + "\",\"features\":[]}]}");
     }
 
     @Test
@@ -79,8 +79,8 @@ public class ContainerResourceIntegrationTest {
         String payload = response.readEntity(String.class);
         assertThat(payload).contains("{\"id\":\"" + containerId + "\",\"name\":\"placard\",\"items\":[" +
                 "{\"item\":\"pantalon noir 3ans\"," +
-                "\"imageStore\":{\"folder\":\"" + retrieveFolder(payload) + "\"}," +
-                "\"hash\":\"" + retrieveHash(payload) + "\"}]}");
+                "\"imageStore\":{\"folder\":\"" + retrieveFolder(payload) + "\",\"images\":[]}," +
+                "\"itemHash\":\"" + retrieveHash(payload) + "\",\"features\":[]}]}");
     }
 
     @Test
@@ -111,7 +111,7 @@ public class ContainerResourceIntegrationTest {
         assertThat(payload).isEqualTo(new FileUtilsForTest("json/expectedJsonResultWithDescription.json").getContent()
                 .replace("ID_TO_REPLACE", containerId)
                 .replace("FOLDER_NAME", retrieveFolder(payload))
-                .replace("HASH", retrieveHash(payload)));
+                .replace("HASH", retrieveHash2(payload)));
     }
 
     @Test
@@ -141,6 +141,10 @@ public class ContainerResourceIntegrationTest {
     }
 
     private String retrieveHash(final String payload) {
+        return retrieveStringToReplace(payload, "itemHash", 11, 51);
+    }
+
+    private String retrieveHash2(final String payload) {
         return retrieveStringToReplace(payload, "hash", 7, 47);
     }
 

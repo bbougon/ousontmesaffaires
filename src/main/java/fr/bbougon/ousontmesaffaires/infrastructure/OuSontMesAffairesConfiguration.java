@@ -8,8 +8,6 @@ import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandBus;
 import fr.bbougon.ousontmesaffaires.infrastructure.module.mongolink.MongolinkModule;
 import fr.bbougon.ousontmesaffaires.infrastructure.module.security.SecurityModule;
 import fr.bbougon.ousontmesaffaires.infrastructure.module.transactional.TransactionalMiddleware;
-import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGenerator;
-import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGeneratorEngine;
 import fr.bbougon.ousontmesaffaires.repositories.FileRepositories;
 import fr.bbougon.ousontmesaffaires.repositories.Repositories;
 import fr.bbougon.ousontmesaffaires.repositories.mongo.MongoRepositories;
@@ -23,13 +21,8 @@ public class OuSontMesAffairesConfiguration extends AbstractModule {
         installMiddleWare();
         install(new MongolinkModule("fr.bbougon.ousontmesaffaires.repositories.mongo.mapping", FileRepositories.dataBaseConfiguration().get().getSettings()));
         install(new SecurityModule());
-        bindQRGenerator();
         bind(Repositories.class).to(MongoRepositories.class).in(Singleton.class);
         requestStaticInjection(Repositories.class);
-    }
-
-    void bindQRGenerator() {
-        bind(QRGenerator.class).to(QRGeneratorEngine.class);
     }
 
     private void installMiddleWare() {

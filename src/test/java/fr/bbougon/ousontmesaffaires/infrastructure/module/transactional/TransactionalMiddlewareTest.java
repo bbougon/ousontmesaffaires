@@ -12,14 +12,12 @@ import fr.bbougon.ousontmesaffaires.domain.extracteditem.ExtractedItem;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandBus;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandResponse;
 import fr.bbougon.ousontmesaffaires.infrastructure.module.mongolink.MongolinkSessionManager;
-import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGenerator;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.Sha1Encryptor;
 import fr.bbougon.ousontmesaffaires.repositories.mongo.ContainerMongoRepository;
 import fr.bbougon.ousontmesaffaires.repositories.mongo.ExtractedItemMongoRepository;
 import fr.bbougon.ousontmesaffaires.test.utils.FileUtilsForTest;
 import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
 import fr.bbougon.ousontmesaffaires.web.helpers.ItemStringFormatter;
-import fr.bbougon.ousontmesaffaires.web.ressources.UriInfoBuilderForTest;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,9 +31,6 @@ public class TransactionalMiddlewareTest {
 
     @Inject
     private CommandBus commandBus;
-
-    @Inject
-    private QRGenerator qrGenerator;
 
     @Inject
     private MongolinkSessionManager mongolinkSessionManager;
@@ -54,9 +49,9 @@ public class TransactionalMiddlewareTest {
 
     @Test
     public void canGetEmptyContainers() {
-        CommandResponse commandResponse = commandBus.send(new ContainersGetCommand(qrGenerator, new UriInfoBuilderForTest().forContainers()));
+        CommandResponse commandResponse = commandBus.send(new ContainersGetCommand());
 
-        assertThat(commandResponse.getResponse()).isEqualTo("[]");
+        assertThat(commandResponse.getResponse().toString()).isEqualTo("[]");
     }
 
     @Test

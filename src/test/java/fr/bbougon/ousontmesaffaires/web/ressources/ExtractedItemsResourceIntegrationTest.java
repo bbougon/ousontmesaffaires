@@ -110,7 +110,7 @@ public class ExtractedItemsResourceIntegrationTest {
     }
 
     private String retrieveStringToReplace(final String payload) {
-        return payload.substring(payload.lastIndexOf("hash") + 7, payload.lastIndexOf("hash") + 47);
+        return payload.substring(payload.lastIndexOf("itemHash") + 11, payload.lastIndexOf("itemHash") + 51);
     }
 
     private URI containerLocation;

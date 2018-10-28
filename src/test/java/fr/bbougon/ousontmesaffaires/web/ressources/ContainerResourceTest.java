@@ -1,13 +1,14 @@
 package fr.bbougon.ousontmesaffaires.web.ressources;
 
 import com.google.common.collect.Lists;
+import com.google.gson.Gson;
 import fr.bbougon.ousontmesaffaires.command.WithCommandBus;
+import fr.bbougon.ousontmesaffaires.container.FoundContainer;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
 import fr.bbougon.ousontmesaffaires.domain.container.Item;
 import fr.bbougon.ousontmesaffaires.domain.container.image.Image;
 import fr.bbougon.ousontmesaffaires.domain.container.image.ResizedImage;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandBus;
-import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGeneratorForTest;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.SecurityService;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.WithSecurityService;
 import fr.bbougon.ousontmesaffaires.repositories.Repositories;
@@ -38,7 +39,6 @@ public class ContainerResourceTest {
     public void before() {
         containerResource = new ContainerResource();
         withCommandBus.apply((CommandBus commandBus) -> containerResource.commandBus = commandBus);
-        containerResource.qrGenerator = new QRGeneratorForTest();
     }
 
     @Test
@@ -51,7 +51,8 @@ public class ContainerResourceTest {
         Response response = containerResource.getContainer(containerId);
 
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
-        assertThat(response.getEntity()).isEqualTo(new FileUtilsForTest("json/expectedJsonResult.json").getContent()
+        FoundContainer entity = (FoundContainer) response.getEntity();
+        assertThat(new Gson().toJson(entity)).isEqualTo(new FileUtilsForTest("json/expectedJsonResult.json").getContent()
                 .replace("ID_TO_REPLACE", containerId)
                 .replace("FOLDER_NAME", container.getItems().get(0).getImageStore().getFolder())
                 .replace("HASH_TO_REPLACE", SecurityService.sha1().cypher(new FileUtilsForTest("test/expectedSingleFormattedItem.txt")
@@ -68,9 +69,10 @@ public class ContainerResourceTest {
         Repositories.containerRepository().persist(container1);
         Repositories.containerRepository().persist(container2);
 
-        Response response = containerResource.getAll(new UriInfoBuilderForTest().forContainers());
+        Response response = containerResource.getAll();
 
-        assertThat(response.getEntity()).isEqualTo(new FileUtilsForTest("json/expectedJsonsResult.json").getContent()
+        String entityResponse = new Gson().toJson(response.getEntity());
+        assertThat(entityResponse).isEqualTo(new FileUtilsForTest("json/expectedJsonsResult.json").getContent()
                 .replace("ID_TO_REPLACE_1", new Codec().urlSafeToBase64(container1.getId().toString()))
                 .replace("FOLDER_NAME_1", container1.getItems().get(0).getImageStore().getFolder())
                 .replace("HASH_TO_REPLACE_1", SecurityService.sha1().cypher(new FileUtilsForTest("test/expectedFormattedItem.txt")

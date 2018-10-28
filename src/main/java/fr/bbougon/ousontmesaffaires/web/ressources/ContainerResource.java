@@ -4,17 +4,14 @@ import fr.bbougon.ousontmesaffaires.command.container.ContainerGetCommand;
 import fr.bbougon.ousontmesaffaires.command.container.ContainersGetCommand;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandBus;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandResponse;
-import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGenerator;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 
 import static javax.ws.rs.core.Response.Status.OK;
 
@@ -22,8 +19,8 @@ import static javax.ws.rs.core.Response.Status.OK;
 public class ContainerResource {
 
     @GET
-    public Response getAll(@Context UriInfo uriInfo) {
-        CommandResponse commandResponse = commandBus.send(new ContainersGetCommand(qrGenerator, uriInfo));
+    public Response getAll() {
+        CommandResponse commandResponse = commandBus.send(new ContainersGetCommand());
         return Response.ok().entity(commandResponse.getResponse()).build();
     }
 
@@ -37,7 +34,4 @@ public class ContainerResource {
 
     @Inject
     CommandBus commandBus;
-
-    @Inject
-    QRGenerator qrGenerator;
 }

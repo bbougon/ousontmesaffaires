@@ -1,28 +1,13 @@
 package fr.bbougon.ousontmesaffaires.command.container;
 
 import fr.bbougon.ousontmesaffaires.command.Command;
-import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGenerator;
-import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
+import fr.bbougon.ousontmesaffaires.container.FoundContainer;
 
-import javax.ws.rs.core.UriInfo;
-import java.util.UUID;
+import java.util.List;
 
-public class ContainersGetCommand implements Command<String> {
+public class ContainersGetCommand implements Command<List<FoundContainer>> {
 
-    public ContainersGetCommand(final QRGenerator qrGenerator, final UriInfo uriInfo) {
-        this.qrGenerator = qrGenerator;
-        this.uriInfo = uriInfo;
+    public ContainersGetCommand() {
     }
 
-    public String getQrCode(final UUID id) {
-        return qrGenerator.encodeToBase64(uriInfo.getAbsolutePath() + "/" + fromUUID(id));
-    }
-
-    public String fromUUID(final UUID id) {
-        return codec.urlSafeToBase64(id.toString());
-    }
-
-    private final Codec codec = new Codec();
-    private final QRGenerator qrGenerator;
-    private final UriInfo uriInfo;
 }

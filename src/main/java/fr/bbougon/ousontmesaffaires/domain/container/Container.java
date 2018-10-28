@@ -2,11 +2,13 @@ package fr.bbougon.ousontmesaffaires.domain.container;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import fr.bbougon.ousontmesaffaires.domain.patch.Description;
+import fr.bbougon.ousontmesaffaires.command.container.ItemDestinationCommand;
 import fr.bbougon.ousontmesaffaires.domain.AggregateRoot;
 import fr.bbougon.ousontmesaffaires.domain.container.image.Image;
+import fr.bbougon.ousontmesaffaires.domain.patch.Description;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class Container extends AggregateRoot {
@@ -26,7 +28,7 @@ public class Container extends AggregateRoot {
         return ImmutableList.<Item>builder().addAll(items).build();
     }
 
-    public void add(final Item item) {
+    public void addItem(final Item item) {
         items.add(item);
     }
 
@@ -42,8 +44,8 @@ public class Container extends AggregateRoot {
         this.description = description;
     }
 
-    public MovedItem moveToExistingContainer(final Container existingContainer, final Item itemToMove) {
-        existingContainer.add(itemToMove);
+    private MovedItem moveToExistingContainer(final Container existingContainer, final Item itemToMove) {
+        existingContainer.addItem(itemToMove);
         removeItem(itemToMove);
         return new MovedItem(itemToMove.getItemHash());
     }
@@ -56,7 +58,7 @@ public class Container extends AggregateRoot {
         items.remove(item);
     }
 
-    public ContainerItemAdded add(final String item) {
+    public ContainerItemAdded addItem(final String item) {
         Item itemAdded = Item.create(item);
         items.add(itemAdded);
         return new ContainerItemAdded(itemAdded.getItemHash());
@@ -85,6 +87,13 @@ public class Container extends AggregateRoot {
                 return new Description(Container.this);
             }
         };
+    }
+
+    public Optional<MovedItem> moveItemTo(final ItemDestinationCommand itemDestinationCommand, final Container existingContainer) {
+        return getItems()
+                .stream()
+                .filter(item -> item.getItemHash().equals(itemDestinationCommand.getItemHash()))
+                .findFirst().map(item -> moveToExistingContainer(existingContainer, item));
     }
 
     private String name;

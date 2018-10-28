@@ -1,13 +1,12 @@
 package fr.bbougon.ousontmesaffaires.command.container;
 
 import fr.bbougon.ousontmesaffaires.command.Command;
-import fr.bbougon.ousontmesaffaires.infrastructure.qrcode.QRGenerator;
+import fr.bbougon.ousontmesaffaires.container.FoundContainer;
 import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
 
-import javax.ws.rs.core.UriInfo;
 import java.util.UUID;
 
-public class ContainerGetCommand implements Command<String> {
+public class ContainerGetCommand implements Command<FoundContainer> {
 
     public ContainerGetCommand(final String base64ContainerId) {
         Codec codec = new Codec();
