@@ -1,7 +1,7 @@
 package fr.bbougon.ousontmesaffaires.command.extracteditem;
 
 import fr.bbougon.ousontmesaffaires.command.CommandHandler;
-import fr.bbougon.ousontmesaffaires.command.NextEvent;
+import fr.bbougon.ousontmesaffaires.command.Event;
 import fr.bbougon.ousontmesaffaires.command.Nothing;
 import fr.bbougon.ousontmesaffaires.container.FoundExtractedItem;
 import fr.bbougon.ousontmesaffaires.domain.extracteditem.ExtractedItem;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class ExtractedItemGetAllCommandHandler implements CommandHandler<ExtractedItemGetAllCommand, List<FoundExtractedItem>> {
 
     @Override
-    public Pair<List<FoundExtractedItem>, NextEvent> execute(final ExtractedItemGetAllCommand extractedItemGetAllCommand) {
+    public Pair<List<FoundExtractedItem>, Event> execute(final ExtractedItemGetAllCommand extractedItemGetAllCommand) {
         List<ExtractedItem> extractedItems = Repositories.extractedItemRepository().getAll();
         List<FoundExtractedItem> foundExtractedItems = extractedItems.stream()
                 .map(extractedItem -> new FoundExtractedItem(new Codec().urlSafeToBase64(extractedItem.getId().toString()), extractedItem.getItem(),

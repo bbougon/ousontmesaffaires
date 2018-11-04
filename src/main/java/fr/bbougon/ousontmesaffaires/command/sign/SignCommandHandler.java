@@ -3,7 +3,7 @@ package fr.bbougon.ousontmesaffaires.command.sign;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import fr.bbougon.ousontmesaffaires.command.CommandHandler;
-import fr.bbougon.ousontmesaffaires.command.NextEvent;
+import fr.bbougon.ousontmesaffaires.command.Event;
 import fr.bbougon.ousontmesaffaires.command.Nothing;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.SecurityService;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.Signature;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class SignCommandHandler implements CommandHandler<SignCommand, Signature> {
 
     @Override
-    public Pair<Signature, NextEvent> execute(final SignCommand signCommand) {
+    public Pair<Signature, Event> execute(final SignCommand signCommand) {
         String secret = FileRepositories.securityConfiguration().get().securitySetting().thirdPartServiceSecret();
         JsonObject jsonObject = new JsonParser().parse(signCommand.getData()).getAsJsonObject();
         String dataToEncrypt = jsonObject

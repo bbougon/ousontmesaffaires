@@ -1,7 +1,7 @@
 package fr.bbougon.ousontmesaffaires.command.container;
 
 import fr.bbougon.ousontmesaffaires.command.CommandHandler;
-import fr.bbougon.ousontmesaffaires.command.NextEvent;
+import fr.bbougon.ousontmesaffaires.command.Event;
 import fr.bbougon.ousontmesaffaires.command.Nothing;
 import fr.bbougon.ousontmesaffaires.container.FoundContainer;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class ContainersGetCommandHandler implements CommandHandler<ContainersGetCommand, List<FoundContainer>> {
 
     @Override
-    public Pair<List<FoundContainer>, NextEvent> execute(final ContainersGetCommand containersGetCommand) {
+    public Pair<List<FoundContainer>, Event> execute(final ContainersGetCommand containersGetCommand) {
         List<Container> containers = Repositories.containerRepository().getAll();
         List<FoundContainer> foundContainers = containers.stream()
                 .map(container -> new FoundContainer(new Codec().urlSafeToBase64(container.getId().toString()),

@@ -3,7 +3,7 @@ package fr.bbougon.ousontmesaffaires.command.container;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import fr.bbougon.ousontmesaffaires.command.Destination;
-import fr.bbougon.ousontmesaffaires.command.NextEvent;
+import fr.bbougon.ousontmesaffaires.command.Event;
 import fr.bbougon.ousontmesaffaires.command.Nothing;
 import fr.bbougon.ousontmesaffaires.container.FoundContainer;
 import fr.bbougon.ousontmesaffaires.domain.BusinessError;
@@ -50,7 +50,7 @@ public class ItemDestinationCommandHandlerTest {
         String containerId = new Codec().toBase64(container.getId().toString().getBytes());
 
         final String payload = "{\"destination\":\"" + new Codec().toBase64(existingContainer.getId().toString().getBytes()) + "\"}";
-        Pair<FoundContainer, NextEvent> result = itemDestinationCommandHandler.execute(new ItemDestinationCommand(containerId, itemHash, new Gson().fromJson(payload, Destination.class)));
+        Pair<FoundContainer, Event> result = itemDestinationCommandHandler.execute(new ItemDestinationCommand(containerId, itemHash, new Gson().fromJson(payload, Destination.class)));
 
         assertThat(Repositories.containerRepository().getAll()).hasSize(2);
         assertThat(Repositories.containerRepository().get(container.getId()).get().getItems()).isEmpty();
@@ -72,7 +72,7 @@ public class ItemDestinationCommandHandlerTest {
         String containerId = new Codec().toBase64(container.getId().toString().getBytes());
 
         final String payload = "{\"destination\":\"" + new Codec().toBase64(existingContainer.getId().toString().getBytes()) + "\"}";
-        Pair<FoundContainer, NextEvent> result = itemDestinationCommandHandler.execute(
+        Pair<FoundContainer, Event> result = itemDestinationCommandHandler.execute(
                 new ItemDestinationCommand(containerId, "unexistingHash",
                         new Gson().fromJson(payload, Destination.class)));
 

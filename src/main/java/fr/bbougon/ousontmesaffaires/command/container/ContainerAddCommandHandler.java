@@ -1,7 +1,7 @@
 package fr.bbougon.ousontmesaffaires.command.container;
 
 import fr.bbougon.ousontmesaffaires.command.CommandHandler;
-import fr.bbougon.ousontmesaffaires.command.NextEvent;
+import fr.bbougon.ousontmesaffaires.command.Event;
 import fr.bbougon.ousontmesaffaires.command.Nothing;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
 import fr.bbougon.ousontmesaffaires.domain.container.Item;
@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class ContainerAddCommandHandler implements CommandHandler<ContainerAddCommand, UUID> {
 
-    public Pair<UUID, NextEvent> execute(final ContainerAddCommand containerAddCommand) {
+    public Pair<UUID, Event> execute(final ContainerAddCommand containerAddCommand) {
         Container container = Container.create(containerAddCommand.getContainerName(),
                 containerAddCommand.getItems().stream()
                         .map(Item::create)

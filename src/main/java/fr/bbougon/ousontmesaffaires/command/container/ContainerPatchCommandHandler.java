@@ -1,7 +1,7 @@
 package fr.bbougon.ousontmesaffaires.command.container;
 
 import fr.bbougon.ousontmesaffaires.command.CommandHandler;
-import fr.bbougon.ousontmesaffaires.command.NextEvent;
+import fr.bbougon.ousontmesaffaires.command.Event;
 import fr.bbougon.ousontmesaffaires.command.patch.PatchMapper;
 import fr.bbougon.ousontmesaffaires.container.FoundContainer;
 import fr.bbougon.ousontmesaffaires.domain.BusinessError;
@@ -14,7 +14,7 @@ import org.apache.commons.lang3.tuple.Pair;
 public class ContainerPatchCommandHandler implements CommandHandler<ContainerPatchCommand, FoundContainer> {
 
     @Override
-    public Pair<FoundContainer, NextEvent> execute(final ContainerPatchCommand containerPatchCommand) {
+    public Pair<FoundContainer, Event> execute(final ContainerPatchCommand containerPatchCommand) {
         Container containerToPatch = Repositories.containerRepository()
                 .get(containerPatchCommand.getUUID())
                 .orElseThrow(() -> new BusinessError("UNEXISTING_CONTAINER"));

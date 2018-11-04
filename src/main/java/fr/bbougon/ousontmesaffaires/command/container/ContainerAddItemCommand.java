@@ -8,7 +8,7 @@ import fr.bbougon.ousontmesaffaires.command.Nothing;
 
 import java.util.UUID;
 
-public class ContainerAddItemCommand implements Command<Nothing> {
+public class ContainerAddItemCommand implements Command<String> {
 
     public ContainerAddItemCommand(final UUID uuid, final String payload) {
         this.uuid = uuid;

@@ -1,7 +1,7 @@
 package fr.bbougon.ousontmesaffaires.command.extracteditem;
 
 import com.google.common.collect.Lists;
-import fr.bbougon.ousontmesaffaires.command.NextEvent;
+import fr.bbougon.ousontmesaffaires.command.Event;
 import fr.bbougon.ousontmesaffaires.command.Nothing;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
 import fr.bbougon.ousontmesaffaires.domain.container.Item;
@@ -56,7 +56,7 @@ public class ExtractedItemAddItemCommandHandlerTest {
     public void handleUnexistingResult() {
         ExtractedItemAddItemCommandHandler extractedItemAddItemCommandHandler = new ExtractedItemAddItemCommandHandler();
 
-        Pair<UUID, NextEvent> result = extractedItemAddItemCommandHandler.execute(
+        Pair<UUID, Event> result = extractedItemAddItemCommandHandler.execute(
                 new ExtractedItemAddItemCommand("{\"containerId\":\"" + new Codec().urlSafeToBase64(container.getId().toString()) + "\",\"itemHash\":\"unknown hash\"}"));
 
         assertThat(result.getLeft()).isNull();

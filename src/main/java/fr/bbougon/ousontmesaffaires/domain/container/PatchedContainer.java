@@ -1,8 +1,8 @@
 package fr.bbougon.ousontmesaffaires.domain.container;
 
-import fr.bbougon.ousontmesaffaires.command.NextEvent;
+import fr.bbougon.ousontmesaffaires.command.Event;
 
-public abstract class PatchedContainer<T> extends NextEvent<Container> {
+public abstract class PatchedContainer<T> extends Event<Container> {
 
     PatchedContainer() {
     }

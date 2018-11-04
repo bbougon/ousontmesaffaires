@@ -1,6 +1,6 @@
 package fr.bbougon.ousontmesaffaires.command;
 
-public final class Nothing extends NextEvent<Void> {
+public final class Nothing extends Event<Void> {
 
     private Nothing() {
     }
