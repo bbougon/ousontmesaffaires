@@ -20,7 +20,6 @@ import org.junit.Test;
 import javax.ws.rs.core.Response;
 import java.util.UUID;
 
-import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 import static javax.ws.rs.core.Response.Status.OK;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
@@ -59,19 +58,6 @@ public class ItemDestinationResourceTest {
                 "\"itemHash\":\"" + SecurityService.sha1().cypher(new ItemStringFormatter(existingContainer.getItems().get(0)).format().getBytes()) + "\",\"features\":[]}," +
                 "{\"item\":\"chaussure\",\"imageStore\":{\"folder\":\"" + existingContainer.getItems().get(1).getImageStore().getFolder() + "\",\"images\":[]}," +
                 "\"itemHash\":\"" + SecurityService.sha1().cypher(new ItemStringFormatter(existingContainer.getItems().get(1)).format().getBytes()) + "\",\"features\":[]}]}");
-    }
-
-    @Test
-    public void returns404OnUnexistingItem() {
-        Container container = Container.create("Container 1", Lists.newArrayList(Item.create("chaussure")));
-        Container existingContainer = Container.create("Container 2", Lists.newArrayList(Item.create("chaussure2")));
-        Repositories.containerRepository().persist(container);
-        Repositories.containerRepository().persist(existingContainer);
-
-        Response response = containerResource.destination(new Codec().urlSafeToBase64(container.getId().toString()), "unexisting hash",
-                "{\"destination\":\"" + new Codec().toBase64(existingContainer.getId().toString().getBytes()) + "\"}");
-
-        assertThat(response.getStatus()).isEqualTo(NOT_FOUND.getStatusCode());
     }
 
     @Test

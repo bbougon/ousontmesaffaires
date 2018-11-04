@@ -14,8 +14,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import static javax.ws.rs.core.Response.Status.NOT_FOUND;
-
 @Path("/containers")
 public class ItemDestinationResource {
 
@@ -26,9 +24,6 @@ public class ItemDestinationResource {
         ContainerAddResource.checkPayload(payload);
         ItemDestinationCommand command = new ItemDestinationCommand(containerId, itemHash, new Gson().fromJson(payload, Destination.class));
         CommandResponse commandResponse = commandBus.send(command);
-        if(commandResponse.isEmpty()) {
-            return Response.status(NOT_FOUND).build();
-        }
         return Response.ok(commandResponse.getResponse()).build();
     }
 

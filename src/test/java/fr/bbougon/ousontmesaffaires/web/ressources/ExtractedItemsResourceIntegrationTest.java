@@ -2,8 +2,8 @@ package fr.bbougon.ousontmesaffaires.web.ressources;
 
 import fr.bbougon.ousontmesaffaires.WithEmbeddedServer;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.WithSecurityService;
-import fr.bbougon.ousontmesaffaires.test.utils.FileUtilsForTest;
 import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
+import fr.bbougon.ousontmesaffaires.web.test.utils.ClientUtilsForTests;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -30,7 +30,7 @@ public class ExtractedItemsResourceIntegrationTest {
 
     @Before
     public void before() {
-        Response response = createContainer();
+        Response response = ClientUtilsForTests.createContainer("json/t-shirt.json");
         containerLocation = response.getLocation();
     }
 
@@ -52,10 +52,10 @@ public class ExtractedItemsResourceIntegrationTest {
 
     @Test
     public void canGetAllExtractedItems() {
-        Response firstContainer = createContainer();
+        Response firstContainer = ClientUtilsForTests.createContainer("json/t-shirt.json");
         createExtractedItem(firstContainer.getLocation().getPath().substring(firstContainer.getLocation().getPath().lastIndexOf("/") + 1),
                 retrieveHash(getContainerResponse(firstContainer.getLocation()).readEntity(String.class)));
-        Response secondContainer = createContainer();
+        Response secondContainer = ClientUtilsForTests.createContainer("json/t-shirt.json");
         createExtractedItem(secondContainer.getLocation().getPath().substring(secondContainer.getLocation().getPath().lastIndexOf("/") + 1),
                 retrieveHash(getContainerResponse(secondContainer.getLocation()).readEntity(String.class)));
 
@@ -70,7 +70,7 @@ public class ExtractedItemsResourceIntegrationTest {
 
     @Test
     public void canGetExtractedItem() {
-        Response container = createContainer();
+        Response container = ClientUtilsForTests.createContainer("json/t-shirt.json");
         Response response = createExtractedItem(container.getLocation().getPath().substring(container.getLocation().getPath().lastIndexOf("/") + 1),
                 retrieveHash(getContainerResponse(container.getLocation()).readEntity(String.class)));
 
@@ -110,16 +110,6 @@ public class ExtractedItemsResourceIntegrationTest {
                 .request()
                 .accept(MediaType.APPLICATION_JSON_TYPE)
                 .post(Entity.json("{\"containerId\":\"" + containerId + "\",\"itemHash\":\"" + itemHash + "\"}"), Response.class);
-    }
-
-    private Response createContainer() {
-        String payload = new FileUtilsForTest("json/t-shirt.json").getContent();
-
-        return ClientBuilder.newClient().target("http://localhost:17000")
-                .path("/containers")
-                .request()
-                .accept(MediaType.APPLICATION_JSON_TYPE)
-                .post(Entity.json(payload), Response.class);
     }
 
     private String retrieveHash(final String payload) {

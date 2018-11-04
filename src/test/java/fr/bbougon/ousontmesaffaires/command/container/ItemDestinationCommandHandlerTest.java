@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import fr.bbougon.ousontmesaffaires.command.Destination;
 import fr.bbougon.ousontmesaffaires.command.Event;
-import fr.bbougon.ousontmesaffaires.command.Nothing;
 import fr.bbougon.ousontmesaffaires.container.FoundContainer;
 import fr.bbougon.ousontmesaffaires.domain.BusinessError;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
@@ -62,22 +61,6 @@ public class ItemDestinationCommandHandlerTest {
                 "\"itemHash\":\"" + SecurityService.sha1().cypher(new ItemStringFormatter(existingContainer.getItems().get(1)).format().getBytes()) + "\",\"features\":[]}]}");
         MovedItem movedItem = (MovedItem) result.getRight();
         assertThat(movedItem.getItemHash()).isEqualTo(itemHash);
-    }
-
-    @Test
-    public void handleUnexistingItem() {
-        ItemDestinationCommandHandler itemDestinationCommandHandler = new ItemDestinationCommandHandler();
-        Container existingContainer = Container.create("Existing container", Lists.newArrayList(Item.create("existing Item")));
-        Repositories.containerRepository().persist(existingContainer);
-        String containerId = new Codec().toBase64(container.getId().toString().getBytes());
-
-        final String payload = "{\"destination\":\"" + new Codec().toBase64(existingContainer.getId().toString().getBytes()) + "\"}";
-        Pair<FoundContainer, Event> result = itemDestinationCommandHandler.execute(
-                new ItemDestinationCommand(containerId, "unexistingHash",
-                        new Gson().fromJson(payload, Destination.class)));
-
-        assertThat(result.getLeft()).isNull();
-        assertThat(result.getRight()).isEqualTo(Nothing.INSTANCE);
     }
 
     @Test

@@ -2,6 +2,7 @@ package fr.bbougon.ousontmesaffaires.web.ressources;
 
 import fr.bbougon.ousontmesaffaires.WithEmbeddedServer;
 import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
+import fr.bbougon.ousontmesaffaires.web.test.utils.ClientUtilsForTests;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -34,5 +35,26 @@ public class ItemDestinationResourceIntegrationTest {
                 .post(Entity.json("{\"destination\":\"" + uuid + "\"}"));
 
         assertThat(response.getStatus()).isEqualTo(NOT_FOUND.getStatusCode());
+        assertThat(response.readEntity(String.class)).contains("The container you are requesting does not exist.");
     }
+
+    @Test
+    public void returns404OnUnexistingItem() {
+        Response container = ClientUtilsForTests.createContainer("json/pantalon.json");
+        Response existingContainer = ClientUtilsForTests.createContainer("json/t-shirt.json");
+
+        Response response = ClientBuilder.newClient()
+                .target("http://localhost:17000")
+                .path("containers")
+                .path(ClientUtilsForTests.retrieveUUID(container))
+                .path("items")
+                .path("abcde")
+                .request()
+                .accept(MediaType.APPLICATION_JSON_TYPE)
+                .post(Entity.json("{\"destination\":\"" + ClientUtilsForTests.retrieveUUID(existingContainer) + "\"}"));
+
+        assertThat(response.getStatus()).isEqualTo(NOT_FOUND.getStatusCode());
+        assertThat(response.readEntity(String.class)).contains("The item you are trying to move to container 'Cave' is unknown.");
+    }
+
 }

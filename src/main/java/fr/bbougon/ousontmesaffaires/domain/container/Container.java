@@ -2,14 +2,12 @@ package fr.bbougon.ousontmesaffaires.domain.container;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import fr.bbougon.ousontmesaffaires.command.container.ItemDestinationCommand;
 import fr.bbougon.ousontmesaffaires.domain.AggregateRoot;
 import fr.bbougon.ousontmesaffaires.domain.BusinessError;
 import fr.bbougon.ousontmesaffaires.domain.container.image.Image;
 import fr.bbougon.ousontmesaffaires.domain.patch.Description;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 public class Container extends AggregateRoot {
@@ -43,12 +41,6 @@ public class Container extends AggregateRoot {
 
     public void setDescription(final String description) {
         this.description = description;
-    }
-
-    private MovedItem moveToExistingContainer(final Container existingContainer, final Item itemToMove) {
-        existingContainer.addItem(itemToMove);
-        removeItem(itemToMove);
-        return new MovedItem(itemToMove.getItemHash());
     }
 
     public static Container create(final String containerName, final List<Item> items) {
@@ -90,11 +82,19 @@ public class Container extends AggregateRoot {
         };
     }
 
-    public Optional<MovedItem> moveItemTo(final ItemDestinationCommand itemDestinationCommand, final Container existingContainer) {
-        return getItems()
+    public MovedItem moveItemTo(final String itemHash, final Container existingContainer) {
+        Item itemToMove = getItems()
                 .stream()
-                .filter(item -> item.getItemHash().equals(itemDestinationCommand.getItemHash()))
-                .findFirst().map(item -> moveToExistingContainer(existingContainer, item));
+                .filter(item -> item.getItemHash().equals(itemHash))
+                .findFirst()
+                .orElseThrow(() -> new BusinessError("UNKNOWN_ITEM_TO_MOVE", existingContainer.name));
+        return moveToExistingContainer(existingContainer, itemToMove);
+    }
+
+    private MovedItem moveToExistingContainer(final Container existingContainer, final Item itemToMove) {
+        existingContainer.addItem(itemToMove);
+        removeItem(itemToMove);
+        return new MovedItem(itemToMove.getItemHash());
     }
 
     private String name;

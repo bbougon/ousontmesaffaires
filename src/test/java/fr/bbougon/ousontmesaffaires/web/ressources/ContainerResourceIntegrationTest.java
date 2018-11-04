@@ -3,6 +3,7 @@ package fr.bbougon.ousontmesaffaires.web.ressources;
 import fr.bbougon.ousontmesaffaires.WithEmbeddedServer;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.WithSecurityService;
 import fr.bbougon.ousontmesaffaires.test.utils.FileUtilsForTest;
+import fr.bbougon.ousontmesaffaires.web.test.utils.ClientUtilsForTests;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -28,14 +29,14 @@ public class ContainerResourceIntegrationTest {
 
     @Test
     public void canAddContainer() {
-        Response response = createContainer("json/t-shirt.json");
+        Response response = ClientUtilsForTests.createContainer("json/t-shirt.json");
 
         assertThat(response.getStatus()).isEqualTo(CREATED.getStatusCode());
     }
 
     @Test
     public void canAddAnItemToContainer() {
-        Response container = createContainer("json/pantalon.json");
+        Response container = ClientUtilsForTests.createContainer("json/pantalon.json");
 
         Response response = ClientBuilder.newClient().target(container.getLocation())
                 .path("item")
@@ -48,7 +49,7 @@ public class ContainerResourceIntegrationTest {
 
     @Test
     public void canGetContainer() {
-        Response container = createContainer("json/pantalon.json");
+        Response container = ClientUtilsForTests.createContainer("json/pantalon.json");
 
         Response response = ClientBuilder.newClient().target(container.getLocation())
                 .request()
@@ -65,7 +66,7 @@ public class ContainerResourceIntegrationTest {
 
     @Test
     public void canGetAllContainers() {
-        Response container = createContainer("json/pantalon.json");
+        Response container = ClientUtilsForTests.createContainer("json/pantalon.json");
 
         Response response = ClientBuilder.newClient()
                 .target("http://localhost:17000")
@@ -98,7 +99,7 @@ public class ContainerResourceIntegrationTest {
 
     @Test
     public void canPatchAContainerWithDescription() {
-        Response container = createContainer("json/pantalon.json");
+        Response container = ClientUtilsForTests.createContainer("json/pantalon.json");
 
         Response response = ClientBuilder.newClient().target(container.getLocation())
                 .request()
@@ -116,8 +117,8 @@ public class ContainerResourceIntegrationTest {
 
     @Test
     public void canMoveAnItemToAnExistingContainer() {
-        Response container = createContainer("json/pantalon.json");
-        Response existingContainer = createContainer("json/t-shirt.json");
+        Response container = ClientUtilsForTests.createContainer("json/pantalon.json");
+        Response existingContainer = ClientUtilsForTests.createContainer("json/t-shirt.json");
         Response getContainer = ClientBuilder.newClient().target(container.getLocation())
                 .request()
                 .accept(MediaType.APPLICATION_JSON_TYPE)
@@ -144,22 +145,8 @@ public class ContainerResourceIntegrationTest {
         return retrieveStringToReplace(payload, "itemHash", 11, 51);
     }
 
-    private String retrieveHash2(final String payload) {
-        return retrieveStringToReplace(payload, "hash", 7, 47);
-    }
-
     private String retrieveStringToReplace(final String payload, final String stringToFind, final int step, final int secondStep) {
         return payload.substring(payload.lastIndexOf(stringToFind) + step, payload.lastIndexOf(stringToFind) + secondStep);
-    }
-
-    private Response createContainer(final String resourceFilePath) {
-        String payload = new FileUtilsForTest(resourceFilePath).getContent();
-
-        return ClientBuilder.newClient().target("http://localhost:17000")
-                .path("/containers")
-                .request()
-                .accept(MediaType.APPLICATION_JSON_TYPE)
-                .post(Entity.json(payload), Response.class);
     }
 
 }
