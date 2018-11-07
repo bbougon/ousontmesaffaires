@@ -5,6 +5,7 @@ import fr.bbougon.ousontmesaffaires.command.Destination;
 import fr.bbougon.ousontmesaffaires.command.container.ItemDestinationCommand;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandBus;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandResponse;
+import fr.bbougon.ousontmesaffaires.infrastructure.module.mongolink.MongolinkTransaction;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -17,6 +18,7 @@ import javax.ws.rs.core.Response;
 @Path("/containers")
 public class ItemDestinationResource {
 
+    @MongolinkTransaction
     @POST
     @Path("/{UUID}/items/{itemHash}")
     @Consumes(MediaType.APPLICATION_JSON)

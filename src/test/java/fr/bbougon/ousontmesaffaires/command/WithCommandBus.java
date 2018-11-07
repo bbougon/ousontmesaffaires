@@ -12,7 +12,7 @@ import fr.bbougon.ousontmesaffaires.command.extracteditem.ExtractedItemGetAllCom
 import fr.bbougon.ousontmesaffaires.command.extracteditem.ExtractedItemGetCommandHandler;
 import fr.bbougon.ousontmesaffaires.command.sign.SignCommandHandler;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandBus;
-import fr.bbougon.ousontmesaffaires.infrastructure.module.transactional.TransactionalMiddleware;
+import fr.bbougon.ousontmesaffaires.infrastructure.module.transactional.CommandBusSynchronous;
 import org.junit.rules.ExternalResource;
 
 import java.util.function.Function;
@@ -20,7 +20,7 @@ import java.util.function.Function;
 public class WithCommandBus extends ExternalResource {
 
     public void apply(final Function<CommandBus, CommandBus> function) {
-        CommandBus commandBus = new TransactionalMiddleware(new CommandHandlersForTest(Sets.newHashSet(
+        CommandBus commandBus = new CommandBusSynchronous(new CommandHandlersForTest(Sets.newHashSet(
                 new ContainerAddCommandHandler(),
                 new ContainerAddItemCommandHandler(),
                 new ContainerGetCommandHandler(),

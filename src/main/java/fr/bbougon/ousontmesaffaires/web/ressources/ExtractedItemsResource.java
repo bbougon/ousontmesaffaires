@@ -5,6 +5,7 @@ import fr.bbougon.ousontmesaffaires.command.extracteditem.ExtractedItemGetAllCom
 import fr.bbougon.ousontmesaffaires.command.extracteditem.ExtractedItemGetCommand;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandBus;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandResponse;
+import fr.bbougon.ousontmesaffaires.infrastructure.module.mongolink.MongolinkTransaction;
 import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
 import fr.bbougon.ousontmesaffaires.web.helpers.URIBuilder;
 
@@ -24,6 +25,7 @@ import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 @Path(ExtractedItemsResource.PATH)
 public class ExtractedItemsResource {
 
+    @MongolinkTransaction
     @POST
     @Consumes(APPLICATION_JSON)
     public Response addItem(final String payload) {
@@ -35,6 +37,7 @@ public class ExtractedItemsResource {
         return Response.created(uri).build();
     }
 
+    @MongolinkTransaction
     @GET
     @Produces(APPLICATION_JSON)
     public Response getAll() {
@@ -42,6 +45,7 @@ public class ExtractedItemsResource {
         return Response.ok(commandResponse.getResponse()).build();
     }
 
+    @MongolinkTransaction
     @GET
     @Path("/{uuid}")
     @Produces(APPLICATION_JSON)

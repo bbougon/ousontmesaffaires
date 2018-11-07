@@ -3,6 +3,7 @@ package fr.bbougon.ousontmesaffaires.web.ressources;
 import fr.bbougon.ousontmesaffaires.command.container.ContainerPatchCommand;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandBus;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandResponse;
+import fr.bbougon.ousontmesaffaires.infrastructure.module.mongolink.MongolinkTransaction;
 import fr.bbougon.ousontmesaffaires.web.ressources.javax.ws.rs.PATCH;
 
 import javax.inject.Inject;
@@ -17,6 +18,7 @@ import static javax.ws.rs.core.Response.Status.OK;
 @Path("/containers")
 public class ContainerPatchResource {
 
+    @MongolinkTransaction
     @PATCH
     @Path("/{UUID}")
     @Consumes(MediaType.APPLICATION_JSON)

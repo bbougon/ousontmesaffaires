@@ -1,11 +1,12 @@
 package fr.bbougon.ousontmesaffaires.infrastructure.bus;
 
+import fr.bbougon.ousontmesaffaires.command.Event;
 import fr.bbougon.ousontmesaffaires.command.Nothing;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class CommandResponse<TResponse> {
 
-    public CommandResponse(final Pair<TResponse, Object> response) {
+    public CommandResponse(final Pair<TResponse, Event> response) {
         this.response = response;
     }
 
@@ -19,5 +20,5 @@ public class CommandResponse<TResponse> {
                 || (response.getLeft().equals(Nothing.INSTANCE) && response.getRight() == Nothing.INSTANCE);
     }
 
-    private final Pair<TResponse, Object> response;
+    private final Pair<TResponse, Event> response;
 }

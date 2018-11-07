@@ -3,6 +3,7 @@ package fr.bbougon.ousontmesaffaires.web.ressources;
 import fr.bbougon.ousontmesaffaires.command.container.ContainerAddItemCommand;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandBus;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandResponse;
+import fr.bbougon.ousontmesaffaires.infrastructure.module.mongolink.MongolinkTransaction;
 import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
 import org.apache.commons.lang3.Validate;
 
@@ -20,6 +21,7 @@ import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 @Path("/containers")
 public class ContainerAddItemResource {
 
+    @MongolinkTransaction
     @POST
     @Path("/{UUID}/item")
     @Consumes(MediaType.APPLICATION_JSON)

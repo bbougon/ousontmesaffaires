@@ -7,7 +7,7 @@ import fr.bbougon.ousontmesaffaires.command.CommandHandler;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandBus;
 import fr.bbougon.ousontmesaffaires.infrastructure.module.mongolink.MongolinkModule;
 import fr.bbougon.ousontmesaffaires.infrastructure.module.security.SecurityModule;
-import fr.bbougon.ousontmesaffaires.infrastructure.module.transactional.TransactionalMiddleware;
+import fr.bbougon.ousontmesaffaires.infrastructure.module.transactional.CommandBusSynchronous;
 import fr.bbougon.ousontmesaffaires.repositories.FileRepositories;
 import fr.bbougon.ousontmesaffaires.repositories.Repositories;
 import fr.bbougon.ousontmesaffaires.repositories.mongo.MongoRepositories;
@@ -28,7 +28,7 @@ public class OuSontMesAffairesConfiguration extends AbstractModule {
     private void installMiddleWare() {
         Multibinder<CommandHandler> multibinder = Multibinder.newSetBinder(binder(), CommandHandler.class);
         scanPackageAndBind(CommandHandler.class, multibinder);
-        bind(CommandBus.class).to(TransactionalMiddleware.class);
+        bind(CommandBus.class).to(CommandBusSynchronous.class);
     }
 
     private static void scanPackageAndBind(Class<CommandHandler> type, Multibinder<CommandHandler> multibinder) {
