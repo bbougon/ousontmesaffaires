@@ -2,5 +2,5 @@ package fr.bbougon.ousontmesaffaires.saga;
 
 import fr.bbougon.ousontmesaffaires.command.Command;
 
-interface Saga extends Command {
+public interface Saga<TResponse> extends Command<TResponse> {
 }

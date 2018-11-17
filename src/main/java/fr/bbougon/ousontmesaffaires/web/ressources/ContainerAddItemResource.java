@@ -1,6 +1,6 @@
 package fr.bbougon.ousontmesaffaires.web.ressources;
 
-import fr.bbougon.ousontmesaffaires.command.container.ContainerAddItemCommand;
+import fr.bbougon.ousontmesaffaires.saga.item.ContainerAddItemSaga;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandBus;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandResponse;
 import fr.bbougon.ousontmesaffaires.infrastructure.module.mongolink.MongolinkTransaction;
@@ -27,7 +27,7 @@ public class ContainerAddItemResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addItem(@PathParam("UUID") final String containerId, final String payload) {
         checkPayload(payload);
-        CommandResponse commandResponse = commandBus.send(new ContainerAddItemCommand(UUID.fromString(codec.fromBase64(containerId)), payload));
+        CommandResponse commandResponse = commandBus.send(new ContainerAddItemSaga(UUID.fromString(codec.fromBase64(containerId)), payload));
         if (commandResponse.isEmpty()) {
             return Response.status(NOT_FOUND).build();
         }

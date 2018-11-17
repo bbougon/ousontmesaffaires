@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CommandMiddlewaresTest {
 
     @Test
-    public void unexistingMiddlewarePassThrough() {
+    public void unknownMiddlewarePassThrough() {
         CommandMiddlewares commandMiddlewares = new CommandMiddlewares(Sets.newHashSet());
 
         assertThat(commandMiddlewares.get(UnknowCommand.class)).isEmpty();
@@ -16,4 +16,5 @@ public class CommandMiddlewaresTest {
 
     private class UnknowCommand implements Command{
     }
+
 }
