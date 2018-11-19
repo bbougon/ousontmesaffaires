@@ -15,7 +15,6 @@
         <maven.compiler.testSource>1.8</maven.compiler.testSource>
         <guice.version>4.1.0</guice.version>
         <resteasy.version>3.1.4.Final</resteasy.version>
-        <zxing.version>3.3.1</zxing.version>
     </properties>
 
     <packaging>jar</packaging>
@@ -85,16 +84,6 @@
             <groupId>org.mongolink</groupId>
             <artifactId>mongolink</artifactId>
             <version>RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.zxing</groupId>
-            <artifactId>core</artifactId>
-            <version>${zxing.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.zxing</groupId>
-            <artifactId>javase</artifactId>
-            <version>${zxing.version}</version>
         </dependency>
         <dependency>
             <groupId>io.github.classgraph</groupId>

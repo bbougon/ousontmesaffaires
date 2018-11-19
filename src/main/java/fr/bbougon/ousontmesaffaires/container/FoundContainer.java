@@ -9,6 +9,10 @@ import java.util.stream.Collectors;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class FoundContainer {
+
+    public FoundContainer() {
+    }
+
     public FoundContainer(final String id, final String name, final String description, final List<fr.bbougon.ousontmesaffaires.domain.container.Item> items) {
         this.id = id;
         this.name = name;
@@ -16,15 +20,18 @@ public class FoundContainer {
         this.items = items.stream().map(item -> new Item(item.getItemHash(), item.getItem(), item.getImageStore(), item.getFeatures())).collect(Collectors.toList());
     }
 
-    public final String id;
-    public final String name;
+    public String id;
+    public String name;
     @JsonInclude(value = JsonInclude.Include.NON_NULL)
-    public final String description;
-    public final List<Item> items;
+    public String description;
+    public List<Item> items;
 
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Item {
+
+        public Item() {
+        }
 
         public Item(final String itemHash, final String item, final fr.bbougon.ousontmesaffaires.domain.container.image.ImageStore imageStore, final Set<fr.bbougon.ousontmesaffaires.domain.container.Feature> features) {
             this.item = item;
@@ -39,6 +46,9 @@ public class FoundContainer {
         @JsonIgnoreProperties(ignoreUnknown = true)
         public static class Image {
 
+            public Image() {
+            }
+
             Image(final String url, final String secureUrl, final String signature, final List<fr.bbougon.ousontmesaffaires.domain.container.image.ResizedImage> resizedImages) {
                 this.url = url;
                 this.secureUrl = secureUrl;
@@ -50,6 +60,10 @@ public class FoundContainer {
 
             @JsonIgnoreProperties(ignoreUnknown = true)
             private class ResizedImage {
+
+                public ResizedImage() {
+                }
+
                 ResizedImage(final String url, final String secureUrl, final Double height, final Double width) {
                     this.url = url;
                     this.secureUrl = secureUrl;
@@ -57,31 +71,39 @@ public class FoundContainer {
                     this.width = width;
                 }
 
-                public final String url;
-                public final String secureUrl;
-                public final Double height;
-                public final Double width;
+                public String url;
+                public String secureUrl;
+                public Double height;
+                public Double width;
             }
 
-            public final String url;
-            public final String secureUrl;
-            public final String signature;
-            public final List<ResizedImage> resizedImages;
+            public String url;
+            public String secureUrl;
+            public String signature;
+            public List<ResizedImage> resizedImages;
         }
 
         @JsonIgnoreProperties(ignoreUnknown = true)
         private class Feature {
+
+            public Feature() {
+            }
+
             Feature(final String type, final String feature) {
                 this.type = type;
                 this.feature = feature;
             }
 
-            public final String type;
-            public final String feature;
+            public String type;
+            public String feature;
         }
 
         @JsonIgnoreProperties(ignoreUnknown = true)
         public class ImageStore {
+
+            public ImageStore() {
+            }
+
             ImageStore(final String folder, final List<fr.bbougon.ousontmesaffaires.domain.container.image.Image> images) {
                 this.folder = folder;
                 this.images = images.stream()
@@ -89,13 +111,13 @@ public class FoundContainer {
                         .collect(Collectors.toList());
             }
 
-            public final String folder;
-            public final List<Image> images;
+            public String folder;
+            public List<Image> images;
         }
 
-        public final String item;
-        public final ImageStore imageStore;
-        public final String itemHash;
-        public final Set<Feature> features;
+        public String item;
+        public ImageStore imageStore;
+        public String itemHash;
+        public Set<Feature> features;
     }
 }

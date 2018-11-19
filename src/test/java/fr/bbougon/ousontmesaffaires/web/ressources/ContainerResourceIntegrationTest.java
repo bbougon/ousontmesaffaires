@@ -1,9 +1,11 @@
 package fr.bbougon.ousontmesaffaires.web.ressources;
 
 import fr.bbougon.ousontmesaffaires.WithEmbeddedServer;
+import fr.bbougon.ousontmesaffaires.container.FoundContainer;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.WithSecurityService;
 import fr.bbougon.ousontmesaffaires.test.utils.FileUtilsForTest;
 import fr.bbougon.ousontmesaffaires.web.test.utils.ClientUtilsForTests;
+import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -38,7 +40,7 @@ public class ContainerResourceIntegrationTest {
     public void canAddAnItemToContainer() {
         Response container = ClientUtilsForTests.createContainer("json/pantalon.json");
 
-        Response response = ClientBuilder.newClient().target(container.getLocation())
+        Response response = new ResteasyClientBuilder().build().target(container.getLocation())
                 .path("item")
                 .request()
                 .accept(MediaType.APPLICATION_JSON_TYPE)
@@ -51,17 +53,24 @@ public class ContainerResourceIntegrationTest {
     public void canGetContainer() {
         Response container = ClientUtilsForTests.createContainer("json/pantalon.json");
 
-        Response response = ClientBuilder.newClient().target(container.getLocation())
+        Response response = new ResteasyClientBuilder().build()
+                .target(container.getLocation())
                 .request()
                 .accept(MediaType.APPLICATION_JSON_TYPE)
                 .get();
 
         assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
         String containerId = container.getLocation().getPath().substring(container.getLocation().getPath().lastIndexOf("/") + 1);
-        String payload = response.readEntity(String.class);
-        assertThat(payload).isEqualTo("{\"id\":\"" + containerId + "\",\"name\":\"placard\",\"items\":[{\"item\":\"pantalon noir 3ans\"," +
-                "\"imageStore\":{\"folder\":\"" + retrieveFolder(payload) + "\",\"images\":[]}," +
-                "\"itemHash\":\"" + retrieveHash(payload) + "\",\"features\":[]}]}");
+        FoundContainer payload = response.readEntity(FoundContainer.class);
+        assertThat(payload.id).isEqualTo(containerId);
+        assertThat(payload.name).isEqualTo("placard");
+        assertThat(payload.items).hasSize(1);
+        assertThat(payload.items.get(0).item).isEqualTo("pantalon noir 3ans");
+        assertThat(payload.items.get(0).itemHash).isNotNull();
+        assertThat(payload.items.get(0).imageStore).isNotNull();
+        assertThat(payload.items.get(0).imageStore.folder).isNotNull();
+        assertThat(payload.items.get(0).imageStore.images).isEmpty();
+        assertThat(payload.items.get(0).features).isEmpty();
     }
 
     @Test

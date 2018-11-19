@@ -1,5 +1,6 @@
 package fr.bbougon.ousontmesaffaires;
 
+import com.fasterxml.jackson.jaxrs.cfg.JaxRSFeature;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Stage;
@@ -8,6 +9,7 @@ import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ClassInfo;
 import io.github.classgraph.ScanResult;
 import org.jboss.resteasy.plugins.interceptors.CorsFilter;
+import org.jboss.resteasy.plugins.providers.jackson.ResteasyJackson2Provider;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.Path;
@@ -35,7 +37,14 @@ public class OuSontMesAffairesApplication extends Application {
         corsFilter.setAllowedHeaders("Location, Content-Type");
         Set<Object> instances = scanPackages().stream().map(injector::getInstance).collect(Collectors.toSet());
         instances.add(corsFilter);
+        instances.add(jsonProviders(instances));
         return instances;
+    }
+
+    private ResteasyJackson2Provider jsonProviders(final Set<Object> instances) {
+        ResteasyJackson2Provider jacksonJsonProvider = new ResteasyJackson2Provider();
+        jacksonJsonProvider.configure(JaxRSFeature.ALLOW_EMPTY_INPUT, true);
+        return jacksonJsonProvider;
     }
 
     private Set<Class<?>> scanPackages() {
@@ -56,5 +65,5 @@ public class OuSontMesAffairesApplication extends Application {
         }
     }
 
-    final Injector injector;
+    private final Injector injector;
 }
