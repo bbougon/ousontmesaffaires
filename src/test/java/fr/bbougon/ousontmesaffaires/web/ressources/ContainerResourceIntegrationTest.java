@@ -44,7 +44,7 @@ public class ContainerResourceIntegrationTest {
                 .path("item")
                 .request()
                 .accept(MediaType.APPLICATION_JSON_TYPE)
-                .post(Entity.json(new FileUtilsForTest("json/t-shirt.json").getContent()), Response.class);
+                .post(Entity.json("{\"item\": \"tshirt blanc 3ans\"}"), Response.class);
 
         assertThat(response.getStatus()).isEqualTo(NO_CONTENT.getStatusCode());
     }

@@ -44,7 +44,7 @@ public class ContainerAddItemResourceTest {
         Container container = Container.create("Cave", Lists.newArrayList(Item.create("pantalon")));
         Repositories.containerRepository().persist(container);
 
-        Response response = containerResource.addItem(new Codec().urlSafeToBase64(container.getId().toString()), new FileUtilsForTest("json/pantalon.json").getContent());
+        Response response = containerResource.addItem(new Codec().urlSafeToBase64(container.getId().toString()), "{\"item\": \"pantalon noir 3ans\"}");
 
         assertThat(response.getStatus()).isEqualTo(NO_CONTENT.getStatusCode());
         List<Container> containers = Repositories.containerRepository().getAll();
@@ -74,7 +74,7 @@ public class ContainerAddItemResourceTest {
 
     @Test(expected = BusinessError.class)
     public void throwsBusinessErrorIfContainerNotFound() {
-        containerResource.addItem(new Codec().urlSafeToBase64(UUID.randomUUID().toString()), new FileUtilsForTest("json/pantalon.json").getContent());
+        containerResource.addItem(new Codec().urlSafeToBase64(UUID.randomUUID().toString()), "{\"item\": \"pantalon noir 3ans\"}");
     }
 
     private ContainerAddItemResource initialise(final Codec codec) {

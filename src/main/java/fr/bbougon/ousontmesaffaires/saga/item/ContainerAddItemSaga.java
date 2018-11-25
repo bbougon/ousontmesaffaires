@@ -13,8 +13,7 @@ public class ContainerAddItemSaga implements Saga<String> {
     public ContainerAddItemSaga(final UUID uuid, final String payload) {
         this.uuid = uuid;
         JsonObject container = new JsonParser().parse(payload).getAsJsonObject();
-        JsonArray jsonArray = container.get("items").getAsJsonArray();
-        this.item = jsonArray.get(0).getAsJsonObject().get("item").getAsString();
+        this.item = container.get("item").getAsString();
     }
 
     UUID getUuid() {
