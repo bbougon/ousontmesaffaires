@@ -10,18 +10,12 @@ public class ContainerGetCommand implements Command<FoundContainer> {
 
     public ContainerGetCommand(final String base64ContainerId) {
         Codec codec = new Codec();
-        this.id = base64ContainerId;
-        this.uuid = codec.fromString(codec.fromBase64(this.id));
+        this.uuid = codec.fromString(codec.fromBase64(base64ContainerId));
     }
 
     public UUID getUUID() {
         return uuid;
     }
 
-    public String getId() {
-        return id;
-    }
-
     private final UUID uuid;
-    private final String id;
 }
