@@ -1,6 +1,6 @@
 package fr.bbougon.ousontmesaffaires.web.ressources;
 
-import fr.bbougon.ousontmesaffaires.command.container.ContainerAddCommand;
+import fr.bbougon.ousontmesaffaires.saga.container.ContainerAddSaga;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandBus;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandResponse;
 import fr.bbougon.ousontmesaffaires.infrastructure.module.mongolink.MongolinkTransaction;
@@ -24,7 +24,7 @@ public class ContainerAddResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response add(final String payload) {
         checkPayload(payload);
-        CommandResponse commandResponse = commandBus.send(new ContainerAddCommand(payload));
+        CommandResponse commandResponse = commandBus.send(new ContainerAddSaga(payload));
         URI uri = new URIBuilder().build("/containers" + "/" + codec.urlSafeToBase64(commandResponse.getResponse().toString()));
         if (uri == null) {
             return Response.serverError().build();

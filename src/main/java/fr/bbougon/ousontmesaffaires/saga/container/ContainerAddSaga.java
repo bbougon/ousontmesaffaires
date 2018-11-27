@@ -1,17 +1,17 @@
-package fr.bbougon.ousontmesaffaires.command.container;
+package fr.bbougon.ousontmesaffaires.saga.container;
 
 import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import fr.bbougon.ousontmesaffaires.command.Command;
+import fr.bbougon.ousontmesaffaires.saga.Saga;
 
 import java.util.List;
 import java.util.UUID;
 
-public class ContainerAddCommand implements Command<UUID> {
+public class ContainerAddSaga implements Saga<UUID> {
 
-    public ContainerAddCommand(final String payload) {
+    public ContainerAddSaga(final String payload) {
         JsonObject container = new JsonParser().parse(payload).getAsJsonObject();
         containerName = container.get("name").getAsString();
         JsonArray jsonArray = container.get("items").getAsJsonArray();

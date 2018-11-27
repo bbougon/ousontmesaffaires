@@ -13,14 +13,6 @@ public class PatchMapper {
         return Patches.getPatch(tempPatch.target, tempPatch.id, tempPatch.data);
     }
 
-    public Object getData() {
-        return tempPatch.data;
-    }
-
-    public String getId() {
-        return tempPatch.id;
-    }
-
     private TempPatch tempPatch;
 
     public static class TempPatch {
