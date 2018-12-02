@@ -27,6 +27,8 @@ public class OuSontMesAffairesConfiguration extends AbstractModule {
         install(new SecurityModule());
         bind(Repositories.class).to(MongoRepositories.class).in(Singleton.class);
         requestStaticInjection(Repositories.class);
+        bind(Services.class).to(RemoteServices.class).in(Singleton.class);
+        requestStaticInjection(Services.class);
     }
 
     private void configureSagas() {

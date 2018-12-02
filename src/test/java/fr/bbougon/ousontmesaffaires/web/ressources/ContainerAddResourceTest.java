@@ -3,6 +3,7 @@ package fr.bbougon.ousontmesaffaires.web.ressources;
 import ch.qos.logback.classic.Level;
 import fr.bbougon.ousontmesaffaires.command.WithCommandBus;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
+import fr.bbougon.ousontmesaffaires.rules.WithFakeServices;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandBus;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.WithSecurityService;
 import fr.bbougon.ousontmesaffaires.repositories.Repositories;
@@ -29,6 +30,9 @@ public class ContainerAddResourceTest {
 
     @Rule
     public WithSecurityService withSecurityService = new WithSecurityService();
+
+    @Rule
+    public WithFakeServices withFakeServices = new WithFakeServices();
 
     @Rule
     public WithCommandBus withCommandBus = new WithCommandBus();

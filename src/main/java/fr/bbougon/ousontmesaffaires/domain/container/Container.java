@@ -6,9 +6,11 @@ import fr.bbougon.ousontmesaffaires.domain.AggregateRoot;
 import fr.bbougon.ousontmesaffaires.domain.BusinessError;
 import fr.bbougon.ousontmesaffaires.domain.container.image.Image;
 import fr.bbougon.ousontmesaffaires.domain.patch.Description;
+import fr.bbougon.ousontmesaffaires.infrastructure.nlp.NLPAnalysis;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class Container extends AggregateRoot {
 
@@ -95,6 +97,12 @@ public class Container extends AggregateRoot {
         existingContainer.addItem(itemToMove);
         removeItem(itemToMove);
         return new MovedItem(itemToMove.getItemHash());
+    }
+
+    public List<NLPAnalyzedItem> processItemsNaturalAnalysis(final List<NLPAnalysis> nlpAnalyses) {
+        return nlpAnalyses.stream()
+                .map(NLPAnalyzedItem::new)
+                .collect(Collectors.toList());
     }
 
     private String name;
