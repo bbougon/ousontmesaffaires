@@ -6,29 +6,42 @@ import fr.bbougon.ousontmesaffaires.infrastructure.nlp.NLPAnalysis.EntitiesAnaly
 
 import java.util.List;
 
-import static fr.bbougon.ousontmesaffaires.infrastructure.nlp.NLPAnalysis.*;
-import static fr.bbougon.ousontmesaffaires.infrastructure.nlp.NLPAnalysis.EntitiesAnalyses.*;
+import static fr.bbougon.ousontmesaffaires.infrastructure.nlp.NLPAnalysis.Category;
+import static fr.bbougon.ousontmesaffaires.infrastructure.nlp.NLPAnalysis.Concept;
+import static fr.bbougon.ousontmesaffaires.infrastructure.nlp.NLPAnalysis.EntitiesAnalyses.Entity;
 
 public class NLPAnalysisBuilder {
 
     public NLPAnalysisBuilder withDefaultEntitiesAnalysis() {
+        return withEntityAnalysis("name", "type");
+    }
+
+    public NLPAnalysisBuilder withEntityAnalysis(final String name, final String type) {
         Entity entity = new Entity();
-        entity.name = "name";
-        entity.type = "type";
+        entity.name = name;
+        entity.type = type;
         entitiesAnalyses.entities.add(entity);
         return this;
     }
 
     public NLPAnalysisBuilder withDefaultCategories() {
+        return withCategory("a/hierarchy");
+    }
+
+    public NLPAnalysisBuilder withCategory(final String categoryValue) {
         Category category = new Category();
-        category.hierarchy = "a/hierarchy";
+        category.hierarchy = categoryValue;
         categories.add(category);
         return this;
     }
 
     public NLPAnalysisBuilder withDefaultConcepts() {
+        return withConcept("name");
+    }
+
+    public NLPAnalysisBuilder withConcept(final String conceptValue) {
         Concept concept = new Concept();
-        concept.name = "name";
+        concept.name = conceptValue;
         concepts.add(concept);
         return this;
     }

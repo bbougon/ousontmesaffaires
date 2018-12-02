@@ -48,17 +48,33 @@ public class ContainerTest {
     public void canProcessOneItemNaturalAnalysis() {
         Item item = Item.create("an item");
         Container container = Container.create("Container name", Lists.newArrayList(item));
-        NLPAnalysis nlpAnalysis = new NLPAnalysisBuilder()
-                .withDefaultCategories()
-                .withDefaultConcepts()
-                .withDefaultEntitiesAnalysis()
-                .build(item.getItemHash());
 
-        List<NLPAnalyzedItem> analyzedItems = container.processItemsNaturalAnalysis(Lists.newArrayList(nlpAnalysis));
+        List<NLPAnalyzedItem> analyzedItems = container.processItemsNaturalAnalysis(Lists.newArrayList(createAnalysis(item)));
 
         assertThat(container.getItems().get(0).getFeatures()).hasSize(3);
         assertThat(analyzedItems).hasSize(1);
         assertThat(analyzedItems.get(0).getItem()).isEqualTo(item);
+    }
+
+    @Test
+    public void canProcessManyItemsNaturalAnalysis() {
+        Item item = Item.create("an item");
+        Item secondItem = Item.create("another item");
+        Container container = Container.create("Container name", Lists.newArrayList(item, secondItem));
+
+        List<NLPAnalyzedItem> analyzedItems = container.processItemsNaturalAnalysis(Lists.newArrayList(createAnalysis(item), createAnalysis(secondItem)));
+
+        assertThat(container.getItems().get(0).getFeatures()).hasSize(3);
+        assertThat(container.getItems().get(1).getFeatures()).hasSize(3);
+        assertThat(analyzedItems).hasSize(2);
+    }
+
+    private NLPAnalysis createAnalysis(final Item item) {
+        return new NLPAnalysisBuilder()
+                    .withDefaultCategories()
+                    .withDefaultConcepts()
+                    .withDefaultEntitiesAnalysis()
+                    .build(item.getItemHash());
     }
 
     @Test

@@ -12,6 +12,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class Item {
 
@@ -58,9 +59,9 @@ public class Item {
     }
 
     public void processAnalysis(final NLPAnalysis nlpAnalysis) {
-        features.add(Feature.create("categories", nlpAnalysis.categories.get(0).hierarchy));
-        features.add(Feature.create("concepts", nlpAnalysis.concepts.get(0).name));
-        features.add(Feature.create("entities", nlpAnalysis.entitiesAnalyses.entities.get(0).type));
+        features.addAll(nlpAnalysis.categories.stream().map(category -> Feature.create("category", category.hierarchy)).collect(Collectors.toList()));
+        features.addAll(nlpAnalysis.concepts.stream().map(concept -> Feature.create("concept", concept.name)).collect(Collectors.toList()));
+        features.addAll(nlpAnalysis.entitiesAnalyses.entities.stream().map(entity -> Feature.create(entity.name, entity.type)).collect(Collectors.toList()));
     }
 
     @Override
