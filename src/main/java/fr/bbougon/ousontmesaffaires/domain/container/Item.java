@@ -3,6 +3,7 @@ package fr.bbougon.ousontmesaffaires.domain.container;
 import com.google.common.collect.Sets;
 import fr.bbougon.ousontmesaffaires.domain.container.image.Image;
 import fr.bbougon.ousontmesaffaires.domain.container.image.ImageStore;
+import fr.bbougon.ousontmesaffaires.infrastructure.nlp.NLPAnalysis;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.SecurityService;
 import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
 import fr.bbougon.ousontmesaffaires.web.helpers.ItemStringFormatter;
@@ -54,6 +55,12 @@ public class Item {
 
     public String getItemHash() {
         return SecurityService.sha1().cypher(new ItemStringFormatter(this).format().getBytes());
+    }
+
+    public void processAnalysis(final NLPAnalysis nlpAnalysis) {
+        features.add(Feature.create("categories", nlpAnalysis.categories.get(0).hierarchy));
+        features.add(Feature.create("concepts", nlpAnalysis.concepts.get(0).name));
+        features.add(Feature.create("entities", nlpAnalysis.entitiesAnalyses.entities.get(0).type));
     }
 
     @Override

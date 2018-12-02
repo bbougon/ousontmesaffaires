@@ -33,8 +33,8 @@ public class NLPAnalysisBuilder {
         return this;
     }
 
-    public NLPAnalysis build() {
-        NLPAnalysis nlpAnalysis = new NLPAnalysis();
+    public NLPAnalysis build(final String itemHash) {
+        NLPAnalysis nlpAnalysis = new NLPAnalysis(itemHash);
         nlpAnalysis.entitiesAnalyses = entitiesAnalyses;
         nlpAnalysis.categories = categories;
         nlpAnalysis.concepts = concepts;

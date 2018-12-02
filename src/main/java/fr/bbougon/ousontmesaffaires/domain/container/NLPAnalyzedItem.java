@@ -1,9 +1,14 @@
 package fr.bbougon.ousontmesaffaires.domain.container;
 
-import fr.bbougon.ousontmesaffaires.infrastructure.nlp.NLPAnalysis;
-
 public class NLPAnalyzedItem {
-    public NLPAnalyzedItem(final NLPAnalysis nlpAnalysis) {
+    public NLPAnalyzedItem(final Item item) {
 
+        this.item = item;
     }
+
+    public Item getItem() {
+        return item;
+    }
+
+    private Item item;
 }

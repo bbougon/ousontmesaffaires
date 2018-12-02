@@ -31,12 +31,13 @@ public class NLPCommandHandlerTest {
 
     @Test
     public void canAnalyzeItem() {
+        Item item = Item.create("an item");
         withFakeServices.getFakeService().nlpServiceReturns(Lists.newArrayList(new NLPAnalysisBuilder()
                 .withDefaultEntitiesAnalysis()
                 .withDefaultCategories()
                 .withDefaultConcepts()
-                .build()));
-        Container container = Container.create("a container", Lists.newArrayList(Item.create("an item")));
+                .build(item.getItemHash())));
+        Container container = Container.create("a container", Lists.newArrayList(item));
         Repositories.containerRepository().persist(container);
 
         Pair<List<NLPAnalyzedItem>, Event> result = new NLPCommandHandler().execute(new NLPCommand(container.getItems(), container.getId()));

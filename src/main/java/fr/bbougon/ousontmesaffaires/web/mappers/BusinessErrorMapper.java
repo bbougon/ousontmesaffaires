@@ -25,6 +25,7 @@ public class BusinessErrorMapper implements ExceptionMapper<BusinessError> {
         errors.put("UNKNOWN_ITEM_TO_PATCH", new BusinessErrorTranslation(NOT_FOUND, "The item you are trying to patch on container '%s' is unknown."));
         errors.put("UNKNOWN_ITEM_TO_MOVE", new BusinessErrorTranslation(NOT_FOUND, "The item you are trying to move to container '%s' is unknown."));
         errors.put("UNKNOWN_EXTRACTED_ITEM", new BusinessErrorTranslation(NOT_FOUND, "The item you are requesting does not exist."));
+        errors.put("UNKNOWN_ITEM_TO_ANALYSE", new BusinessErrorTranslation(NOT_FOUND, "The item you are trying to analyse in container '%s' is unknown."));
     }
 
     @Override

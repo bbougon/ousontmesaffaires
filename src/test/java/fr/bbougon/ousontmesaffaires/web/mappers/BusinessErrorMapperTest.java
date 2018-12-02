@@ -22,7 +22,8 @@ public class BusinessErrorMapperTest {
                 {"UNEXISTING_DESTINATION_CONTAINER", null, Response.Status.NOT_FOUND, "The destination container you are requesting does not exist."},
                 {"UNKNOWN_PATCH", "unknown", Response.Status.NOT_FOUND, "An error occurred during patch, current target 'unknown' is unknown."},
                 {"UNKNOWN_ITEM_TO_PATCH", "big container", Response.Status.NOT_FOUND, "The item you are trying to patch on container 'big container' is unknown."},
-                {"UNKNOWN_ITEM_TO_MOVE", "existing container", Response.Status.NOT_FOUND, "The item you are trying to move to container 'existing container' is unknown."}
+                {"UNKNOWN_ITEM_TO_MOVE", "existing container", Response.Status.NOT_FOUND, "The item you are trying to move to container 'existing container' is unknown."},
+                {"UNKNOWN_ITEM_TO_ANALYSE", "a container", Response.Status.NOT_FOUND, "The item you are trying to analyse in container 'a container' is unknown."}
         });
     }
 
