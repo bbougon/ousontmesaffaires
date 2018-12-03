@@ -1,6 +1,7 @@
 package fr.bbougon.ousontmesaffaires.infrastructure.nlp;
 
 import com.google.common.collect.Lists;
+import com.google.gson.Gson;
 import fr.bbougon.ousontmesaffaires.domain.container.Item;
 import fr.bbougon.ousontmesaffaires.infrastructure.TechnicalError;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.WithSecurityService;
@@ -25,13 +26,16 @@ public class RemoteNLPServiceTest {
     @Test
     public void canAnalyseOneItemFromRemoteService() {
         Item item = Item.create("an item");
-        RemoteNLPService remoteNLPService = new RemoteNLPService(new CustomResteasyCLientBuilder().getResteasyClientBuilder());
+        CustomResteasyCLientBuilder customResteasyCLientBuilder = new CustomResteasyCLientBuilder();
+        RemoteNLPService remoteNLPService = new RemoteNLPService(customResteasyCLientBuilder.getResteasyClientBuilder());
 
         List<NLPAnalysis> nlpAnalysis = remoteNLPService.analyze(Lists.newArrayList(item));
 
         assertThat(nlpAnalysis).isNotEmpty();
         assertThat(nlpAnalysis).hasSize(1);
         assertAnalysis(item, nlpAnalysis.get(0));
+        assertThat(customResteasyCLientBuilder.path).isEqualTo("/request");
+        assertThat(customResteasyCLientBuilder.body).isEqualTo(new Gson().toJson(new RemoteNLPService.TextToAnalyse(item.getItem())));
     }
 
     @Test
@@ -63,7 +67,7 @@ public class RemoteNLPServiceTest {
         assertThat(nlpAnalysis.itemHash).isEqualTo(item.getItemHash());
         assertThat(nlpAnalysis.categories).isNotEmpty();
         assertThat(nlpAnalysis.concepts).isNotEmpty();
-        assertThat(nlpAnalysis.entitiesAnalyses.entities).isNotEmpty();
+        assertThat(nlpAnalysis.entitiesAnalysis.entities).isNotEmpty();
     }
 
 }

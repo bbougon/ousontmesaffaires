@@ -23,4 +23,11 @@ public class FileRepositoriesTest {
         assertThat(dataBaseConfiguration.getSettings().getUpdateStrategy()).isEqualTo(UpdateStrategies.DIFF);
         assertThat(dataBaseConfiguration.getSettings().buildDatabase().getName()).isEqualTo("ousontmesaffaires-test");
     }
+
+    @Test
+    public void canGetRemoteNLPServiceConfiguration() {
+        Configuration.RemoteServiceConfiguration remoteServiceConfiguration = FileRepositories.remoteServiceConfiguration().get();
+
+        assertThat(remoteServiceConfiguration.nlpUrl()).isEqualTo("http://locahost:8083");
+    }
 }

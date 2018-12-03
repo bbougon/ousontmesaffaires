@@ -2,13 +2,13 @@ package fr.bbougon.ousontmesaffaires.test.utils;
 
 import com.google.common.collect.Lists;
 import fr.bbougon.ousontmesaffaires.infrastructure.nlp.NLPAnalysis;
-import fr.bbougon.ousontmesaffaires.infrastructure.nlp.NLPAnalysis.EntitiesAnalyses;
+import fr.bbougon.ousontmesaffaires.infrastructure.nlp.NLPAnalysis.EntitiesAnalysis;
 
 import java.util.List;
 
 import static fr.bbougon.ousontmesaffaires.infrastructure.nlp.NLPAnalysis.Category;
 import static fr.bbougon.ousontmesaffaires.infrastructure.nlp.NLPAnalysis.Concept;
-import static fr.bbougon.ousontmesaffaires.infrastructure.nlp.NLPAnalysis.EntitiesAnalyses.Entity;
+import static fr.bbougon.ousontmesaffaires.infrastructure.nlp.NLPAnalysis.EntitiesAnalysis.Entity;
 
 public class NLPAnalysisBuilder {
 
@@ -20,7 +20,7 @@ public class NLPAnalysisBuilder {
         Entity entity = new Entity();
         entity.name = name;
         entity.type = type;
-        entitiesAnalyses.entities.add(entity);
+        entitiesAnalysis.entities.add(entity);
         return this;
     }
 
@@ -48,13 +48,13 @@ public class NLPAnalysisBuilder {
 
     public NLPAnalysis build(final String itemHash) {
         NLPAnalysis nlpAnalysis = new NLPAnalysis(itemHash);
-        nlpAnalysis.entitiesAnalyses = entitiesAnalyses;
+        nlpAnalysis.entitiesAnalysis = entitiesAnalysis;
         nlpAnalysis.categories = categories;
         nlpAnalysis.concepts = concepts;
         return nlpAnalysis;
     }
 
-    private final EntitiesAnalyses entitiesAnalyses = new EntitiesAnalyses();
+    private final EntitiesAnalysis entitiesAnalysis = new EntitiesAnalysis();
     private List<Category> categories = Lists.newArrayList();
     private List<Concept> concepts = Lists.newArrayList();
 }

@@ -49,7 +49,7 @@ public class DefaultFileRepositories extends FileRepositories {
     }
 
     private String getRemoteServiceUrl() {
-        return "";
+        return configurationProperties.nlpServiceUrl();
     }
 
     private SecuritySettings getSecuritySettings() {

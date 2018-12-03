@@ -93,6 +93,10 @@ public class ConfigurationProperties {
         return keys.get(key).startsWith(LINUX_ENV_PREFIX);
     }
 
+    public String nlpServiceUrl() {
+        return getKeyValue(NLP_SERVICE);
+    }
+
     private final Map<String, String> keys;
     private static final String LINUX_ENV_PREFIX = "$";
     private static final String SERVER_PORT = "server.port";
@@ -100,9 +104,10 @@ public class ConfigurationProperties {
     private static final String DATABASE_PORT = "database.port";
     private static final String DATABASE_HOST = "database.host";
     private static final String DATABASE_NAME = "database.name";
-    private static final Logger LOGGER = LoggerFactory.getLogger(ConfigurationProperties.class);
     private static final String DATABASE_USER = "database.user";
     private static final String DATABASE_PASSWORD = "database.password";
     private static final String THIRDPARTSERVICE_IMAGE_SECRET = "thirdpartservice.image.secret";
     private static final String THIRDPARTSERVICE_IMAGE_APIKEY = "thirdpartservice.image.apikey";
+    private static final String NLP_SERVICE = "remoteservice.nlp";
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConfigurationProperties.class);
 }
