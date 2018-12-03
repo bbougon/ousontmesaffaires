@@ -39,6 +39,11 @@ public class WithFileRepositories extends ExternalResource {
             protected FileRepository<Configuration.SecurityConfiguration> getSecurityConfiguration() {
                 return () -> (Configuration.SecurityConfiguration) () -> new SecuritySettings("abcd", "12345");
             }
+
+            @Override
+            protected FileRepository<Configuration.RemoteServiceConfiguration> getRemoteServiceConfiguration() {
+                return () -> (Configuration.RemoteServiceConfiguration) () -> "http://localhost";
+            }
         });
     }
 

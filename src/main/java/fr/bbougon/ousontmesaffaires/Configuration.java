@@ -24,10 +24,16 @@ public class Configuration {
         Builder getBuilder();
 
         int getPort();
+
     }
 
     @FunctionalInterface
     public interface SecurityConfiguration {
         SecuritySettings securitySetting();
+
+    }
+
+    public interface RemoteServiceConfiguration {
+        String nlpUrl();
     }
 }

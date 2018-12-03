@@ -39,7 +39,8 @@ public class BusinessErrorMapperTest {
     @Test
     public void canMapBusinessErrors() {
         BusinessError exception = new BusinessError(errorCode, target);
-        assertThat(new BusinessErrorMapper().toResponse(exception).getStatus()).isEqualTo(status.getStatusCode());
-        assertThat(new BusinessErrorMapper().toResponse(exception).getEntity()).isEqualTo("{\"error\":\"" + expectedMessage + "\"}");
+        Response response = new BusinessErrorMapper().toResponse(exception);
+        assertThat(response.getStatus()).isEqualTo(status.getStatusCode());
+        assertThat(response.getEntity()).isEqualTo("{\"error\":\"" + expectedMessage + "\"}");
     }
 }

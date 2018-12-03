@@ -6,6 +6,7 @@ import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import fr.bbougon.ousontmesaffaires.Configuration;
 import fr.bbougon.ousontmesaffaires.Configuration.DataBaseConfiguration;
+import fr.bbougon.ousontmesaffaires.Configuration.RemoteServiceConfiguration;
 import fr.bbougon.ousontmesaffaires.Configuration.SecurityConfiguration;
 import fr.bbougon.ousontmesaffaires.Configuration.ServerConfiguration;
 import fr.bbougon.ousontmesaffaires.Main;
@@ -40,6 +41,15 @@ public class DefaultFileRepositories extends FileRepositories {
     @Override
     protected FileRepository<SecurityConfiguration> getSecurityConfiguration() {
         return () -> (SecurityConfiguration) this::getSecuritySettings;
+    }
+
+    @Override
+    protected FileRepository<RemoteServiceConfiguration> getRemoteServiceConfiguration() {
+        return () -> (RemoteServiceConfiguration) this::getRemoteServiceUrl;
+    }
+
+    private String getRemoteServiceUrl() {
+        return "";
     }
 
     private SecuritySettings getSecuritySettings() {

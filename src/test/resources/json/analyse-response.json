@@ -1,0 +1,24 @@
+{
+  "entitiesAnalysis": {
+    "entities": [
+      {
+        "name": "name",
+        "type": "type",
+        "relevance": 10.0
+      }
+    ],
+    "language": "fr"
+  },
+  "categories": [
+    {
+      "hierarchy": "/a/hierrachy",
+      "score": 10.0
+    }
+  ],
+  "concepts": [
+    {
+      "name": "name",
+      "score": 10.0
+    }
+  ]
+}
