@@ -30,9 +30,6 @@ public class ExtractedItemsResource {
     @Consumes(APPLICATION_JSON)
     public Response addItem(final String payload) {
         CommandResponse commandResponse = commandBus.send(new ExtractedItemAddItemCommand(payload));
-        if(commandResponse.isEmpty()) {
-            return Response.status(NOT_FOUND).build();
-        }
         URI uri = new URIBuilder().build(PATH + "/" + new Codec().urlSafeToBase64(commandResponse.getResponse().toString()));
         return Response.created(uri).build();
     }
@@ -51,9 +48,6 @@ public class ExtractedItemsResource {
     @Produces(APPLICATION_JSON)
     public Response get(@PathParam("uuid") final String extractedItemId) {
         CommandResponse commandResponse = commandBus.send(new ExtractedItemGetCommand(extractedItemId));
-        if (commandResponse.isEmpty()) {
-            return Response.status(NOT_FOUND).build();
-        }
         return Response.ok(commandResponse.getResponse()).build();
     }
 

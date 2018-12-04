@@ -15,7 +15,7 @@ public class ExtractedItemGetCommandHandler implements CommandHandler<ExtractedI
     @Override
     public Pair<FoundExtractedItem, Event> execute(final ExtractedItemGetCommand extractedItemGetCommand) {
         ExtractedItem extractedItem = Repositories.extractedItemRepository().get(extractedItemGetCommand.getExtractedItemUUID())
-                .orElseThrow(() -> new BusinessError("UNKNOWN_EXTRACTED_ITEM"));
+                .orElseThrow(() -> new BusinessError("UNKNOWN_ITEM"));
         FoundExtractedItem foundExtractedItem = new FoundExtractedItem(new Codec().urlSafeToBase64(extractedItem.getId().toString()), extractedItem.getItem(),
                 new Codec().urlSafeToBase64(extractedItem.getSourceContainer().getId().toString()), extractedItem.getSourceContainer().getName());
         return Pair.of(foundExtractedItem, Nothing.INSTANCE);

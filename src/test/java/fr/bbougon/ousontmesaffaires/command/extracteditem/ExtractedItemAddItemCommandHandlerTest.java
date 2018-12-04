@@ -1,8 +1,7 @@
 package fr.bbougon.ousontmesaffaires.command.extracteditem;
 
 import com.google.common.collect.Lists;
-import fr.bbougon.ousontmesaffaires.command.Event;
-import fr.bbougon.ousontmesaffaires.command.Nothing;
+import fr.bbougon.ousontmesaffaires.domain.BusinessError;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
 import fr.bbougon.ousontmesaffaires.domain.container.Item;
 import fr.bbougon.ousontmesaffaires.domain.extracteditem.ExtractedItem;
@@ -12,7 +11,6 @@ import fr.bbougon.ousontmesaffaires.repositories.Repositories;
 import fr.bbougon.ousontmesaffaires.repositories.WithMemoryRepositories;
 import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
 import fr.bbougon.ousontmesaffaires.web.helpers.ItemStringFormatter;
-import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -21,6 +19,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 
 public class ExtractedItemAddItemCommandHandlerTest {
 
@@ -53,14 +52,28 @@ public class ExtractedItemAddItemCommandHandlerTest {
     }
 
     @Test
-    public void handleUnexistingResult() {
-        ExtractedItemAddItemCommandHandler extractedItemAddItemCommandHandler = new ExtractedItemAddItemCommandHandler();
+    public void handleUnknownItem() {
+        try {
+            ExtractedItemAddItemCommandHandler extractedItemAddItemCommandHandler = new ExtractedItemAddItemCommandHandler();
+            extractedItemAddItemCommandHandler.execute(
+                    new ExtractedItemAddItemCommand("{\"containerId\":\"" + new Codec().urlSafeToBase64(container.getId().toString()) + "\",\"itemHash\":\"unknown hash\"}"));
+            failBecauseExceptionWasNotThrown(BusinessError.class);
+        } catch (BusinessError e){
+            assertThat(e.getCode()).isEqualTo("UNKNOWN_ITEM");
+            assertThat(e.getTarget().get()).isEqualTo("Container name");
+        }
+    }
 
-        Pair<UUID, Event> result = extractedItemAddItemCommandHandler.execute(
-                new ExtractedItemAddItemCommand("{\"containerId\":\"" + new Codec().urlSafeToBase64(container.getId().toString()) + "\",\"itemHash\":\"unknown hash\"}"));
-
-        assertThat(result.getLeft()).isNull();
-        assertThat(result.getRight()).isEqualTo(Nothing.INSTANCE);
+    @Test
+    public void handleUnknownContainer() {
+        try {
+            ExtractedItemAddItemCommandHandler extractedItemAddItemCommandHandler = new ExtractedItemAddItemCommandHandler();
+            extractedItemAddItemCommandHandler.execute(
+                    new ExtractedItemAddItemCommand("{\"containerId\":\"" + new Codec().urlSafeToBase64(UUID.randomUUID().toString()) + "\",\"itemHash\":\"unknown hash\"}"));
+            failBecauseExceptionWasNotThrown(BusinessError.class);
+        } catch (BusinessError e){
+            assertThat(e.getCode()).isEqualTo("UNEXISTING_CONTAINER");
+        }
     }
 
     private Container container;

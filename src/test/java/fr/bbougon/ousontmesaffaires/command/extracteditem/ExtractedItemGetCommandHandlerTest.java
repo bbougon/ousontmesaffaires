@@ -20,7 +20,7 @@ public class ExtractedItemGetCommandHandlerTest {
         try {
             new ExtractedItemGetCommandHandler().execute(new ExtractedItemGetCommand(new Codec().urlSafeToBase64(UUID.randomUUID().toString())));
         } catch (BusinessError e) {
-            assertThat(e.getCode()).isEqualTo("UNKNOWN_EXTRACTED_ITEM");
+            assertThat(e.getCode()).isEqualTo("UNKNOWN_ITEM");
         }
     }
 }

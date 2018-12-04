@@ -19,7 +19,8 @@ import org.junit.Test;
 
 import javax.ws.rs.core.Response;
 
-import static javax.ws.rs.core.Response.Status.*;
+import static javax.ws.rs.core.Response.Status.CREATED;
+import static javax.ws.rs.core.Response.Status.OK;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ExtractedItemsResourceTest {
@@ -55,17 +56,6 @@ public class ExtractedItemsResourceTest {
         ExtractedItem extractedItem = Repositories.extractedItemRepository().getAll().get(0);
         assertThat(extractedItem.getItem()).isEqualTo(item);
         assertThat(extractedItem.getSourceContainer()).isEqualTo(container);
-    }
-
-    @Test
-    public void returns404IfUnknownItem() {
-        Item item = Item.create("pantalon");
-        Container container = Container.create("Cave", Lists.newArrayList(item));
-        Repositories.containerRepository().persist(container);
-
-        Response response = resource.addItem("{\"containerId\":\"" + new Codec().urlSafeToBase64(container.getId().toString()) + "\",\"itemHash\":\"unknown hash\"}");
-
-        assertThat(response.getStatus()).isEqualTo(NOT_FOUND.getStatusCode());
     }
 
     @Test
