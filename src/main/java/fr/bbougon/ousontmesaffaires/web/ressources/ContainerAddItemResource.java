@@ -1,9 +1,8 @@
 package fr.bbougon.ousontmesaffaires.web.ressources;
 
-import fr.bbougon.ousontmesaffaires.saga.item.ContainerAddItemSaga;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandBus;
-import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandResponse;
 import fr.bbougon.ousontmesaffaires.infrastructure.module.mongolink.MongolinkTransaction;
+import fr.bbougon.ousontmesaffaires.saga.item.ContainerAddItemSaga;
 import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
 import org.apache.commons.lang3.Validate;
 
@@ -16,8 +15,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.UUID;
 
-import static javax.ws.rs.core.Response.Status.NOT_FOUND;
-
 @Path("/containers")
 public class ContainerAddItemResource {
 
@@ -27,10 +24,7 @@ public class ContainerAddItemResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addItem(@PathParam("UUID") final String containerId, final String payload) {
         checkPayload(payload);
-        CommandResponse commandResponse = commandBus.send(new ContainerAddItemSaga(UUID.fromString(codec.fromBase64(containerId)), payload));
-        if (commandResponse.isEmpty()) {
-            return Response.status(NOT_FOUND).build();
-        }
+        commandBus.send(new ContainerAddItemSaga(UUID.fromString(codec.fromBase64(containerId)), payload));
         return Response.noContent().build();
     }
 

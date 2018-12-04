@@ -36,6 +36,6 @@ public class ImagePatch extends PatchData<Image> implements Patch<Item> {
 
     @Override
     public PatchedContainer<Item> apply(final Supplier<Container> supplier) {
-        return supplier.get().patchImage(getData(), getId());
+        return supplier.get().addImageToItem(getData(), getId());
     }
 }

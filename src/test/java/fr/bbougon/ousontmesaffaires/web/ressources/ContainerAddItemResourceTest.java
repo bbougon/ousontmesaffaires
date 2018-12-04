@@ -9,7 +9,6 @@ import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandBus;
 import fr.bbougon.ousontmesaffaires.infrastructure.security.WithSecurityService;
 import fr.bbougon.ousontmesaffaires.repositories.Repositories;
 import fr.bbougon.ousontmesaffaires.repositories.WithMemoryRepositories;
-import fr.bbougon.ousontmesaffaires.test.utils.FileUtilsForTest;
 import fr.bbougon.ousontmesaffaires.web.helpers.Codec;
 import org.junit.Before;
 import org.junit.Rule;
@@ -69,6 +68,16 @@ public class ContainerAddItemResourceTest {
             failBecauseExceptionWasNotThrown(NullPointerException.class);
         } catch (NullPointerException exception) {
             assertThat(exception.getMessage()).isEqualTo("Payload cannot be null.");
+        }
+    }
+
+    @Test
+    public void checkPayloadHasNoEmptyBodyWhenAddingItemToContainer() {
+        try {
+            containerResource.addItem("id", "{  }");
+            failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
+        } catch (IllegalArgumentException exception) {
+            assertThat(exception.getMessage()).isEqualTo("Payload cannot be empty.");
         }
     }
 

@@ -59,7 +59,7 @@ public class Container extends AggregateRoot {
         return new ContainerItemAdded(itemAdded.getItemHash());
     }
 
-    public PatchedContainer<Item> patchImage(final Image image, final String itemHash) {
+    public PatchedContainer<Item> addImageToItem(final Image image, final String itemHash) {
         Item patchedItem = items.stream()
                 .filter(item -> item.getItemHash().equals(itemHash))
                 .findFirst()

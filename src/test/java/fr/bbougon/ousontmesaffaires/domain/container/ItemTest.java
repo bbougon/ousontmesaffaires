@@ -32,9 +32,9 @@ public class ItemTest {
                 Feature.create("category", "hierarchy/2"),
                 Feature.create("concept", "concept1"),
                 Feature.create("concept", "concept2"),
-                Feature.create("terme1", "type1"),
-                Feature.create("terme2", "type2"),
-                Feature.create("terme3", "type3")
+                Feature.create("type1", "terme1"),
+                Feature.create("type2", "terme2"),
+                Feature.create("type3", "terme3")
         );
     }
 

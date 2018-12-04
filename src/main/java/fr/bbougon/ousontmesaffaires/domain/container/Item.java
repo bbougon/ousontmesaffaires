@@ -61,7 +61,7 @@ public class Item {
     public void processAnalysis(final NLPAnalysis nlpAnalysis) {
         features.addAll(nlpAnalysis.categories.stream().map(category -> Feature.create("category", category.hierarchy)).collect(Collectors.toList()));
         features.addAll(nlpAnalysis.concepts.stream().map(concept -> Feature.create("concept", concept.name)).collect(Collectors.toList()));
-        features.addAll(nlpAnalysis.entitiesAnalysis.entities.stream().map(entity -> Feature.create(entity.name, entity.type)).collect(Collectors.toList()));
+        features.addAll(nlpAnalysis.entitiesAnalysis.entities.stream().map(entity -> Feature.create(entity.type, entity.name)).collect(Collectors.toList()));
     }
 
     @Override
