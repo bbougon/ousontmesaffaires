@@ -2,7 +2,6 @@ package fr.bbougon.ousontmesaffaires.web.ressources;
 
 import com.google.common.collect.Lists;
 import fr.bbougon.ousontmesaffaires.command.WithCommandBus;
-import fr.bbougon.ousontmesaffaires.domain.BusinessError;
 import fr.bbougon.ousontmesaffaires.domain.container.Container;
 import fr.bbougon.ousontmesaffaires.domain.container.Item;
 import fr.bbougon.ousontmesaffaires.infrastructure.bus.CommandBus;
@@ -16,7 +15,6 @@ import org.junit.Test;
 
 import javax.ws.rs.core.Response;
 import java.util.List;
-import java.util.UUID;
 
 import static javax.ws.rs.core.Response.Status.NO_CONTENT;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -79,11 +77,6 @@ public class ContainerAddItemResourceTest {
         } catch (IllegalArgumentException exception) {
             assertThat(exception.getMessage()).isEqualTo("Payload cannot be empty.");
         }
-    }
-
-    @Test(expected = BusinessError.class)
-    public void throwsBusinessErrorIfContainerNotFound() {
-        containerResource.addItem(new Codec().urlSafeToBase64(UUID.randomUUID().toString()), "{\"item\": \"pantalon noir 3ans\"}");
     }
 
     private ContainerAddItemResource initialise(final Codec codec) {

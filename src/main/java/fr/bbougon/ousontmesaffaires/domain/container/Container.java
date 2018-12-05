@@ -10,6 +10,7 @@ import fr.bbougon.ousontmesaffaires.infrastructure.nlp.NLPAnalysis;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class Container extends AggregateRoot {
@@ -27,6 +28,12 @@ public class Container extends AggregateRoot {
 
     public ImmutableList<Item> getItems() {
         return ImmutableList.<Item>builder().addAll(items).build();
+    }
+
+    public Optional<Item> getItemFromHash(final String itemFromHash) {
+        return items.stream()
+                .filter(item -> item.getItemHash().equals(itemFromHash))
+                .findFirst();
     }
 
     public void addItem(final Item item) {
@@ -60,9 +67,7 @@ public class Container extends AggregateRoot {
     }
 
     public PatchedContainer<Item> addImageToItem(final Image image, final String itemHash) {
-        Item patchedItem = items.stream()
-                .filter(item -> item.getItemHash().equals(itemHash))
-                .findFirst()
+        Item patchedItem = getItemFromHash(itemHash)
                 .orElseThrow(() -> new BusinessError("UNKNOWN_ITEM_TO_PATCH", name));
         patchedItem.add(image);
         return new PatchedContainer<Item>() {
@@ -85,10 +90,7 @@ public class Container extends AggregateRoot {
     }
 
     public MovedItem moveItemTo(final String itemHash, final Container existingContainer) {
-        Item itemToMove = getItems()
-                .stream()
-                .filter(item -> item.getItemHash().equals(itemHash))
-                .findFirst()
+        Item itemToMove = getItemFromHash(itemHash)
                 .orElseThrow(() -> new BusinessError("UNKNOWN_ITEM_TO_MOVE", existingContainer.name));
         return moveToExistingContainer(existingContainer, itemToMove);
     }

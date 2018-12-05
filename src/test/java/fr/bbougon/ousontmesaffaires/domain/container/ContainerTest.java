@@ -119,4 +119,13 @@ public class ContainerTest {
             assertThat(e.getTarget().get()).isEqualTo("Container name");
         }
     }
+
+    @Test
+    public void canGetItemFromHash() {
+        Item item = Item.create("item 2");
+
+        Container container = Container.create("A container", Lists.newArrayList(Item.create("item 1"), item));
+
+        assertThat(container.getItemFromHash(item.getItemHash()).get()).isEqualTo(item);
+    }
 }
